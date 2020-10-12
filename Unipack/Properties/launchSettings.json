@@ -15,8 +15,6 @@
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "AzureConnectionString": "Data Source=pepehands.database.windows.net;Initial Catalog=Unipack;Persist Security Info=True;User ID=pepehands;Password=YZegUmDRLdJf77R5Sv3pTbNfgAeJwtDAwoHHpBPo",
-        "SignInKey": "mx7kdHygamvcUJPtyUDxh4zx9dfiN9"
       }
     },
     "Unipack": {
@@ -26,8 +24,6 @@
       "applicationUrl": "https://localhost:5001;http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Production",
-        "AzureConnectionString": "Data Source=pepehands.database.windows.net;Initial Catalog=Unipack;Persist Security Info=True;User ID=pepehands;Password=YZegUmDRLdJf77R5Sv3pTbNfgAeJwtDAwoHHpBPo",
-        "SignInKey": "mx7kdHygamvcUJPtyUDxh4zx9dfiN9"
       }
     }
   }
