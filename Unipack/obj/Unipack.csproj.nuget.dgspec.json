@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\dzhem\\source\\repos\\Unipack\\Unipack\\Unipack.csproj": {}
+    "C:\\Applications\\Native apps 2\\Unipack\\Unipack\\Unipack.csproj": {}
   },
   "projects": {
-    "C:\\Users\\dzhem\\source\\repos\\Unipack\\Unipack\\Unipack.csproj": {
+    "C:\\Applications\\Native apps 2\\Unipack\\Unipack\\Unipack.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\dzhem\\source\\repos\\Unipack\\Unipack\\Unipack.csproj",
+        "projectUniqueName": "C:\\Applications\\Native apps 2\\Unipack\\Unipack\\Unipack.csproj",
         "projectName": "Unipack",
-        "projectPath": "C:\\Users\\dzhem\\source\\repos\\Unipack\\Unipack\\Unipack.csproj",
+        "projectPath": "C:\\Applications\\Native apps 2\\Unipack\\Unipack\\Unipack.csproj",
         "packagesPath": "C:\\Users\\dzhem\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\dzhem\\source\\repos\\Unipack\\Unipack\\obj\\",
+        "outputPath": "C:\\Applications\\Native apps 2\\Unipack\\Unipack\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\",
@@ -42,6 +42,62 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "dependencies": {
+            "Microsoft.AspNet.WebApi.Core": {
+              "target": "Package",
+              "version": "[5.2.7, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[3.1.8, )"
+            },
+            "Microsoft.AspNetCore.Identity": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[3.1.8, )"
+            },
+            "Microsoft.AspNetCore.Mvc.NewtonsoftJson": {
+              "target": "Package",
+              "version": "[3.1.8, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[3.1.8, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[3.1.8, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[3.1.8, )"
+            },
+            "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
+              "target": "Package",
+              "version": "[3.1.3, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[12.0.3, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[5.6.3, )"
+            },
+            "Swashbuckle.AspNetCore.Swagger": {
+              "target": "Package",
+              "version": "[5.6.3, )"
+            },
+            "xunit": {
+              "target": "Package",
+              "version": "[2.4.1, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
