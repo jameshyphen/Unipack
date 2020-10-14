@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "http://json.schemastore.org/launchsettings.json",
   "iisSettings": {
     "windowsAuthentication": false,
@@ -15,7 +15,7 @@
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "AzureConnectionString": "Data Source=pepehands.database.windows.net;Initial Catalog=Unipack;Persist Security Info=True;User ID=pepehands;Password=YZegUmDRLdJf77R5Sv3pTbNfgAeJwtDAwoHHpBPo",
+        "AzureConnectionString": "Data Source=localhost;Initial Catalog=master;Integrated Security=True;Database=Unipack;",
         "SignInKey": "mx7kdHygamvcUJPtyUDxh4zx9dfiN9"
       }
     },
@@ -26,7 +26,7 @@
       "applicationUrl": "https://localhost:5001;http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Production",
-        "AzureConnectionString": "Data Source=pepehands.database.windows.net;Initial Catalog=Unipack;Persist Security Info=True;User ID=pepehands;Password=YZegUmDRLdJf77R5Sv3pTbNfgAeJwtDAwoHHpBPo",
+        "AzureConnectionString": "Data Source=pepehands.database.windows.net;Initial Catalog=Unipack;Persist Security Info=True;User ID=pepehands;Password=VfPjTCCSmSnPmfzrs5zthaPk4vSBSUupfMMz8DCS",
         "SignInKey": "mx7kdHygamvcUJPtyUDxh4zx9dfiN9"
       }
     }

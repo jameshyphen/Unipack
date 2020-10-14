@@ -40,11 +40,9 @@ namespace Unipack.Data
         private async Task InitializeUsers()
         {
             const string password = "password";
-            await CreateUser("nicklersberghe", "nick@gmail.com", password);
-            await CreateUser("nicklersberghe", "nick2@gmail.com", password);
             await CreateUser("dzhemaptula", "dzhem.aptula@gmail.com", password);
             await CreateUser("tijlzwartjes", "tijl@gmail.com", password);
-            await CreateUser("jannevschep", "janne@vsche.pp", password);
+            await CreateUser("lunadv", "luna.devuyst@student.hogent.be", password);
             await CreateUser("josephstalin", "joseph@stal.in", password);
             await CreateUser("johncena", "john@ce.na", password);
             await CreateUser("web4", "student@hogent.be", password);
