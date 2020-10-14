@@ -4,3 +4,7 @@
 Unipack/Properties/launchSettings.json
 
 *.cache
+
+*.exe
+
+Unipack/obj/
