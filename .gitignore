@@ -2,3 +2,5 @@
 .vs
 
 Unipack/Properties/launchSettings.json
+
+*.cache
