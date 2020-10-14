@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Unipack.Enums;
 
 namespace Unipack.Models
 {
@@ -19,7 +20,7 @@ namespace Unipack.Models
 
         public Boolean completed;
 
-        //public Taskpriority Priority;
+        public TaskPriority Priority;
 
         public VacationTask(string name, DateTime deadLine /*, TaskPriority priority*/ )
         {

@@ -10,22 +10,22 @@ namespace Unipack.Models
     {
         public int VacationItemId { get; set; }
         public int ItemId { get; set; }
-        // [ForeignKey(nameof(ItemId))]
-        // public Item Item { get; set; }
+        [ForeignKey(nameof(ItemId))]
+        public Item Item { get; set; }
 
         public int VacationListId { get; set; }
 
-        // [ForeignKey(nameof(VacationListId))]
-        // public VacationList VacationList { get; set; }
+        [ForeignKey(nameof(VacationListId))]
+        public VacationList VacationList { get; set; }
         public int Quantity { get; set; }
         public DateTime AddedOn { get; set; }
 
-        public VacationItem(/*VacationList VacationList, Item Item*/) // etc
+        public VacationItem(VacationList VacationList, Item Item) // etc
         {
-            //User = user;
-            //Friend = friend;
-            //UserId = user.UserId;
-            //FriendId = friend.UserId;
+            this.VacationList = VacationList;
+            this.VacationItemId = VacationList.VacationListId;
+            this.Item = Item;
+            this.ItemId = Item.ItemId;
         }
 
     }
