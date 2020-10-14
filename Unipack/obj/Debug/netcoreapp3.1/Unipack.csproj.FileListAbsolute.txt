@@ -2,7 +2,6 @@ C:\Applications\Native apps 2\Unipack\Unipack\bin\Debug\netcoreapp3.1\appsetting
 C:\Applications\Native apps 2\Unipack\Unipack\bin\Debug\netcoreapp3.1\appsettings.json
 C:\Applications\Native apps 2\Unipack\Unipack\bin\Debug\netcoreapp3.1\Properties\launchSettings.json
 C:\Applications\Native apps 2\Unipack\Unipack\bin\Debug\netcoreapp3.1\Unipack.exe
-C:\Applications\Native apps 2\Unipack\Unipack\obj\Debug\netcoreapp3.1\Unipack.csprojAssemblyReference.cache
 C:\Applications\Native apps 2\Unipack\Unipack\obj\Debug\netcoreapp3.1\staticwebassets\Unipack.StaticWebAssets.Manifest.cache
 C:\Applications\Native apps 2\Unipack\Unipack\obj\Debug\netcoreapp3.1\staticwebassets\Unipack.StaticWebAssets.xml
 C:\Applications\Native apps 2\Unipack\Unipack\obj\Debug\netcoreapp3.1\Unipack.AssemblyInfoInputs.cache
