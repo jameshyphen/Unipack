@@ -12,7 +12,8 @@ namespace Unipack.DTOs
         [Required]
         public int VacationLocationId { get; set; }
 
-        public string CityName { get; set; }
+        public string CityName { get; set; } = null! ;
+
         [Required]
         public string CountryName { get; set; }
         [Required]
@@ -21,15 +22,16 @@ namespace Unipack.DTOs
         public DateTime DateArrival { get; set; }
         [Required]
         public DateTime DateDeparture { get; set; }
-
+          
         public VacationLocationDto() { }
-        public VacationLocationDto(int id,string countryName, DateTime addedOn, DateTime dateArrival, DateTime dateDeparture)
+        public VacationLocationDto(int id,string countryName, DateTime addedOn, DateTime dateArrival, DateTime dateDeparture, string cityName = null)
         {
             VacationLocationId = id;
             CountryName = countryName;
             AddedOn = addedOn;
             DateArrival = dateArrival;
             DateDeparture = dateDeparture;
+            CityName = cityName;
         }
     }
 }
