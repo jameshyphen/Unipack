@@ -2,11 +2,15 @@
 .vs
 
 Unipack/Properties/launchSettings.json
+
 Unipack/obj/
+
 Unipack/bin/
+
 *.cache
 
 *.exe
 
 Unipack/obj/
+
 Unipack/bin/
