@@ -20,6 +20,7 @@ namespace Unipack.Models
         public int Quantity { get; set; }
         public DateTime AddedOn { get; set; }
 
+        public VacationItem() { }
         public VacationItem(VacationList VacationList, Item Item) // etc
         {
             this.VacationList = VacationList;
