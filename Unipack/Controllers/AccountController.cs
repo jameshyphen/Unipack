@@ -35,7 +35,7 @@ namespace Unipack.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        [Route("Register")]
+        [Route("register")]
         //POST : /api/Account/Register
         public async Task<IActionResult> Register(RegisterDto model)
         {
@@ -76,7 +76,7 @@ namespace Unipack.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        [Route("Login")]
+        [Route("login")]
         //POST : /api/Account/Login
         public async Task<IActionResult> Login(LoginDto model)
         {

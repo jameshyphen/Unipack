@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -8,6 +10,7 @@ using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -40,13 +43,24 @@ namespace Unipack
                 o.AddPolicy("Moderators", s => s.Requirements.Add(new RolesAuthorizationRequirement(new string[] { "Admin", "Moderator" })));
                 o.AddPolicy("Admins", s => s.RequireRole("Admin"));
             });
-            services.AddControllers(o => o.Filters.Add(new AuthorizeFilter()))
+            services.AddControllers(o =>
+                {
+                    
+                    o.Filters.Add(new AuthorizeFilter());
+                    o.Conventions.Add(new RouteTokenTransformerConvention(new SlugifyParameterTransformer()));
+                })
                 .AddNewtonsoftJson(options =>
-                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                    {
+                        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+
+                    }
                 );
             services.AddSwaggerGen(x =>
             {
                 x.SwaggerDoc("v1", new OpenApiInfo { Title = "Unipack API", Version = "v1" });
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                x.IncludeXmlComments(xmlPath);
             });
 
             services.AddIdentity<IdentityUser, IdentityRole>(o => {
@@ -63,8 +77,8 @@ namespace Unipack
                 options.Cookie.HttpOnly = true;
                 options.ExpireTimeSpan = TimeSpan.FromDays(30);
 
-                options.LoginPath = "/api/Account/Login";
-                options.AccessDeniedPath = "/api/Account/AccessDenied";
+                options.LoginPath = "/api/account/login";
+                options.AccessDeniedPath = "/api/account/denied";
                 options.SlidingExpiration = true;
             });
 
