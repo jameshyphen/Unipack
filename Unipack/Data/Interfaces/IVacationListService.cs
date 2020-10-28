@@ -2,23 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Unipack.DTOs;
 using Unipack.Models;
 
 namespace Unipack.Data.Interfaces
 {
     public interface IVacationListService
     {
-        bool AddVacationList(VacationList list);
+        bool AddVacationList(VacationListDto list);
 
-        //Task<VacationListDto> GetVacationListById(int id);
+        Task<VacationListDto> GetVacationListById(int id);
 
-        //Task<IEnumerable<VacationListDto>> GetAllVacationListsByUser(int userId);
+        Task<IEnumerable<VacationListDto>> GetAllVacationListsByUser(int userId);
 
         bool DeleteVacationListById(int id);
 
         bool AddItemToListByItemId(int itemId, int listId);
 
         bool DeleteItemFromListByVacationItemId(int vacationItemId, int listId);
-        void getAllListsFromUser(User user);
     }
 }

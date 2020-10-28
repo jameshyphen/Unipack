@@ -36,9 +36,10 @@ namespace Unipack.Data.Services
                 .FirstOrDefaultAsync();
         }
 
-        //public Task<IEnumerable<VacationListDto>> GetAllVacationListsByUser(int userId)
-        //{
-        //}
+        public Task<IEnumerable<VacationListDto>> GetAllVacationListsByUser(int userId)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// Adds an Item by Id to a List by Id. Returns false if 0 changes are made
@@ -60,9 +61,9 @@ namespace Unipack.Data.Services
         /// </summary>
         /// <param name="list"></param>
         /// <returns>boolean of any made changes</returns>
-        public bool AddVacationList(VacationList list)
+        public bool AddVacationList(VacationListDto list)
         {
-            _vacationLists.Add(list);
+            _vacationLists.Add(new VacationList() {Name = list.Name, AddedOn = DateTime.Now });
             return _context.SaveChanges() != 0;
         }
 
@@ -89,11 +90,6 @@ namespace Unipack.Data.Services
             var vacationItem = _vacationItems.Where(vi => vi.ItemId == vacationItemId && vi.VacationListId == listId).FirstOrDefault();
             _vacationItems.Remove(vacationItem);
             return _context.SaveChanges() != 0;
-        }
-
-        public void getAllListsFromUser(User user)
-        {
-            IList<VacationList> = _vacationLists.get
         }
     }
 }
