@@ -33,22 +33,31 @@ namespace Unipack.Data.Services
 
         public bool AddItem(ItemDto item)
         {
-            throw new NotImplementedException();
+            _items.Add(new Item() { Name = item.Name, AddedOn = item.AddedOn, ItemId = item.ItemId });
+            return _context.SaveChanges() != 0;
         }
 
         public bool AddItemToCategory(int id, string name)
         {
-            throw new NotImplementedException();
+            var category = _itemCategories.FirstOrDefault(c => c.Name == name);
+            var item = _items.FirstOrDefault(i => i.ItemId == id);
+            category.Items.Add(item);
+            _itemCategories.Update(category);
+            return _context.SaveChanges() != 0;
         }
 
         public bool DeleteCategoryByName(string name)
         {
-            throw new NotImplementedException();
+            var category = _itemCategories.FirstOrDefault(c => c.Name == name);
+            _itemCategories.Remove(category);
+            return _context.SaveChanges() != 0;
         }
 
         public bool DeleteItemById(int id)
         {
-            throw new NotImplementedException();
+            var item = _items.FirstOrDefault(i => i.ItemId == id);
+            _items.Remove(item);
+            return _context.SaveChanges() != 0;
         }
 
         public Task<IEnumerable<string>> GetAllCategoriesByUser(int userId)
@@ -56,9 +65,11 @@ namespace Unipack.Data.Services
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<ItemDto>> GetAllItemsByCategory(string name)
+        public async Task<IEnumerable<ItemDto>> GetAllItemsByCategory(string name)
         {
-            throw new NotImplementedException();
+            var categoryId = _itemCategories.FirstOrDefault(c => c.Name == name).ItemCategoryID;
+            return await _items.AsNoTracking().Where(i => i.CategoryId == categoryId)
+                .Select(s => new ItemDto() {AddedOn = s.AddedOn, Category = s.Category.Name, ItemId = s.ItemId, Name = s.Name }).ToListAsync();
         }
 
         public Task<IEnumerable<ItemDto>> GetAllItemsByUser(int userId)
@@ -66,14 +77,22 @@ namespace Unipack.Data.Services
             throw new NotImplementedException();
         }
 
-        public Task<ItemDto> GetItemById(int id)
+        public async Task<ItemDto> GetItemById(int id)
         {
-            throw new NotImplementedException();
+            return await _items.Where(i => i.ItemId == id)
+                .Select(s => new ItemDto() { AddedOn = s.AddedOn, Category = s.Category.Name, ItemId = s.ItemId, Name = s.Name }).FirstOrDefaultAsync();
         }
 
-        public bool UpdateItem(int id, ItemDto item)
+        public bool UpdateItem(int id, ItemDto itemupdate)
         {
-            throw new NotImplementedException();
+            var item = _items.FirstOrDefault(i => i.ItemId == id);
+            var updatedCategory = _itemCategories.FirstOrDefault(c => c.Name == itemupdate.Category);
+            item.Name = itemupdate.Name;
+            item.AddedOn = itemupdate.AddedOn;
+            item.Category = updatedCategory;
+            item.CategoryId = updatedCategory.ItemCategoryID;
+            _items.Update(item);
+            return _context.SaveChanges() != 0;
         }
     }
 }
