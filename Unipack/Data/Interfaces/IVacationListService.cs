@@ -18,9 +18,7 @@ namespace Unipack.Data.Interfaces
 
         bool AddItemToListByItemId(int itemId, int listId);
 
-        bool DeleteItemFromListByItemId(int vacationItemId, int listId);
-
-
-
+        bool DeleteItemFromListByVacationItemId(int vacationItemId, int listId);
+        void getAllListsFromUser(User user);
     }
 }
