@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Unipack.Data.Interfaces;
+using Unipack.Exceptions;
 using Unipack.Models;
 
 namespace Unipack.Data.Services
@@ -26,22 +27,6 @@ namespace Unipack.Data.Services
             this._items = context.Items;
         }
 
-        /*
-        public Task<VacationListDto> GetVacationListById(int id)
-        {
-            return _vacationLists
-                .Where(l => l.VacationListId == id)
-                .Select(l => new VacationListDto { })
-                .FirstOrDefaultAsync();
-        }
-        */
-
-        /*
-        public Task<IEnumerable<VacationListDto>> GetAllVacationListsByUser(int userId)
-        {
-        }
-        */
-
         /// <summary>
         /// Adds an Item by Id to a List by Id. Returns false if 0 changes are made
         /// </summary>
@@ -50,9 +35,11 @@ namespace Unipack.Data.Services
         /// <returns>boolean of any made changes</returns>
         public bool AddItemToListByItemId(int itemId, int listId)
         {
-            var item = _items.Where(i => i.ItemId == itemId).FirstOrDefault();
-            var list = _vacationLists.Where(l => l.VacationListId == listId).FirstOrDefault();
-            var vacationItem = new VacationItem { Item = item, VacationList = list, Quantity = 1, AddedOn = DateTime.Now };
+            Item item = _items.FirstOrDefault(i => i.ItemId == itemId) ?? throw new ItemNotFoundException(itemId);
+            VacationList list = _vacationLists.FirstOrDefault(l => l.VacationListId == listId) ?? throw new VacationListNotFoundException(listId);
+
+            VacationItem vacationItem = new VacationItem { Item = item, VacationList = list, Quantity = 1, AddedOn = DateTime.Now };
+
             _vacationItems.Add(vacationItem);
             return _context.SaveChanges() != 0;
         }
@@ -75,7 +62,8 @@ namespace Unipack.Data.Services
         /// <returns>boolean of any made changes</returns>
         public bool DeleteVacationListById(int id)
         {
-            var list = _vacationLists.Where(l => l.VacationListId == id).FirstOrDefault();
+            VacationList list = _vacationLists.FirstOrDefault(l => l.VacationListId == id) ??
+                                        throw new VacationListNotFoundException(id);
             _vacationLists.Remove(list);
             return _context.SaveChanges() != 0;
         }
@@ -83,12 +71,15 @@ namespace Unipack.Data.Services
         /// <summary>
         /// Delete a Item by vacationItemId from List by Id. Returns false if 0 changes are made
         /// </summary>
-        /// <param name="vacationItemId"></param>
+        /// <param name="itemId"></param>
         /// <param name="listId"></param>
         /// <returns>boolean of any made changes</returns>
-        public bool DeleteItemFromListByVacationItemId(int vacationItemId, int listId)
+        public bool DeleteItemFromListByItemId(int itemId, int listId)
         {
-            var vacationItem = _vacationItems.Where(vi => vi.ItemId == vacationItemId && vi.VacationListId == listId).FirstOrDefault();
+            VacationList list = _vacationLists.FirstOrDefault(l => l.VacationListId == listId) ?? 
+                                        throw new VacationListNotFoundException(listId);
+            VacationItem vacationItem = list.Items.FirstOrDefault(x => x.ItemId == itemId) ??
+                                        throw new ItemNotFoundException(itemId);
             _vacationItems.Remove(vacationItem);
             return _context.SaveChanges() != 0;
         }
