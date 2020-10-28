@@ -8,6 +8,8 @@ namespace Unipack.Models
 {
     public class User
     {
+        #region Properties
+
         public int UserId { get; set; }
 
         private string _email;
@@ -67,6 +69,13 @@ namespace Unipack.Models
             }
         }
 
+        public ICollection<Vacation> Vacations { get; set; }
+
+        #endregion
+
+
+        #region Constructors
+
         public User() { }
 
         public User(string fName, string lName, string email, string username) : this()
@@ -75,10 +84,24 @@ namespace Unipack.Models
             Lastname = lName;
             Username = username;
             Email = email.ToLower();
+            Vacations = new HashSet<Vacation>();
         }
 
         public User(string fName, string lName, string email) : this(fName, lName, email, fName + lName)
         {
         }
+
+        #endregion
+
+
+        #region Behavior
+
+        public void AddVacation(Vacation vacation)
+        {
+            Vacations.Add(vacation);
+        }
+
+        #endregion
+
     }
 }

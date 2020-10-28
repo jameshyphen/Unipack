@@ -7,21 +7,21 @@ namespace Unipack.Models
 {
     public class ItemCategory
     {
-        public int ItemCategoryID { get; set; }
+        public int ItemCategoryId { get; set; }
 
         public string Name { get; set; }
-        public List<Item> Items { get; set; }
+        public User AuthorUser { get; set; }
         public DateTime AddedOn { get; set; }
 
-        public ItemCategory(string name )
+
+        public ItemCategory(string name, User author)
         {
             Name = name;
+            AuthorUser = author;
             AddedOn = DateTime.Now;
         }
 
-        public ItemCategory()
-        {
-        }
+
 
 
 
