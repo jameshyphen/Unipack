@@ -4,7 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Unipack.Data;
+using Unipack.Data.Interfaces;
+using Unipack.DTOs;
+using Unipack.Models;
 using Xunit;
 
 namespace Unipack.Controllers
@@ -14,6 +20,18 @@ namespace Unipack.Controllers
     [ApiController]
     public class VacationListController : ControllerBase
     {
+
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly IVacationListService _vacationListService;
+        private readonly IUserService _userService;
+
+        public VacationListController(UserManager<IdentityUser> userManager, IVacationListService vacationListService, IUserService userService)
+        {
+            this._userManager = userManager;
+            this._vacationListService = vacationListService;
+            this._userService = userService;
+        }
+
         /// <summary>
         /// Returns all the VacationLists the authorized user has created
         /// </summary>
@@ -21,7 +39,7 @@ namespace Unipack.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public IEnumerable<string> Get()
+        public ActionResult<VacationListDto> GetAll(User user)
         {
             throw new NotImplementedException();
         }
@@ -47,9 +65,9 @@ namespace Unipack.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [HttpPost]
-        public void Post([FromBody] string vacationListDto)
+        public bool Post([FromBody] VacationListDto vacationListDto)
         {
-            throw new NotImplementedException();
+            return _vacationListService.AddVacationList();
         }
         /// <summary>
         /// Update a list.
@@ -60,9 +78,9 @@ namespace Unipack.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string vacationListDto)
+        public bool Put(int id, [FromBody] VacationListDto vacationListDto)
         {
-            throw new NotImplementedException();
+            return _vacationListService.AddItemToListByItemId(id,vacationListDto.VacationListId);
         }
 
         /// <summary>
@@ -73,9 +91,9 @@ namespace Unipack.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public bool Delete(int id)
         {
-            throw new NotImplementedException();
+             return _vacationListService.DeleteVacationListById(id);
         }
     }
 }
