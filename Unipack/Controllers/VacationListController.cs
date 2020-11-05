@@ -6,10 +6,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Server.IIS;
 using Microsoft.Extensions.Logging;
 using Unipack.Data;
 using Unipack.Data.Interfaces;
 using Unipack.DTOs;
+using Unipack.Exceptions;
 using Unipack.Models;
 using Xunit;
 
@@ -33,67 +35,103 @@ namespace Unipack.Controllers
         }
 
         /// <summary>
-        /// Returns all the VacationLists the authorized user has created
+        /// Returns all VacationLists created by the authenticated user.
         /// </summary>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public ActionResult<VacationListDto> GetAll(User user)
+        public ActionResult GetVacationListFromUser(User user)
         {
-            throw new NotImplementedException();
+            var result = _vacationListService.GetAllVacationListsByUser(user.UserId);
+            if (result != null)
+                return new OkObjectResult(result);
+            return NotFound();
         }
 
         /// <summary>
-        /// Returns a specific list by id.
+        /// Finds a VacationList with the specified id.
         /// </summary>
-        /// <param name="id"></param>  
+        /// <param name="id">The id of the VacationList you're looking to get.</param>  
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
+        public async Task<ActionResult> GetVacationList(int id)
         {
-            throw new NotImplementedException();
+            var result = new object();
+            try
+            {
+                
+                result = await _vacationListService.GetVacationListById(id);
+            }
+            catch (VacationListNotFoundException ve)
+            {
+                return BadRequest(new { message = "Error while finding vacation list: " + ve.Message });
+            }
+            return new OkObjectResult(result);
         }
 
         /// <summary>
-        /// Creates a new list.
+        /// Creates a VacationList.
         /// </summary>
-        /// <param name="vacationListDto"></param>  
+        /// <param name="model">This is the VacationListDto model with the required information.</param>  
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [HttpPost]
-        public bool Post([FromBody] VacationListDto vacationListDto)
+        public ActionResult AddVacationList([FromBody] VacationListDto model)
         {
-            return _vacationListService.AddVacationList();
+                if (_vacationListService.AddVacationList(model))
+                    return Ok();
+                else
+                    throw new Exception("Something went wrong, vacationList has not been added.");
         }
         /// <summary>
-        /// Update a list.
+        /// Update a VacationList with the specified id.
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="vacationListDto"></param>
+        /// <param name="id">The id of the VacationList you're looking to update.</param>
+        /// <param name="model">This is the VacationList model with the required information.</param>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [HttpPut("{id}")]
-        public bool Put(int id, [FromBody] VacationListDto vacationListDto)
+        public ActionResult UpdateVacationList(int id, [FromBody] VacationListDto model)
         {
-            return _vacationListService.AddItemToListByItemId(id,vacationListDto.VacationListId);
+            bool result;
+            try
+            {
+
+                result = _vacationListService.UpdateList(id, model);
+            }
+            catch (VacationListNotFoundException ve)
+            {
+                return BadRequest(new { message = "Error while finding vacation list: " + ve.Message });
+            }
+            return new OkObjectResult(result);
         }
 
         /// <summary>
-        /// Deletes a specific TodoItem.
+        /// Deletes a VacationList with the specified id.
         /// </summary>
-        /// <param name="id"></param>      
+        /// <param name="id">The id of the VacationList you're looking to delete.</param>      
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [HttpDelete("{id}")]
-        public bool Delete(int id)
+        public ActionResult Delete(int id)
         {
-             return _vacationListService.DeleteVacationListById(id);
+            
+            bool result;
+            try
+            {
+                result = _vacationListService.DeleteVacationListById(id);
+            }
+            catch (VacationListNotFoundException ve)
+            {
+                return BadRequest(new { message = "Error while finding vacation list: " + ve.Message });
+            }
+            return new OkObjectResult(result);
         }
     }
 }
