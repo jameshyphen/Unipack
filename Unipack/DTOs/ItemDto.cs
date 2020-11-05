@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Unipack.Enums;
 
 namespace Unipack.DTOs
 {
@@ -17,5 +18,6 @@ namespace Unipack.DTOs
         public DateTime AddedOn { get; set; }
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
+        public Priority Priority { get; set; }
     }
 }

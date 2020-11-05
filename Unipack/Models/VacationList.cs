@@ -12,6 +12,7 @@ namespace Unipack.Models
 
         public int VacationListId { get; set; }
         public string Name { get; set; }
+        public User AuthorUser { get; set; }
         public ICollection<VacationItem> Items { get; set; }
         public ICollection<VacationTask> Tasks { get; set; }
         public DateTime AddedOn { get; set; }
@@ -30,6 +31,11 @@ namespace Unipack.Models
         public VacationList(string name) : this()
         {
             Name = name;
+        }
+
+        public VacationList(string name, User user) : this(name)
+        {
+            AuthorUser = user;
         }
 
         #endregion

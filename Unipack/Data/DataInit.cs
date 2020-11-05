@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using Unipack.Enums;
 using Unipack.Models;
 
 namespace Unipack.Data
@@ -93,11 +94,11 @@ namespace Unipack.Data
             // Add some lists to the vacation
             VacationList ronaVacList = 
                 new VacationList(
-                        "Important stuff, DONT FORGET!"
+                        "Important stuff, DONT FORGET!", dzhem
                     );
             VacationList ronaVacList2 =
                 new VacationList(
-                    "Optional stuff!"
+                    "Optional stuff!", dzhem
                 );
 
             // Add some item categories
@@ -114,7 +115,9 @@ namespace Unipack.Data
 
             // Add some tasks to the lists
 
-
+            VacationTask task1 = new VacationTask("Charge up my phone", dzhem, DateTime.Parse("12/12/2020"));
+            task1.Priority = Priority.High;
+            ronaVacList.Tasks.Add(task1);
 
             // Add some locations to the lists
 

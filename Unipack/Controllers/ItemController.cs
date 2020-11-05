@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web.Http.Results;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -98,32 +99,105 @@ namespace Unipack.Controllers
             {
                 var methodName = this.GetType().FullName + "." + System.Reflection.MethodBase.GetCurrentMethod().Name;
                 _logger.LogError($"[INTERNAL ERROR] Something broke in {nameof(ItemController)}/{methodName}: {e.Message}");
-                return BadRequest(new {message = "Internal server error: " + e.Message});
+                return StatusCode(500);
             }
         }
 
-        [HttpPost("add")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        /// <summary>
+        /// Creates an Item with the passed on Item DTO model.
+        /// </summary>
+        /// <param name="itemDto">The Item DTO model of the Item to be created.</param>  
+        [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<ItemDto>> AddItem([FromBody] ItemDto model)
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<bool>> AddItem([FromBody] ItemDto itemDto)
         {
-            // Second comment
-            // kek
             try
             {
                 var user = await GetCurrentUser();
-                var item = new Item(model.Name, user);
+                var category = _categoryService.GetCategoryById(itemDto.CategoryId);
+                var item = new Item
+                {
+                    Name = itemDto.Name,
+                    AuthorUser = user,
+                    Category = category,
+                    Priority = itemDto.Priority
+                };
                 if (_itemService.AddItem(item))
-                    return Ok();
-                else
-                    throw new Exception("Something went wrong, item has not been added.");
+                    return Ok(true);
+                throw new Exception("Something went wrong, item has not been created.");
             }
             catch (Exception e)
             {
                 var methodName = this.GetType().FullName + "." + System.Reflection.MethodBase.GetCurrentMethod().Name;
                 _logger.LogError($"[INTERNAL ERROR] Something broke in {nameof(ItemController)}/{methodName}: {e.Message}");
-                return BadRequest(new { message = "Internal server error: " + e.Message });
+                return StatusCode(500);
+            }
+        }
+
+        /// <summary>
+        /// Creates an Item with the passed on Item DTO Model.
+        /// </summary>
+        /// <param name="itemId">The Id of the Item to be updated.</param>  
+        /// <param name="itemDto">The Item DTO Model of the Item to be updated.</param>  
+        [HttpPut("{itemId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<bool>> UpdateItem(int itemId, [FromBody] ItemDto itemDto)
+        {
+            try
+            {
+                var user = await GetCurrentUser();
+                var category = _categoryService.GetCategoryById(itemDto.CategoryId);
+                var item = new Item
+                {
+                    Name = itemDto.Name,
+                    AuthorUser = user,
+                    Category = category,
+                    Priority = itemDto.Priority
+                };
+                if (_itemService.UpdateItem(itemId, item))
+                    return Ok(true);
+                throw new Exception("Something went wrong, item has not been updated.");
+            }
+            catch (Exception e)
+            {
+                var methodName = this.GetType().FullName + "." + System.Reflection.MethodBase.GetCurrentMethod().Name;
+                _logger.LogError($"[INTERNAL ERROR] Something broke in {nameof(ItemController)}/{methodName}: {e.Message}");
+                return StatusCode(500);
+            }
+        }
+
+        /// <summary>
+        /// Deletes an Item with the specified id.
+        /// </summary>
+        /// <param name="itemId">The Id of the Item to be updated.</param>  
+        [HttpDelete("{itemId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<bool>> DeleteItem(int itemId)
+        {
+            try
+            {
+                var user = await GetCurrentUser();
+                if (_itemService.GetItemById(itemId).AuthorUser.UserId == user.UserId)
+                {
+                    if (_itemService.DeleteItemById(itemId))
+                        return Ok(true);
+                }
+                else
+                {
+                    return BadRequest("This item does not belong to your account.");
+                }
+                    
+                throw new Exception("Something went wrong, item has not been deleted.");
+            }
+            catch (Exception e)
+            {
+                var methodName = this.GetType().FullName + "." + System.Reflection.MethodBase.GetCurrentMethod().Name;
+                _logger.LogError($"[INTERNAL ERROR] Something broke in {nameof(ItemController)}/{methodName}: {e.Message}");
+                return StatusCode(500);
             }
         }
 
@@ -142,7 +216,7 @@ namespace Unipack.Controllers
                 var user = await _userService.GetByUserEmailAsync(identityUser.Email);
                 return user;
             }
-            catch (ArgumentException e)
+            catch (Exception e)
             {
                 _logger.LogInformation($"Error GetCurrentUser(): {e.Message}");
                 return null;
