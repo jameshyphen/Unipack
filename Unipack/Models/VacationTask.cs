@@ -16,6 +16,7 @@ namespace Unipack.Models
         public int VacationTaskId { get; set; }
 
         public string Name { get; set; }
+        public User AuthorUser { get; set; }
 
         public DateTime AddedOn { get; set; }
 
@@ -29,14 +30,26 @@ namespace Unipack.Models
 
         #region Constructors
 
-        public VacationTask(string name, DateTime deadLine)
+        public VacationTask(string name)
         {
-            DeadLine = deadLine;
             Name = name;
             AddedOn = DateTime.Now;
-
         }
 
+        public VacationTask(string name, DateTime deadLine): this(name)
+        {
+            DeadLine = deadLine;
+        }
+
+        public VacationTask(string name, User user) : this(name)
+        {
+            AuthorUser = user;
+        }
+
+        public VacationTask(string name, User user, DateTime deadLine) : this(name, user)
+        {
+            DeadLine = deadLine;
+        }
         #endregion
 
         #region Behavior
