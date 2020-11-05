@@ -40,11 +40,14 @@ namespace Unipack.Data.Services
 
         public bool AddItemToCategory(int id, string name)
         {
-            var category = _itemCategories.FirstOrDefault(c => c.Name == name);
-            var item = _items.FirstOrDefault(i => i.ItemId == id);
-            category.Items.Add(item);
-            _itemCategories.Update(category);
-            return _context.SaveChanges() != 0;
+            // This is weird?
+            //var category = _itemCategories.FirstOrDefault(c => c.ItemCategoryId = id);
+            //var item = _items.FirstOrDefault(i => i.ItemId == id);
+            //category..Add(item);
+            //_itemCategories.Update(category);
+            //return _context.SaveChanges() != 0;
+
+            throw new NotImplementedException();
         }
 
         public bool DeleteCategoryByName(string name)
@@ -68,7 +71,7 @@ namespace Unipack.Data.Services
 
         public async Task<IEnumerable<ItemDto>> GetAllItemsByCategory(string name)
         {
-            var categoryId = _itemCategories.FirstOrDefault(c => c.Name == name).ItemCategoryID;
+            var categoryId = _itemCategories.FirstOrDefault(c => c.Name == name).ItemCategoryId;
             return await _items.AsNoTracking().Where(i => i.CategoryId == categoryId)
                 .Select(s => new ItemDto() {AddedOn = s.AddedOn, Category = s.Category.Name, ItemId = s.ItemId, Name = s.Name }).ToListAsync();
         }
@@ -91,7 +94,7 @@ namespace Unipack.Data.Services
             item.Name = itemupdate.Name;
             item.AddedOn = itemupdate.AddedOn;
             item.Category = updatedCategory;
-            item.CategoryId = updatedCategory.ItemCategoryID;
+            item.CategoryId = updatedCategory.ItemCategoryId;
             _items.Update(item);
             return _context.SaveChanges() != 0;
         }

@@ -39,11 +39,9 @@ namespace Unipack.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public ActionResult<VacationListDto> GetVacationLists(User user)
+        public ActionResult GetVacationLists(User user)
         {
-            var user = User.Identity.Name;
-            //TODO implement method to get userid
-            return _vacationListService.GetAllVacationListsByUser(0);
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -54,9 +52,9 @@ namespace Unipack.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [HttpGet("{id}", Name = "Get")]
-        public string GetVacationList(int id)
+        public async Task<ActionResult> GetVacationList(int id)
         {
-            return _vacationListService.GetVacationListById(id);
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -67,7 +65,7 @@ namespace Unipack.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [HttpPost]
-        public bool CreateVacationList([FromBody] VacationListDto model)
+        public ActionResult CreateVacationList([FromBody] VacationListDto model)
         {
             throw new NotImplementedException();
         }
@@ -80,7 +78,7 @@ namespace Unipack.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [HttpPut("{id}")]
-        public bool UpdateVacationList(int id, [FromBody] VacationListDto model)
+        public ActionResult UpdateVacationList(int id, [FromBody] VacationListDto model)
         {
 
             throw new NotImplementedException();
@@ -94,7 +92,7 @@ namespace Unipack.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [HttpDelete("{id}")]
-        public bool Delete(int id)
+        public ActionResult Delete(int id)
         {
             throw new NotImplementedException();
         }
