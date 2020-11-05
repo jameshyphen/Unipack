@@ -5,31 +5,38 @@ using System.Threading.Tasks;
 
 namespace Unipack.Models
 {
-    public class ItemCategory
+    public class Category
     {
         #region Properties
 
-        public int ItemCategoryId { get; set; }
-
+        public int CategoryId { get; set; }
         public string Name { get; set; }
         public User AuthorUser { get; set; }
+        public ICollection<Item> Items { get; set; }
         public DateTime AddedOn { get; set; }
 
         #endregion
 
         #region Constructors
 
-        public ItemCategory()
+        public Category()
         {
+            Items = new HashSet<Item>();
             AddedOn = DateTime.Now;
         }
-        public ItemCategory(string name, User author): this()
+        public Category(string name) : this()
         {
             Name = name;
-            AuthorUser = author;
         }
-
+        public Category(string name, User user) : this(name)
+        {
+            this.AuthorUser = user;
+        }
         #endregion
 
+        #region Behavior
+
+
+        #endregion
     }
 }

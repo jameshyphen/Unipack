@@ -13,11 +13,12 @@ namespace Unipack.Models
 
         public int ItemId { get; set; }
         public string Name { get; set; }
+        public User AuthorUser { get; set; }
         public DateTime AddedOn { get; set; }
         public Priority Priority { get; set; }
 
         [ForeignKey(nameof(CategoryId))]
-        public ItemCategory Category { get; set; }
+        public Category Category { get; set; }
         public int CategoryId { get; set; }
 
         #endregion
@@ -32,11 +33,19 @@ namespace Unipack.Models
         {
             Name = name;
         }
-        public Item(string name, ItemCategory category) : this(name)
+        public Item(string name, Category category) : this(name)
         {
             Category = category;
         }
 
+        public Item(string name, User user) : this(name)
+        {
+            AuthorUser = user;
+        }
+        public Item(string name, Category category, User user) : this(name, category)
+        {
+            AuthorUser = user;
+        }
         #endregion
     }
 }

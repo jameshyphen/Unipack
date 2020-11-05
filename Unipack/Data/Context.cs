@@ -13,7 +13,7 @@ namespace Unipack.Data
         public DbSet<User> UnipackUsers { get; set; }
         public DbSet<Item> Items { get; set; }
         public DbSet<Vacation> Vacations { get; set; }
-        public DbSet<ItemCategory> ItemCategories { get; set; }
+        public DbSet<Category> Categories { get; set; }
         public DbSet<VacationItem> VacationItems { get; set; }
         public DbSet<VacationList> VacationLists { get; set; }
         public DbSet<VacationLocation> VacationLocations { get; set; }
@@ -29,7 +29,7 @@ namespace Unipack.Data
             base.OnModelCreating(builder);
 
             builder.Entity<User>();
-            builder.Entity<ItemCategory>();
+            builder.Entity<Category>();
             builder.Entity<Item>();
             builder.Entity<Vacation>();
 

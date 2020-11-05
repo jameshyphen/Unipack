@@ -18,19 +18,28 @@ namespace Unipack.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ItemController : ControllerBase
+    public class CategoryController : ControllerBase
     {
         private readonly IItemService _itemService;
+        private readonly ICategoryService _categoryService;
         private readonly IUserService _userService;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger _logger;
 
-        public ItemController(IUserService userService, UserManager<IdentityUser> userManager, ILogger<ItemController> logger, IItemService itemService)
+        public CategoryController
+        (
+            IUserService userService,
+            UserManager<IdentityUser> userManager,
+            ILogger<ItemController> logger,
+            IItemService itemService,
+            ICategoryService categoryService
+        )
         {
             this._logger = logger;
             this._userService = userService;
             this._userManager = userManager;
             this._itemService = itemService;
+            this._categoryService = categoryService;
         }
 
         /// <summary>
@@ -88,6 +97,84 @@ namespace Unipack.Controllers
                 return BadRequest(new {message = "Internal server error: " + e.Message});
             }
         }
+
+
+        // TODO: You cannot have 2 gets in the same controller, causes conflict lol
+        // TODO: Create a categorycontroller...
+        //[HttpGet]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //public ActionResult<Task<IEnumerable<string>>> GetAllCategories()
+        //{
+        //    var user = User.Identity.Name;
+        //    //TODO implement method to get userid
+        //    return service.GetAllCategoriesByUser(0);
+        //}
+
+        // TODO: Same issue, move to category controller
+        //[HttpPost]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //public ActionResult<bool> AddCategory([FromBody] string value)
+        //{
+        //    return service.AddCategory(value);
+        //}
+
+        // TODO: All of these endpoints are not going to work, they are all on the same api/Item/{id} http get, and the above ones are all on api/Item,
+        // TODO: please make unique routes and correct request types
+        //[HttpGet("{id}")]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //public ActionResult<bool> AddItemToCategory(int id,[FromBody] string categoryName)
+        //{
+        //    return service.AddItemToCategory(id, categoryName);
+        //}
+
+        //[HttpDelete]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //public ActionResult<bool> DeleteCategory(string name)
+        //{
+        //    return service.DeleteCategoryByName(name);
+        //}
+
+        /// <summary>
+        /// Creates an Item.
+        /// </summary>
+        /// <param name="model">This is the ItemDto model with the required information.</param>  
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public ActionResult<bool> AddItem([FromBody] ItemDto model)
+        {
+            return _itemService.AddItem(model);
+        }
+
+        /// <summary>
+        /// Updates an Item with the specified id.
+        /// </summary>
+        /// <param name="id">The id of the Item you're looking to update.</param>  
+        /// <param name="model">This is the ItemDto model with the required information.</param>  
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public ActionResult<bool> UpdateItem(int id, [FromBody] ItemDto model)
+        {
+            return _itemService.UpdateItem(id, model);
+        }
+
+        /// <summary>
+        /// Deletes an Item with the specified id.
+        /// </summary>
+        /// <param name="id">The id of the Item you're looking to delete.</param>  
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public ActionResult<bool> DeleteItem(int id)
+        {
+            return _itemService.DeleteItemById(id);
+        }
+
         private async Task<User> GetCurrentUser()
         {
             try
