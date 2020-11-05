@@ -31,12 +31,16 @@ namespace Unipack.Data.Services
             _users = context.UnipackUsers;
         }
 
-
+        /// <summary>
+        /// Get a vacation list from the VacationListId
+        /// </summary>
+        /// <param name="itemId"></param>
+        /// <param name="listId"></param>
+        /// <returns>boolean of any made changes</returns>
         public Task<VacationListDto> GetVacationListById(int id)
         {
-            return _vacationLists
-                .Where(l => l.VacationListId == id)
-                .Select(l => new VacationListDto
+            var vacationList = _vacationLists.Where(l => l.VacationListId == id) ?? throw new VacationListNotFoundException(id);
+            return vacationList.Select(l => new VacationListDto
                 {
                     AddedOn = l.AddedOn,
                     Name = l.Name,
@@ -46,6 +50,12 @@ namespace Unipack.Data.Services
                 .FirstOrDefaultAsync();
         }
 
+        /// <summary>
+        /// Get all lists from a user.
+        /// </summary>
+        /// <param name="itemId"></param>
+        /// <param name="listId"></param>
+        /// <returns>boolean of any made changes</returns>
         public ICollection<VacationListDto> GetAllVacationListsByUser(int userId)
         {
             User user = _users.FirstOrDefault(u => u.UserId == userId) ?? throw new UserNotFoundException(userId);
@@ -121,19 +131,19 @@ namespace Unipack.Data.Services
             return _context.SaveChanges() != 0;
         }
 
-        public void getAllListsFromUser(User user)
-        {
-            throw new NotImplementedException();
-        }
-
+        /// <summary>
+        /// Update a List by Id. Returns false if 0 changes are made
+        /// </summary>
+        /// <param name="itemId"></param>
+        /// <param name="listId"></param>
+        /// <returns>boolean of any made changes</returns>
         public bool UpdateList(int id, VacationListDto model)
         {
-            throw new NotImplementedException();
+            var list = _vacationLists.FirstOrDefault(l => l.VacationListId == id) ?? throw new VacationListNotFoundException(id);
+            _vacationLists.Update(list);
+            return _context.SaveChanges() != 0;
         }
 
-        Task<IEnumerable<VacationListDto>> IVacationListService.GetAllVacationListsByUser(int userId)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }
