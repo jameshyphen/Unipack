@@ -76,7 +76,7 @@ namespace Unipack.Data.Services
         /// <summary>
         /// Delete a VacationList by Id. Returns false if 0 changes are made
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="listId"></param>
         /// <returns>boolean of any made changes</returns>
         public bool DeleteVacationListById(int listId)
         {
@@ -107,6 +107,11 @@ namespace Unipack.Data.Services
         public void getAllListsFromUser(User user)
         {
             //IList<VacationList> = _vacationLists.get
+        }
+
+        public bool UpdateList(int id, VacationListDto model)
+        {
+            throw new NotImplementedException();
         }
     }
 }

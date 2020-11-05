@@ -67,7 +67,7 @@ namespace Unipack.Data
             var dzhem = new User("Dzhem", "Aptula", "dzhem.aptula@gmail.com");
             var luna = new User("Luna", "dv", "luna.devuyst@student.hogent.be");
             var tijl = new User("Tijl", "Zwartjes", "tijl@hotmail.com");
-            var users = _context.Users;
+            var users = _context.UnipackUsers;
             dzhem.Username = "dzhemaptula";
             luna.Username = "nicklersberghe";
             users.Add(dzhem);

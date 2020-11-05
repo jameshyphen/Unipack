@@ -21,6 +21,7 @@ namespace Unipack.Models
         public Vacation()
         {
             Locations = new HashSet<VacationLocation>();
+            VacationLists = new HashSet<VacationList>();
             AddedOn = DateTime.Now;
         }
 
