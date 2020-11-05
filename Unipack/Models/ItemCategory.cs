@@ -7,23 +7,29 @@ namespace Unipack.Models
 {
     public class ItemCategory
     {
-        public int ItemCategoryID { get; set; }
+        #region Properties
+
+        public int ItemCategoryId { get; set; }
 
         public string Name { get; set; }
-        public List<Item> Items { get; set; }
+        public User AuthorUser { get; set; }
         public DateTime AddedOn { get; set; }
 
-        public ItemCategory(string name )
-        {
-            Name = name;
-            AddedOn = DateTime.Now;
-        }
+        #endregion
+
+        #region Constructors
 
         public ItemCategory()
         {
+            AddedOn = DateTime.Now;
+        }
+        public ItemCategory(string name, User author): this()
+        {
+            Name = name;
+            AuthorUser = author;
         }
 
-
+        #endregion
 
     }
 }

@@ -10,13 +10,14 @@ namespace Unipack.Data
 {
     public class Context : IdentityDbContext
     {
-        public new DbSet<User> Users { get; set; }
-        public new DbSet<Item> Items { get; set; }
-        public new DbSet<ItemCategory> ItemCategories { get; set; }
-        public new DbSet<VacationItem> VacationItems { get; set; }
-        public new DbSet<VacationList> VacationLists { get; set; }
-        public new DbSet<VacationLocation> VacationLocations { get; set; }
-        public new DbSet<VacationTask> VacationTasks { get; set; }
+        public DbSet<User> UnipackUsers { get; set; }
+        public DbSet<Item> Items { get; set; }
+        public DbSet<Vacation> Vacations { get; set; }
+        public DbSet<ItemCategory> ItemCategories { get; set; }
+        public DbSet<VacationItem> VacationItems { get; set; }
+        public DbSet<VacationList> VacationLists { get; set; }
+        public DbSet<VacationLocation> VacationLocations { get; set; }
+        public DbSet<VacationTask> VacationTasks { get; set; }
 
         public Context(DbContextOptions options)
             : base(options)
@@ -30,6 +31,7 @@ namespace Unipack.Data
             builder.Entity<User>();
             builder.Entity<ItemCategory>();
             builder.Entity<Item>();
+            builder.Entity<Vacation>();
 
             builder.Entity<VacationItem>();
 

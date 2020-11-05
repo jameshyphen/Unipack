@@ -28,7 +28,7 @@ namespace Unipack.Data
             _context.Database.EnsureDeleted();
             if (_context.Database.EnsureCreated())
             {
-                InitData();
+                InitUsers();
                 await InitializeUsers();
             }
             else
@@ -62,19 +62,18 @@ namespace Unipack.Data
 
         }
 
-        private void InitData()
+        private void InitUsers()
         {
             var dzhem = new User("Dzhem", "Aptula", "dzhem.aptula@gmail.com");
-            var nick = new User("Nick", "Lersberghe", "nick@gmail.com");
+            var luna = new User("Luna", "dv", "luna.devuyst@student.hogent.be");
             var tijl = new User("Tijl", "Zwartjes", "tijl@hotmail.com");
-            var users = _context.Users;
+            var users = _context.UnipackUsers;
             dzhem.Username = "dzhemaptula";
-            nick.Username = "nicklersberghe";
+            luna.Username = "nicklersberghe";
             users.Add(dzhem);
-            users.Add(nick);
-            users.Add(new User("Janne", "Vschep", "jannev@gmail.com"));
+            users.Add(luna);
             users.Add(tijl);
-            users.Add(new User("John", "Cena", "cantcme@wwe.org"));
+            users.Add(new User("John", "Cena", "john@ce.na"));
             users.Add(new User("Billie", "Eilish", "liketheothergirls@unoriginal.com"));
             users.Add(new User("Joseph", "Stalin", "gulag@comrade.gulu"));
             users.Add(new User("Napoleon", "Bonaparte", "short@men.riseup"));
@@ -83,6 +82,45 @@ namespace Unipack.Data
             var web4 = new User("student", "hogent", "student@hogent.be", "web4");
             users.Add(web4);
 
+            // Create a vacation
+            Vacation ronaVac = 
+                new Vacation(
+                    "Tour de la Corona",
+                    new DateTime(2021, 3, 20),
+                    new DateTime(2021, 4, 20)
+                    );
+
+            // Add some lists to the vacation
+            VacationList ronaVacList = 
+                new VacationList(
+                        "Important stuff, DONT FORGET!"
+                    );
+            VacationList ronaVacList2 =
+                new VacationList(
+                    "Optional stuff!"
+                );
+
+            // Add some item categories
+            ItemCategory ronaCategory = new ItemCategory("Technology", dzhem);
+
+            ItemCategory ronaCategory2 = new ItemCategory("Books", dzhem);
+
+
+            // Add some items to the lists
+            Item ronaItem = new Item("Laptop"){Category = ronaCategory};
+            Item ronaItem2 = new Item("Phone"){Category = ronaCategory};
+
+            Item ronaItem3 = new Item("Clean Coder book") { Category = ronaCategory2 };
+
+            // Add some tasks to the lists
+
+
+
+            // Add some locations to the lists
+
+            ronaVac.AddList(ronaVacList);
+            ronaVac.AddList(ronaVacList2);
+            dzhem.AddVacation(ronaVac);
             _context.SaveChanges();
         }
     }
