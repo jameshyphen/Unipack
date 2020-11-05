@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Unipack.Data.Interfaces;
 using Unipack.DTOs;
 using Unipack.Exceptions;
+using Unipack.Exceptions.NotFoundExceptions;
 using Unipack.Models;
 
 namespace Unipack.Data.Services
@@ -18,6 +19,7 @@ namespace Unipack.Data.Services
         private readonly DbSet<VacationList> _vacationLists;
         private readonly DbSet<VacationItem> _vacationItems;
         private readonly DbSet<Item> _items;
+        private readonly DbSet<User> _users;
 
         public VacationListService(Context context, ILogger<UserService> _logger)
         {
@@ -26,9 +28,10 @@ namespace Unipack.Data.Services
             this._vacationLists = context.VacationLists;
             this._vacationItems = context.VacationItems;
             this._items = context.Items;
+            this._users = context.Users;
         }
 
-        
+
         public Task<VacationListDto> GetVacationListById(int id)
         {
             return _vacationLists
@@ -43,9 +46,22 @@ namespace Unipack.Data.Services
                 .FirstOrDefaultAsync();
         }
 
-        public Task<IEnumerable<VacationListDto>> GetAllVacationListsByUser(int userId)
+        public ICollection<VacationListDto> GetAllVacationListsByUser(int userId)
         {
-            throw new NotImplementedException();
+            User user = _users.FirstOrDefault(u => u.UserId == userId) ?? throw new UserNotFoundException(userId);
+            ICollection<VacationList> vacationLists = user.Vacations.SelectMany(v=> v.VacationLists).ToList();
+            var dto = vacationLists.Select(list => new VacationListDto
+            {
+                VacationListId = list.VacationListId,
+                AddedOn = list.AddedOn,
+                Name = list.Name
+                //Can be uncommented when VacationItemDto & VacationTaskDto have been implemented
+                //Tasks = list.Tasks,
+                //Items= list.Items
+            }).OrderByDescending(l => l.AddedOn).ToList();
+            return dto;
+            
+
         }
 
         /// <summary>
@@ -70,7 +86,7 @@ namespace Unipack.Data.Services
         /// <returns>boolean of any made changes</returns>
         public bool AddVacationList(VacationListDto list)
         {
-            _vacationLists.Add(new VacationList() {Name = list.Name, AddedOn = DateTime.Now });
+            _vacationLists.Add(new VacationList() { Name = list.Name, AddedOn = DateTime.Now });
             return _context.SaveChanges() != 0;
         }
 
@@ -95,7 +111,7 @@ namespace Unipack.Data.Services
         /// <returns>boolean of any made changes</returns>
         public bool DeleteItemFromListByVacationItemId(int itemId, int listId)
         {
-            VacationList vacationList = _vacationLists.FirstOrDefault(x => x.VacationListId == listId) ?? 
+            VacationList vacationList = _vacationLists.FirstOrDefault(x => x.VacationListId == listId) ??
                                         throw new VacationListNotFoundException(listId);
 
             VacationItem vacationItem = vacationList.Items.FirstOrDefault(x => x.ItemId == itemId) ??
