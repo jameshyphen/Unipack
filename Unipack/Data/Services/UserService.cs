@@ -58,5 +58,10 @@ namespace Unipack.Data.Services
         {
             return _users.FirstOrDefault(b => b.Email.Equals(email));
         }
+
+        public async Task<User> GetByUserEmailAsync(string email)
+        {
+            return await _users.FirstOrDefaultAsync(x => x.Email.Equals(email));
+        }
     }
 }
