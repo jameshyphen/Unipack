@@ -22,16 +22,5 @@ namespace Unipack.DTOs
         public DateTime DateArrival { get; set; }
         [Required]
         public DateTime DateDeparture { get; set; }
-          
-        public VacationLocationDto() { }
-        public VacationLocationDto(int id,string countryName, DateTime addedOn, DateTime dateArrival, DateTime dateDeparture, string cityName = null)
-        {
-            VacationLocationId = id;
-            CountryName = countryName;
-            AddedOn = addedOn;
-            DateArrival = dateArrival;
-            DateDeparture = dateDeparture;
-            CityName = cityName;
-        }
     }
 }

@@ -5,6 +5,7 @@ namespace Unipack.Data.Interfaces
 {
     public interface ICategoryService
     {
+        Category GetCategoryById(int categoryId);
         bool AddCategory(Category category);
         
         ICollection<Category> GetAllCategoriesByUserId(int userId);
