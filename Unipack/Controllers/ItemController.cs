@@ -110,6 +110,8 @@ namespace Unipack.Controllers
         {
             // First change
             // lmao
+            // Second comment
+            // kek
             try
             {
                 var user = await GetCurrentUser();
