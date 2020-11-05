@@ -27,7 +27,8 @@ namespace Unipack.Data.Services
 
         public bool AddCategory(string category)
         {
-            _itemCategories.Add(new ItemCategory() {Name = category, AddedOn = DateTime.Now});
+            // TODO: User has to be added along with itemcategory aswell, find out who is logged in and add the corresponding user along
+            //_itemCategories.Add(new ItemCategory(category));
             return _context.SaveChanges() != 0;
         }
 

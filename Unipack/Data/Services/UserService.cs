@@ -19,7 +19,7 @@ namespace Unipack.Data.Services
         {
             this._context = context;
             this._logger = _logger;
-            this._users = context.Users;
+            this._users = context.UnipackUsers;
         }
 
         public void Add(User user)

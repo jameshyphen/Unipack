@@ -33,13 +33,13 @@ namespace Unipack.Controllers
         }
 
         /// <summary>
-        /// Returns all the VacationLists the authorized user has created
+        /// Returns all VacationLists created by the authenticated user.
         /// </summary>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public ActionResult<Task<IEnumerable<VacationListDto>>> GetAll()
+        public ActionResult<VacationListDto> GetVacationLists(User user)
         {
             var user = User.Identity.Name;
             //TODO implement method to get userid
@@ -47,55 +47,56 @@ namespace Unipack.Controllers
         }
 
         /// <summary>
-        /// Returns a specific list by id.
+        /// Finds a VacationList with the specified id.
         /// </summary>
-        /// <param name="id"></param>  
+        /// <param name="id">The id of the VacationList you're looking to get.</param>  
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [HttpGet("{id}", Name = "Get")]
-        public ActionResult<Task<VacationListDto>> Get(int id)
+        public string GetVacationList(int id)
         {
             return _vacationListService.GetVacationListById(id);
         }
 
         /// <summary>
-        /// Creates a new list.
+        /// Creates a VacationList.
         /// </summary>
-        /// <param name="vacationListDto"></param>  
+        /// <param name="model">This is the VacationListDto model with the required information.</param>  
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [HttpPost]
-        public bool Post([FromBody] VacationListDto vacationListDto)
+        public bool CreateVacationList([FromBody] VacationListDto model)
         {
-            return _vacationListService.AddVacationList(vacationListDto);
+            throw new NotImplementedException();
         }
         /// <summary>
-        /// Update a list.
+        /// Update a VacationList with the specified id.
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="vacationListDto"></param>
+        /// <param name="id">The id of the VacationList you're looking to update.</param>
+        /// <param name="model">This is the VacationList model with the required information.</param>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [HttpPut("{id}")]
-        public bool Put(int id, [FromBody] VacationListDto vacationListDto)
+        public bool UpdateVacationList(int id, [FromBody] VacationListDto model)
         {
-            return _vacationListService.AddItemToListByItemId(id,vacationListDto.VacationListId);
+
+            throw new NotImplementedException();
         }
 
         /// <summary>
-        /// Deletes a specific TodoItem.
+        /// Deletes a VacationList with the specified id.
         /// </summary>
-        /// <param name="id"></param>      
+        /// <param name="id">The id of the VacationList you're looking to delete.</param>      
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [HttpDelete("{id}")]
         public bool Delete(int id)
         {
-             return _vacationListService.DeleteVacationListById(id);
+            throw new NotImplementedException();
         }
     }
 }

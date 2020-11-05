@@ -33,6 +33,10 @@ namespace Unipack.Controllers
             this._logger = _logger;
         }
 
+        /// <summary>
+        /// Registers a user. Returns a token and the created user.
+        /// </summary>
+        /// <param name="model">This is the RegisterDto model with the required information.</param>  
         [AllowAnonymous]
         [HttpPost]
         [Route("register")]
@@ -74,6 +78,10 @@ namespace Unipack.Controllers
             return BadRequest(model);
         }
 
+        /// <summary>
+        /// Authenticates user. Returns a token and the user.
+        /// </summary>
+        /// <param name="model">This is the LoginDto model with the required information.</param>  
         [AllowAnonymous]
         [HttpPost]
         [Route("login")]

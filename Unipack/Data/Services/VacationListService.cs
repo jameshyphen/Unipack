@@ -1,11 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Unipack.Data.Interfaces;
 using Unipack.DTOs;
+using Unipack.Exceptions;
 using Unipack.Models;
 
 namespace Unipack.Data.Services
@@ -23,7 +25,6 @@ namespace Unipack.Data.Services
             this._context = context;
             this._logger = _logger;
             this._vacationLists = context.VacationLists;
-            this._vacationItems = context.VacationItems;
             this._items = context.Items;
         }
 
@@ -32,7 +33,13 @@ namespace Unipack.Data.Services
         {
             return _vacationLists
                 .Where(l => l.VacationListId == id)
-                .Select(l => new VacationListDto { })
+                .Select(l => new VacationListDto
+                {
+                    AddedOn = l.AddedOn,
+                    Name = l.Name,
+                    VacationListId = l.VacationListId,
+                    // TODO: Move this, change up VacationList to Vacation
+                })
                 .FirstOrDefaultAsync();
         }
 
@@ -49,8 +56,8 @@ namespace Unipack.Data.Services
         /// <returns>boolean of any made changes</returns>
         public bool AddItemToListByItemId(int itemId, int listId)
         {
-            var item = _items.Where(i => i.ItemId == itemId).FirstOrDefault();
-            var list = _vacationLists.Where(l => l.VacationListId == listId).FirstOrDefault();
+            Item item = _items.FirstOrDefault(i => i.ItemId == itemId) ?? throw new ItemNotFoundException(itemId);
+            VacationList list = _vacationLists.FirstOrDefault(l => l.VacationListId == listId) ?? throw new VacationListNotFoundException(listId);
             var vacationItem = new VacationItem { Item = item, VacationList = list, Quantity = 1, AddedOn = DateTime.Now };
             _vacationItems.Add(vacationItem);
             return _context.SaveChanges() != 0;
@@ -70,11 +77,12 @@ namespace Unipack.Data.Services
         /// <summary>
         /// Delete a VacationList by Id. Returns false if 0 changes are made
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="listId"></param>
         /// <returns>boolean of any made changes</returns>
-        public bool DeleteVacationListById(int id)
+        public bool DeleteVacationListById(int listId)
         {
-            var list = _vacationLists.Where(l => l.VacationListId == id).FirstOrDefault();
+            VacationList list = _vacationLists.FirstOrDefault(l => l.VacationListId == listId) ?? throw new VacationListNotFoundException(listId);
+
             _vacationLists.Remove(list);
             return _context.SaveChanges() != 0;
         }
@@ -82,14 +90,29 @@ namespace Unipack.Data.Services
         /// <summary>
         /// Delete a Item by vacationItemId from List by Id. Returns false if 0 changes are made
         /// </summary>
-        /// <param name="vacationItemId"></param>
+        /// <param name="itemId"></param>
         /// <param name="listId"></param>
         /// <returns>boolean of any made changes</returns>
-        public bool DeleteItemFromListByVacationItemId(int vacationItemId, int listId)
+        public bool DeleteItemFromListByVacationItemId(int itemId, int listId)
         {
-            var vacationItem = _vacationItems.Where(vi => vi.ItemId == vacationItemId && vi.VacationListId == listId).FirstOrDefault();
+            VacationList vacationList = _vacationLists.FirstOrDefault(x => x.VacationListId == listId) ?? 
+                                        throw new VacationListNotFoundException(listId);
+
+            VacationItem vacationItem = vacationList.Items.FirstOrDefault(x => x.ItemId == itemId) ??
+                                        throw new ItemNotFoundException(itemId);
+
             _vacationItems.Remove(vacationItem);
             return _context.SaveChanges() != 0;
+        }
+
+        public void getAllListsFromUser(User user)
+        {
+            //IList<VacationList> = _vacationLists.get
+        }
+
+        public bool UpdateList(int id, VacationListDto model)
+        {
+            throw new NotImplementedException();
         }
     }
 }

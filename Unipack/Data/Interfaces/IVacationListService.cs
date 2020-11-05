@@ -16,6 +16,7 @@ namespace Unipack.Data.Interfaces
         Task<IEnumerable<VacationListDto>> GetAllVacationListsByUser(int userId);
 
         bool DeleteVacationListById(int id);
+        bool UpdateList(int id, VacationListDto model);
 
         bool AddItemToListByItemId(int itemId, int listId);
 
