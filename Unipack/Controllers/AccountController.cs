@@ -71,8 +71,14 @@ namespace Unipack.Controllers
 
                 User modelUser = newUser;
 
-                UserDto user = new UserDto(modelUser.UserId, modelUser.Email, modelUser.Username, modelUser.Firstname, modelUser.Lastname);
-
+                UserDto user = new UserDto
+                {
+                    UserId = modelUser.UserId,
+                    Email = modelUser.Email,
+                    Username = modelUser.Username,
+                    FirstName = modelUser.Firstname,
+                    LastName = modelUser.Lastname
+                };
                 return Ok(new { token, userdto = user });
             }
             return BadRequest(model);
@@ -112,7 +118,14 @@ namespace Unipack.Controllers
 
                 User modelUser = _userService.GetByUserName(model.Username);
 
-                UserDto user = new UserDto(modelUser.UserId, modelUser.Email, modelUser.Username, modelUser.Firstname, modelUser.Lastname);
+                UserDto user = new UserDto
+                {
+                    UserId = modelUser.UserId,
+                    Email = modelUser.Email,
+                    Username = modelUser.Username,
+                    FirstName = modelUser.Firstname,
+                    LastName = modelUser.Lastname
+                };
 
                 return Ok(new { token, userdto = user });
             }

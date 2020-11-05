@@ -101,9 +101,9 @@ namespace Unipack.Data
                 );
 
             // Add some item categories
-            ItemCategory ronaCategory = new ItemCategory("Technology", dzhem);
+            Category ronaCategory = new Category("Technology", dzhem);
 
-            ItemCategory ronaCategory2 = new ItemCategory("Books", dzhem);
+            Category ronaCategory2 = new Category("Books", dzhem);
 
 
             // Add some items to the lists

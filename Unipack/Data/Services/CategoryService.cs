@@ -64,5 +64,12 @@ namespace Unipack.Data.Services
                                 throw new CategoryNotFoundException(categoryId);
             return category.Items;
         }
+
+        public Category GetCategoryById(int categoryId)
+        {
+            var category = _categories.FirstOrDefault(x => x.CategoryId == categoryId) ??
+                           throw new CategoryNotFoundException(categoryId);
+            return category;
+        }
     }
 }

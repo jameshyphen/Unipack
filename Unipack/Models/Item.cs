@@ -16,10 +16,7 @@ namespace Unipack.Models
         public User AuthorUser { get; set; }
         public DateTime AddedOn { get; set; }
         public Priority Priority { get; set; }
-
-        [ForeignKey(nameof(CategoryId))]
         public Category Category { get; set; }
-        public int CategoryId { get; set; }
 
         #endregion
 

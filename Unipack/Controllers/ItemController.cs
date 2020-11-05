@@ -22,15 +22,17 @@ namespace Unipack.Controllers
     {
         private readonly IItemService _itemService;
         private readonly IUserService _userService;
+        private readonly ICategoryService _categoryService;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger _logger;
 
-        public ItemController(IUserService userService, UserManager<IdentityUser> userManager, ILogger<ItemController> logger, IItemService itemService)
+        public ItemController(IUserService userService, UserManager<IdentityUser> userManager, ILogger<ItemController> logger, IItemService itemService, ICategoryService categoryService)
         {
-            this._logger = logger;
-            this._userService = userService;
-            this._userManager = userManager;
-            this._itemService = itemService;
+            _logger = logger;
+            _userService = userService;
+            _userManager = userManager;
+            _itemService = itemService;
+            _categoryService = categoryService;
         }
 
         /// <summary>
@@ -41,17 +43,27 @@ namespace Unipack.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<ICollection<ItemDto>>> GetAllItems()
         {
-            User user = await GetCurrentUser();
-            List<ItemDto> result = _itemService.GetAllItemsByUserId(user.UserId)
-                .Select(x => new ItemDto
-                    {
-                        ItemId = x.ItemId,
-                        AddedOn = x.AddedOn,
-                        Name = x.AddedOn.ToString("d"),
-                        Category = x.Category.Name
-                    }
-                ).ToList();
-            return Ok(result);
+            try
+            {
+                var user = await GetCurrentUser();
+                var result = _itemService.GetAllItemsByUserId(user.UserId)
+                    .Select(x => new ItemDto
+                        {
+                            ItemId = x.ItemId,
+                            AddedOn = x.AddedOn,
+                            Name = x.AddedOn.ToString("d"),
+                            CategoryId = x.Category.CategoryId,
+                            CategoryName = x.Category.Name
+                        }
+                    ).ToList();
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                var methodName = this.GetType().FullName + "." + System.Reflection.MethodBase.GetCurrentMethod().Name;
+                _logger.LogError($"[INTERNAL ERROR] Something broke in {nameof(ItemController)}/{methodName}: {e.Message}");
+                return BadRequest(new { message = "Internal server error: " + e.Message });
+            }
         }
 
         /// <summary>
@@ -67,13 +79,13 @@ namespace Unipack.Controllers
         {
             try
             {
-                Item item = _itemService.GetItemById(itemId);
-                ItemDto result = new ItemDto
+                var item = _itemService.GetItemById(itemId);
+                var result = new ItemDto
                 {
                     ItemId = item.ItemId,
                     AddedOn = item.AddedOn,
                     Name = item.AddedOn.ToString("d"),
-                    Category = item.Category.Name
+                    CategoryName = item.Category.Name
                 };
                 return Ok(result);
 
@@ -84,30 +96,55 @@ namespace Unipack.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError($"[INTERNAL ERROR] Something broke in {nameof(ItemController)}: {e.Message}");
+                var methodName = this.GetType().FullName + "." + System.Reflection.MethodBase.GetCurrentMethod().Name;
+                _logger.LogError($"[INTERNAL ERROR] Something broke in {nameof(ItemController)}/{methodName}: {e.Message}");
                 return BadRequest(new {message = "Internal server error: " + e.Message});
             }
         }
+
+        [HttpPost("add")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult<ItemDto>> AddItem([FromBody] ItemDto model)
+        {
+            try
+            {
+                var user = await GetCurrentUser();
+                var item = new Item(model.Name, user);
+                if (_itemService.AddItem(item))
+                    return Ok();
+                else
+                    throw new Exception("Something went wrong, item has not been added.");
+            }
+            catch (Exception e)
+            {
+                var methodName = this.GetType().FullName + "." + System.Reflection.MethodBase.GetCurrentMethod().Name;
+                _logger.LogError($"[INTERNAL ERROR] Something broke in {nameof(ItemController)}/{methodName}: {e.Message}");
+                return BadRequest(new { message = "Internal server error: " + e.Message });
+            }
+        }
+
+
         private async Task<User> GetCurrentUser()
         {
             try
             {
                 //get identity userid from claims
-                string userId = User.Claims.First(c => c.Type == "UserID").Value;
+                var userId = User.Claims.First(c => c.Type == "UserID").Value;
 
                 //get identity class
                 var identityUser = await _userManager.FindByIdAsync(userId);
 
                 //get user class by identity username
-                User user = await _userService.GetByUserEmailAsync(identityUser.Email);
+                var user = await _userService.GetByUserEmailAsync(identityUser.Email);
                 return user;
             }
             catch (ArgumentException e)
             {
                 _logger.LogInformation($"Error GetCurrentUser(): {e.Message}");
+                return null;
             }
-
-            return null;
         }
     }
 }

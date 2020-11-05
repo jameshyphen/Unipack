@@ -28,7 +28,7 @@ namespace Unipack.Data.Services
             this._vacationLists = context.VacationLists;
             this._vacationItems = context.VacationItems;
             this._items = context.Items;
-            this._users = context.Users;
+            this._users = context.UnipackUsers;
         }
 
 
@@ -127,6 +127,11 @@ namespace Unipack.Data.Services
         }
 
         public bool UpdateList(int id, VacationListDto model)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<IEnumerable<VacationListDto>> IVacationListService.GetAllVacationListsByUser(int userId)
         {
             throw new NotImplementedException();
         }

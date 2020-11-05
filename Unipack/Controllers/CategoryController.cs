@@ -57,7 +57,8 @@ namespace Unipack.Controllers
                         ItemId = x.ItemId,
                         AddedOn = x.AddedOn,
                         Name = x.AddedOn.ToString("d"),
-                        Category = x.Category.Name
+                        CategoryId = x.Category.CategoryId,
+                        CategoryName = x.Category.Name
                     }
                 ).ToList();
             return Ok(result);
@@ -82,7 +83,7 @@ namespace Unipack.Controllers
                     ItemId = item.ItemId,
                     AddedOn = item.AddedOn,
                     Name = item.AddedOn.ToString("d"),
-                    Category = item.Category.Name
+                    CategoryId = item.Category.CategoryId
                 };
                 return Ok(result);
 
@@ -147,7 +148,8 @@ namespace Unipack.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public ActionResult<bool> AddItem([FromBody] ItemDto model)
         {
-            return _itemService.AddItem(model);
+            //return _itemService.AddItem(model);
+            return true;
         }
 
         /// <summary>
@@ -160,7 +162,8 @@ namespace Unipack.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public ActionResult<bool> UpdateItem(int id, [FromBody] ItemDto model)
         {
-            return _itemService.UpdateItem(id, model);
+            //return _itemService.UpdateItem(id, model);
+            return true;
         }
 
         /// <summary>

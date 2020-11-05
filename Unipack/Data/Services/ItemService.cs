@@ -28,7 +28,6 @@ namespace Unipack.Data.Services
         {
             _items.Add(item);
             return _context.SaveChanges() != 0;
-
         }
 
         public bool AddItemToCategoryById(int itemId, int categoryId)
