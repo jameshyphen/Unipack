@@ -41,7 +41,15 @@ namespace Unipack.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public ActionResult GetVacationLists(User user)
         {
-            throw new NotImplementedException();
+            var result = _vacationListService.GetAllVacationListsByUser(user.UserId);
+            if (result != null)
+                return new OkObjectResult(result);
+            return 
+
+            /**var result = _postService.GetAll();
+            if (result != null)
+                return new OkObjectResult(result);
+            return NotFound(); **/
         }
 
         /// <summary>

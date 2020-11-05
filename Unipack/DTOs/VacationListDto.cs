@@ -13,13 +13,15 @@ namespace Unipack.DTOs
         public int VacationListId { get; set; }
         [Required]
         public string Name { get; set; }
-        public ICollection<VacationLocationDto> Locations { get; set; }
+        
         //public ICollection<VacationItemDto> Items { get; set; }
         //public ICollection<VacationTaskDto> Tasks { get; set; }
         [Required]
         public DateTime AddedOn { get; set; }
-        public DateTime Departure { get; set; }
-        public DateTime Return { get; set; }
+        //Vacation props:
+        //public DateTime Departure { get; set; }
+        //public DateTime Return { get; set; }
+        //public ICollection<VacationLocationDto> Locations { get; set; }
 
         public VacationListDto() { }
         public VacationListDto(int id, string name, DateTime added)
