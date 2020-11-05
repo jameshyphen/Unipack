@@ -3,9 +3,8 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Unipack.Data.Interfaces;
-using Unipack.DTOs;
+using Unipack.Exceptions;
 using Unipack.Models;
 
 namespace Unipack.Data.Services
@@ -14,88 +13,56 @@ namespace Unipack.Data.Services
     {
         private readonly Context _context;
         private readonly ILogger _logger;
-        private readonly DbSet<ItemCategory> _itemCategories;
+        private readonly DbSet<Category> _categories;
         private readonly DbSet<Item> _items;
 
         public ItemService(Context context, ILogger<UserService> _logger)
         {
             this._context = context;
             this._logger = _logger;
-            this._itemCategories = context.ItemCategories;
+            this._categories = context.Categories;
             this._items = context.Items;
         }
 
-        public bool AddCategory(string category)
+        public bool AddItem(Item item)
         {
-            // TODO: User has to be added along with itemcategory aswell, find out who is logged in and add the corresponding user along
-            //_itemCategories.Add(new ItemCategory(category));
+            _items.Add(item);
+            return _context.SaveChanges() != 0;
+
+        }
+
+        public bool AddItemToCategoryById(int itemId, int categoryId)
+        {
+            Category category = _categories.FirstOrDefault(x => x.CategoryId == categoryId) ??
+                                throw new CategoryNotFoundException(categoryId);
+
+            Item item = _items.FirstOrDefault(x => x.ItemId == itemId) ?? throw new ItemNotFoundException(itemId);
+
+            category.Items.Add(item);
             return _context.SaveChanges() != 0;
         }
 
-        public bool AddItem(ItemDto item)
+        public bool DeleteItemById(int itemId)
         {
-            _items.Add(new Item() { Name = item.Name, AddedOn = item.AddedOn, ItemId = item.ItemId });
-            return _context.SaveChanges() != 0;
-        }
-
-        public bool AddItemToCategory(int id, string name)
-        {
-            // This is weird?
-            //var category = _itemCategories.FirstOrDefault(c => c.ItemCategoryId = id);
-            //var item = _items.FirstOrDefault(i => i.ItemId == id);
-            //category..Add(item);
-            //_itemCategories.Update(category);
-            //return _context.SaveChanges() != 0;
-
-            throw new NotImplementedException();
-        }
-
-        public bool DeleteCategoryByName(string name)
-        {
-            var category = _itemCategories.FirstOrDefault(c => c.Name == name);
-            _itemCategories.Remove(category);
-            return _context.SaveChanges() != 0;
-        }
-
-        public bool DeleteItemById(int id)
-        {
-            var item = _items.FirstOrDefault(i => i.ItemId == id);
+            Item item = _items.FirstOrDefault(x => x.ItemId == itemId) ?? throw new ItemNotFoundException(itemId);
             _items.Remove(item);
             return _context.SaveChanges() != 0;
         }
 
-        public Task<IEnumerable<string>> GetAllCategoriesByUser(int userId)
+        public ICollection<Item> GetAllItemsByUserId(int userId)
         {
-            throw new NotImplementedException();
+            ICollection<Item> items = _items.Where(x => x.AuthorUser.UserId == userId).ToList();
+            return items;
         }
 
-        public async Task<IEnumerable<ItemDto>> GetAllItemsByCategory(string name)
+        public Item GetItemById(int itemId)
         {
-            var categoryId = _itemCategories.FirstOrDefault(c => c.Name == name).ItemCategoryId;
-            return await _items.AsNoTracking().Where(i => i.CategoryId == categoryId)
-                .Select(s => new ItemDto() {AddedOn = s.AddedOn, Category = s.Category.Name, ItemId = s.ItemId, Name = s.Name }).ToListAsync();
+            Item item = _items.FirstOrDefault(x => x.ItemId == itemId) ?? throw new ItemNotFoundException(itemId);
+            return item;
         }
 
-        public Task<IEnumerable<ItemDto>> GetAllItemsByUser(int userId)
+        public bool UpdateItem(int itemId, Item item)
         {
-            throw new NotImplementedException();
-        }
-
-        public async Task<ItemDto> GetItemById(int id)
-        {
-            return await _items.Where(i => i.ItemId == id)
-                .Select(s => new ItemDto() { AddedOn = s.AddedOn, Category = s.Category.Name, ItemId = s.ItemId, Name = s.Name }).FirstOrDefaultAsync();
-        }
-
-        public bool UpdateItem(int id, ItemDto itemupdate)
-        {
-            var item = _items.FirstOrDefault(i => i.ItemId == id);
-            var updatedCategory = _itemCategories.FirstOrDefault(c => c.Name == itemupdate.Category);
-            item.Name = itemupdate.Name;
-            item.AddedOn = itemupdate.AddedOn;
-            item.Category = updatedCategory;
-            item.CategoryId = updatedCategory.ItemCategoryId;
-            _items.Update(item);
             return _context.SaveChanges() != 0;
         }
     }

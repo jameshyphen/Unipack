@@ -70,6 +70,7 @@ namespace Unipack
                 o.Password.RequiredLength = 6;
                 o.Password.RequireLowercase = false;
                 o.Password.RequireNonAlphanumeric = false;
+                o.User.RequireUniqueEmail = true;
             }).AddEntityFrameworkStores<Context>();
 
             services.ConfigureApplicationCookie(options =>
