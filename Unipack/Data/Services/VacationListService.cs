@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -27,6 +26,7 @@ namespace Unipack.Data.Services
             this._context = context;
             this._logger = _logger;
             this._vacationLists = context.VacationLists;
+            this._vacationItems = context.VacationItems;
             this._items = context.Items;
             this._users = context.Users;
         }
@@ -117,13 +117,13 @@ namespace Unipack.Data.Services
             VacationItem vacationItem = vacationList.Items.FirstOrDefault(x => x.ItemId == itemId) ??
                                         throw new ItemNotFoundException(itemId);
 
-            _vacationItems.Remove(vacationItem);
+            vacationList.Items.Remove(vacationItem);
             return _context.SaveChanges() != 0;
         }
 
         public void getAllListsFromUser(User user)
         {
-            //IList<VacationList> = _vacationLists.get
+            throw new NotImplementedException();
         }
 
         public bool UpdateList(int id, VacationListDto model)

@@ -1,31 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Unipack.DTOs;
+using Unipack.Models;
 
 namespace Unipack.Data.Interfaces
 {
     public interface IItemService
     {
-        bool AddItem(ItemDto item);
+        bool AddItem(Item item);
 
-        bool UpdateItem(int id, ItemDto item);
+        bool UpdateItem(int itemId, Item item);
 
-        bool AddCategory(string category);
+        Item GetItemById(int itemId);
 
-        Task<ItemDto> GetItemById(int id);
+        ICollection<Item> GetAllItemsByUserId(int userId);
 
-        Task<IEnumerable<ItemDto>> GetAllItemsByUser(int userId);
+        bool DeleteItemById(int itemId);
 
-        Task<IEnumerable<ItemDto>> GetAllItemsByCategory(string name);
-
-        Task<IEnumerable<string>> GetAllCategoriesByUser(int userId);
-
-        bool DeleteItemById(int id);
-
-        bool DeleteCategoryByName(string name);
-
-        bool AddItemToCategory(int id, string name);
+        bool AddItemToCategoryById(int itemId, int categoryId);
     }
 }
