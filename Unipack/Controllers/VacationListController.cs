@@ -44,12 +44,13 @@ namespace Unipack.Controllers
             var result = _vacationListService.GetAllVacationListsByUser(user.UserId);
             if (result != null)
                 return new OkObjectResult(result);
-            return 
-
-            /**var result = _postService.GetAll();
+            return NotFound();
+            /*
+            var result = _postService.GetAll();
             if (result != null)
                 return new OkObjectResult(result);
-            return NotFound(); **/
+            return NotFound(); 
+            */
         }
 
         /// <summary>

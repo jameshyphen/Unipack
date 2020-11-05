@@ -22,13 +22,5 @@ namespace Unipack.DTOs
         //public DateTime Departure { get; set; }
         //public DateTime Return { get; set; }
         //public ICollection<VacationLocationDto> Locations { get; set; }
-
-        public VacationListDto() { }
-        public VacationListDto(int id, string name, DateTime added)
-        {
-            VacationListId = id;
-            Name = name;
-            AddedOn = added;
-        }
     }
 }
