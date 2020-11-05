@@ -12,7 +12,7 @@ namespace Unipack.Data.Interfaces
         User GetById(int id);
         ICollection<User> GetAll();
         Task<User> GetByUserNameAsync(string username);
-        Task<User> GetByUserEmailAsync(string username);
+        Task<User> GetByUserEmailAsync(string email);
         User GetByUserName(string username);
         bool UsernameAvailable(string username);
     }
