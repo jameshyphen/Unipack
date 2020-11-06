@@ -32,10 +32,10 @@ namespace Unipack.Data.Services
 
         public bool AddItemToCategoryById(int itemId, int categoryId)
         {
-            Category category = _categories.FirstOrDefault(x => x.CategoryId == categoryId) ??
+            var category = _categories.FirstOrDefault(x => x.CategoryId == categoryId) ??
                                 throw new CategoryNotFoundException(categoryId);
 
-            Item item = _items.FirstOrDefault(x => x.ItemId == itemId) ?? throw new ItemNotFoundException(itemId);
+            var item = _items.FirstOrDefault(x => x.ItemId == itemId) ?? throw new ItemNotFoundException(itemId);
 
             category.Items.Add(item);
             return _context.SaveChanges() != 0;
@@ -43,25 +43,35 @@ namespace Unipack.Data.Services
 
         public bool DeleteItemById(int itemId)
         {
-            Item item = _items.FirstOrDefault(x => x.ItemId == itemId) ?? throw new ItemNotFoundException(itemId);
+            var item = _items.FirstOrDefault(x => x.ItemId == itemId) ?? throw new ItemNotFoundException(itemId);
             _items.Remove(item);
             return _context.SaveChanges() != 0;
         }
 
         public ICollection<Item> GetAllItemsByUserId(int userId)
         {
-            ICollection<Item> items = _items.Where(x => x.AuthorUser.UserId == userId).ToList();
+            var items = _items
+                .Where(x => x.Author.UserId == userId)
+                .Include(x => x.Category)
+                .ToList();
             return items;
         }
 
         public Item GetItemById(int itemId)
         {
-            Item item = _items.FirstOrDefault(x => x.ItemId == itemId) ?? throw new ItemNotFoundException(itemId);
+            var item = _items.FirstOrDefault(x => x.ItemId == itemId) ?? throw new ItemNotFoundException(itemId);
             return item;
         }
 
         public bool UpdateItem(int itemId, Item item)
         {
+            var toBeUpdatedItem = _items.FirstOrDefault(x => x.ItemId == itemId) ??
+                                  throw new ItemNotFoundException(itemId);
+            toBeUpdatedItem.Name = item.Name;
+            toBeUpdatedItem.Category = item.Category;
+            toBeUpdatedItem.Priority = item.Priority;
+
+            _items.Update(toBeUpdatedItem);
             return _context.SaveChanges() != 0;
         }
     }

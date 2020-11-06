@@ -21,14 +21,14 @@ namespace Unipack.Data.Services
         private readonly DbSet<Item> _items;
         private readonly DbSet<User> _users;
 
-        public VacationListService(Context context, ILogger<UserService> _logger)
+        public VacationListService(Context context, ILogger<UserService> logger)
         {
-            this._context = context;
-            this._logger = _logger;
-            this._vacationLists = context.VacationLists;
-            this._vacationItems = context.VacationItems;
-            this._items = context.Items;
-            this._users = context.UnipackUsers;
+            _context = context;
+            _logger = logger;
+            _vacationLists = context.VacationLists;
+            _vacationItems = context.VacationItems;
+            _items = context.Items;
+            _users = context.UnipackUsers;
         }
 
         /// <summary>

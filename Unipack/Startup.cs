@@ -86,6 +86,7 @@ namespace Unipack
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IItemService, ItemService>();
+            services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<DataInit>();
             services.AddDbContext<Context>(options =>
                 options.UseSqlServer(
