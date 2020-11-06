@@ -53,8 +53,8 @@ namespace Unipack.Controllers
                             ItemId = x.ItemId,
                             Name = x.Name,
                             AddedOn = x.AddedOn,
-                            CategoryId = x.Category.CategoryId,
-                            CategoryName = x.Category.Name
+                            CategoryId = x.Category?.CategoryId ,
+                            CategoryName = x.Category?.Name
                         }
                     ).ToList();
                 return Ok(result);
@@ -115,7 +115,7 @@ namespace Unipack.Controllers
             try
             {
                 var user = await GetCurrentUser();
-                var category = _categoryService.GetCategoryById(itemDto.CategoryId);
+                var category = itemDto.CategoryId != null ? _categoryService.GetCategoryById((int) itemDto.CategoryId) : null;
                 var item = new Item
                 {
                     Name = itemDto.Name,
@@ -148,7 +148,7 @@ namespace Unipack.Controllers
             try
             {
                 var user = await GetCurrentUser();
-                var category = _categoryService.GetCategoryById(itemDto.CategoryId);
+                var category = _categoryService.GetCategoryById((int) itemDto.CategoryId);
                 var item = new Item
                 {
                     Name = itemDto.Name,
