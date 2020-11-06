@@ -108,17 +108,20 @@ namespace Unipack.Data
 
 
             // Add some items to the lists
-            Item ronaItem = new Item("Laptop"){Category = ronaCategory};
-            Item ronaItem2 = new Item("Phone"){Category = ronaCategory};
+            Item ronaItem = new Item("Laptop", dzhem){Category = ronaCategory};
+            Item ronaItem2 = new Item("Phone", dzhem) {Category = ronaCategory};
 
-            Item ronaItem3 = new Item("Clean Coder book") { Category = ronaCategory2 };
+            Item ronaItem3 = new Item("Clean Coder book", dzhem) { Category = ronaCategory2 };
 
             // Add some tasks to the lists
 
             VacationTask task1 = new VacationTask("Charge up my phone", dzhem, DateTime.Parse("12/12/2020"));
+
             task1.Priority = Priority.High;
             ronaVacList.Tasks.Add(task1);
-
+            ronaVacList.Items.Add(new VacationItem(ronaVacList, ronaItem));
+            ronaVacList.Items.Add(new VacationItem(ronaVacList, ronaItem2));
+            ronaVacList.Items.Add(new VacationItem(ronaVacList, ronaItem3));
             // Add some locations to the lists
 
             ronaVac.AddList(ronaVacList);

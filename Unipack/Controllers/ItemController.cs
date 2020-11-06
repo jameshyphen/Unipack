@@ -42,7 +42,7 @@ namespace Unipack.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult<ICollection<ItemDto>>> GetAllItems()
+        public async Task<ActionResult<List<ItemDto>>> GetAllItems()
         {
             try
             {
@@ -51,8 +51,8 @@ namespace Unipack.Controllers
                     .Select(x => new ItemDto
                         {
                             ItemId = x.ItemId,
+                            Name = x.Name,
                             AddedOn = x.AddedOn,
-                            Name = x.AddedOn.ToString("d"),
                             CategoryId = x.Category.CategoryId,
                             CategoryName = x.Category.Name
                         }
@@ -119,7 +119,7 @@ namespace Unipack.Controllers
                 var item = new Item
                 {
                     Name = itemDto.Name,
-                    AuthorUser = user,
+                    Author = user,
                     Category = category,
                     Priority = itemDto.Priority
                 };
@@ -152,7 +152,7 @@ namespace Unipack.Controllers
                 var item = new Item
                 {
                     Name = itemDto.Name,
-                    AuthorUser = user,
+                    Author = user,
                     Category = category,
                     Priority = itemDto.Priority
                 };
@@ -181,7 +181,7 @@ namespace Unipack.Controllers
             try
             {
                 var user = await GetCurrentUser();
-                if (_itemService.GetItemById(itemId).AuthorUser.UserId == user.UserId)
+                if (_itemService.GetItemById(itemId).Author.UserId == user.UserId)
                 {
                     if (_itemService.DeleteItemById(itemId))
                         return Ok(true);
