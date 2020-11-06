@@ -185,13 +185,10 @@ namespace Unipack.Controllers
                 {
                     if (_itemService.DeleteItemById(itemId))
                         return Ok(true);
+                    throw new Exception("Something went wrong, item has not been deleted.");
                 }
-                else
-                {
-                    return BadRequest("This item does not belong to your account.");
-                }
+                return BadRequest("This item does not belong to your account.");
                     
-                throw new Exception("Something went wrong, item has not been deleted.");
             }
             catch (Exception e)
             {

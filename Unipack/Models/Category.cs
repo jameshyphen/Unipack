@@ -11,7 +11,7 @@ namespace Unipack.Models
 
         public int CategoryId { get; set; }
         public string Name { get; set; }
-        public User AuthorUser { get; set; }
+        public User Author { get; set; }
         public ICollection<Item> Items { get; set; }
         public DateTime AddedOn { get; set; }
 
@@ -30,7 +30,7 @@ namespace Unipack.Models
         }
         public Category(string name, User user) : this(name)
         {
-            this.AuthorUser = user;
+            this.Author = user;
         }
         #endregion
 
