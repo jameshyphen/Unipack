@@ -14,6 +14,5 @@ namespace Unipack.DTOs
         public string Name { get; set; }
         public User Author { get; set; }
         public DateTime AddedOn { get; set; }
-        public Priority Priority { get; set; }
     }
 }

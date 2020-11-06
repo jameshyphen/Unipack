@@ -93,7 +93,7 @@ namespace Unipack.Controllers
             }
             catch (ItemNotFoundException e)
             {
-                return NotFound(new {message = "Not found: " + e.Message});
+                return NotFound(new {message = "Item not found: " + e.Message});
             }
             catch (Exception e)
             {
