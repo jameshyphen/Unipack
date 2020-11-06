@@ -108,10 +108,6 @@ namespace Unipack.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<ItemDto>> AddItem([FromBody] ItemDto model)
         {
-            // First change
-            // lmao
-            // Second comment
-            // kek
             try
             {
                 var user = await GetCurrentUser();
