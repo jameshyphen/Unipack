@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,25 @@ namespace Unipack.Data.Services
             this._users = context.UnipackUsers;
         }
 
+       
+        /// <summary>
+        /// Add a Vacation to the database. Returns false if 0 changes are made
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns>boolean of any made changes</returns>
+        public bool AddVacation(Vacation vacation)
+        {
+            _vacations.Add(new Vacation() { Name = vacation.Name, DateDeparture = vacation.DateDeparture, DateReturn = vacation.DateReturn });
+            return _context.SaveChanges() != 0;
+        }
+
+        public bool DeleteVacation(int vacationId)
+        {
+            var vac = _vacations.Where(v => v.VacationId == vacationId).FirstOrDefault() ?? throw new VacationNotFoundException(vacationId);
+            _vacations.Remove(vac);
+            return _context.SaveChanges() != 0;
+        }
+
         public ICollection<VacationDto> GetAllVacationsByUserId(int userId)
         {
             User user = _users.FirstOrDefault(u => u.UserId == userId) ?? throw new UserNotFoundException(userId);
@@ -44,5 +64,17 @@ namespace Unipack.Data.Services
 
         }
 
+        public Vacation GetVacationById(int vacationId)
+        {
+            return _vacations.Where(v => v.VacationId == vacationId).FirstOrDefault() ?? throw new VacationNotFoundException(vacationId);
+            
+        }
+
+        public bool UpdateVacation(int vacationId, Vacation vacation)
+        {
+            var vac = _vacations.Where(v => v.VacationId == vacationId).FirstOrDefault() ?? throw new VacationNotFoundException(vacationId);
+            _vacations.Update(vac);
+            return _context.SaveChanges() != 0;
+        }
     }
 }

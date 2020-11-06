@@ -19,5 +19,7 @@ namespace Unipack.DTOs
         public DateTime DateDeparture { get; set; }
         [Required]
         public DateTime DateReturn { get; set; }
+        [Required]
+        public string Name { get; set; }
     }
 }
