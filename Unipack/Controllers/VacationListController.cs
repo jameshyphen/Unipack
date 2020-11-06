@@ -6,10 +6,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Server.IIS;
 using Microsoft.Extensions.Logging;
 using Unipack.Data;
 using Unipack.Data.Interfaces;
 using Unipack.DTOs;
+using Unipack.Exceptions;
 using Unipack.Models;
 using Xunit;
 
@@ -39,18 +41,12 @@ namespace Unipack.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public ActionResult GetVacationLists(User user)
+        public ActionResult GetVacationListFromUser(User user)
         {
             var result = _vacationListService.GetAllVacationListsByUser(user.UserId);
             if (result != null)
                 return new OkObjectResult(result);
             return NotFound();
-            /*
-            var result = _postService.GetAll();
-            if (result != null)
-                return new OkObjectResult(result);
-            return NotFound(); 
-            */
         }
 
         /// <summary>
@@ -63,7 +59,17 @@ namespace Unipack.Controllers
         [HttpGet("{id}", Name = "Get")]
         public async Task<ActionResult> GetVacationList(int id)
         {
-            throw new NotImplementedException();
+            var result = new object();
+            try
+            {
+                
+                result = await _vacationListService.GetVacationListById(id);
+            }
+            catch (VacationListNotFoundException ve)
+            {
+                return BadRequest(new { message = "Error while finding vacation list: " + ve.Message });
+            }
+            return new OkObjectResult(result);
         }
 
         /// <summary>
@@ -74,9 +80,12 @@ namespace Unipack.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [HttpPost]
-        public ActionResult CreateVacationList([FromBody] VacationListDto model)
+        public ActionResult AddVacationList([FromBody] VacationListDto model)
         {
-            throw new NotImplementedException();
+                if (_vacationListService.AddVacationList(model))
+                    return Ok();
+                else
+                    throw new Exception("Something went wrong, vacationList has not been added.");
         }
         /// <summary>
         /// Update a VacationList with the specified id.
@@ -89,8 +98,17 @@ namespace Unipack.Controllers
         [HttpPut("{id}")]
         public ActionResult UpdateVacationList(int id, [FromBody] VacationListDto model)
         {
+            bool result;
+            try
+            {
 
-            throw new NotImplementedException();
+                result = _vacationListService.UpdateList(id, model);
+            }
+            catch (VacationListNotFoundException ve)
+            {
+                return BadRequest(new { message = "Error while finding vacation list: " + ve.Message });
+            }
+            return new OkObjectResult(result);
         }
 
         /// <summary>
@@ -103,7 +121,17 @@ namespace Unipack.Controllers
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {
-            throw new NotImplementedException();
+            
+            bool result;
+            try
+            {
+                result = _vacationListService.DeleteVacationListById(id);
+            }
+            catch (VacationListNotFoundException ve)
+            {
+                return BadRequest(new { message = "Error while finding vacation list: " + ve.Message });
+            }
+            return new OkObjectResult(result);
         }
     }
 }

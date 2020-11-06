@@ -50,7 +50,10 @@ namespace Unipack.Data.Services
 
         public ICollection<Item> GetAllItemsByUserId(int userId)
         {
-            var items = _items.Where(x => x.AuthorUser.UserId == userId).ToList();
+            var items = _items
+                .Where(x => x.Author.UserId == userId)
+                .Include(x => x.Category)
+                .ToList();
             return items;
         }
 

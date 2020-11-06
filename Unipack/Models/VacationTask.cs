@@ -16,7 +16,7 @@ namespace Unipack.Models
         public int VacationTaskId { get; set; }
 
         public string Name { get; set; }
-        public User AuthorUser { get; set; }
+        public User Author { get; set; }
 
         public DateTime AddedOn { get; set; }
 
@@ -43,7 +43,7 @@ namespace Unipack.Models
 
         public VacationTask(string name, User user) : this(name)
         {
-            AuthorUser = user;
+            Author = user;
         }
 
         public VacationTask(string name, User user, DateTime deadLine) : this(name, user)

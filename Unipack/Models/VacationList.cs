@@ -31,6 +31,9 @@ namespace Unipack.Models
         public VacationList(string name) : this()
         {
             Name = name;
+            Items = new HashSet<VacationItem>();
+            Tasks = new HashSet<VacationTask>();
+            AddedOn = DateTime.Now;
         }
 
         public VacationList(string name, User user) : this(name)

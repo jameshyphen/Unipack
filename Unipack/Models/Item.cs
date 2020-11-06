@@ -13,7 +13,7 @@ namespace Unipack.Models
 
         public int ItemId { get; set; }
         public string Name { get; set; }
-        public User AuthorUser { get; set; }
+        public User Author { get; set; }
         public DateTime AddedOn { get; set; }
         public Priority Priority { get; set; }
         public Category Category { get; set; }
@@ -37,11 +37,11 @@ namespace Unipack.Models
 
         public Item(string name, User user) : this(name)
         {
-            AuthorUser = user;
+            Author = user;
         }
         public Item(string name, Category category, User user) : this(name, category)
         {
-            AuthorUser = user;
+            Author = user;
         }
         #endregion
     }
