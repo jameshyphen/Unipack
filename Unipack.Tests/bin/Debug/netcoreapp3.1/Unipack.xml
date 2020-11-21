@@ -1,0 +1,110 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Unipack</name>
+    </assembly>
+    <members>
+        <member name="M:Unipack.Controllers.AccountController.Register(Unipack.DTOs.RegisterDto)">
+            <summary>
+            Registers a user. Returns a token and the created user.
+            </summary>
+            <param name="model">This is the RegisterDto model with the required information.</param>  
+        </member>
+        <member name="M:Unipack.Controllers.AccountController.Login(Unipack.DTOs.LoginDto)">
+            <summary>
+            Authenticates user. Returns a token and the user.
+            </summary>
+            <param name="model">This is the LoginDto model with the required information.</param>  
+        </member>
+        <member name="M:Unipack.Controllers.CategoryController.GetAllCategories">
+            <summary>
+            Returns all Categories created by the authenticated user.
+            </summary>
+        </member>
+        <member name="M:Unipack.Controllers.CategoryController.GetCategory(System.Int32)">
+            <summary>
+            Finds a Category with the specified id.
+            </summary>
+            <param name="categoryId">The id of the Category you're looking to get.</param>  
+        </member>
+        <member name="M:Unipack.Controllers.CategoryController.AddCategory(Unipack.DTOs.CategoryDto)">
+            <summary>
+            Creates a Category with the passed on Category DTO model.
+            </summary>
+            <param name="categoryDto">The Category DTO model of the Category to be created.</param>  
+        </member>
+        <member name="M:Unipack.Controllers.CategoryController.UpdateCategory(System.Int32,Unipack.DTOs.CategoryDto)">
+            <summary>
+            Creates an Category with the passed on Category DTO Model.
+            </summary>
+            <param name="categoryId">The Id of the Category to be updated.</param>  
+            <param name="categoryDto">The Category DTO Model of the Category to be updated.</param>  
+        </member>
+        <member name="M:Unipack.Controllers.CategoryController.DeleteCategory(System.Int32)">
+            <summary>
+            Deletes an Category with the specified id.
+            </summary>
+            <param name="categoryId">The Id of the Category to be updated.</param>  
+        </member>
+        <member name="M:Unipack.Controllers.ItemController.GetAllItems">
+            <summary>
+            Returns all Items created by the authenticated user.
+            </summary>
+        </member>
+        <member name="M:Unipack.Controllers.ItemController.GetItem(System.Int32)">
+            <summary>
+            Finds an Item with the specified id.
+            </summary>
+            <param name="itemId">The id of the Item you're looking to get.</param>  
+        </member>
+        <member name="M:Unipack.Controllers.ItemController.AddItem(Unipack.DTOs.ItemDto)">
+            <summary>
+            Creates an Item with the passed on Item DTO model.
+            </summary>
+            <param name="itemDto">The Item DTO model of the Item to be created.</param>  
+        </member>
+        <member name="M:Unipack.Controllers.ItemController.UpdateItem(System.Int32,Unipack.DTOs.ItemDto)">
+            <summary>
+            Creates an Item with the passed on Item DTO Model.
+            </summary>
+            <param name="itemId">The Id of the Item to be updated.</param>  
+            <param name="itemDto">The Item DTO Model of the Item to be updated.</param>  
+        </member>
+        <member name="M:Unipack.Controllers.ItemController.DeleteItem(System.Int32)">
+            <summary>
+            Deletes an Item with the specified id.
+            </summary>
+            <param name="itemId">The Id of the Item to be updated.</param>  
+        </member>
+        <member name="M:Unipack.Controllers.VacationListController.GetVacationListFromUser(Unipack.Models.User)">
+            <summary>
+            Returns all VacationLists created by the authenticated user.
+            </summary>
+        </member>
+        <member name="M:Unipack.Controllers.VacationListController.GetVacationList(System.Int32)">
+            <summary>
+            Finds a VacationList with the specified id.
+            </summary>
+            <param name="id">The id of the VacationList you're looking to get.</param>  
+        </member>
+        <member name="M:Unipack.Controllers.VacationListController.AddVacationList(Unipack.DTOs.VacationListDto)">
+            <summary>
+            Creates a VacationList.
+            </summary>
+            <param name="model">This is the VacationListDto model with the required information.</param>  
+        </member>
+        <member name="M:Unipack.Controllers.VacationListController.UpdateVacationList(System.Int32,Unipack.DTOs.VacationListDto)">
+            <summary>
+            Update a VacationList with the specified id.
+            </summary>
+            <param name="id">The id of the VacationList you're looking to update.</param>
+            <param name="model">This is the VacationList model with the required information.</param>
+        </member>
+        <member name="M:Unipack.Controllers.VacationListController.Delete(System.Int32)">
+            <summary>
+            Deletes a VacationList with the specified id.
+            </summary>
+            <param name="id">The id of the VacationList you're looking to delete.</param>      
+        </member>
+    </members>
+</doc>

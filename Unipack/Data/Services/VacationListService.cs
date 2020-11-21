@@ -31,15 +31,9 @@ namespace Unipack.Data.Services
             _users = context.UnipackUsers;
         }
 
-        /// <summary>
-        /// Get a vacation list from the VacationListId
-        /// </summary>
-        /// <param name="itemId"></param>
-        /// <param name="listId"></param>
-        /// <returns>boolean of any made changes</returns>
-        public Task<VacationListDto> GetVacationListById(int id)
+        public Task<VacationListDto> GetVacationListById(int listId)
         {
-            var vacationList = _vacationLists.Where(l => l.VacationListId == id) ?? throw new VacationListNotFoundException(id);
+            var vacationList = _vacationLists.Where(l => l.VacationListId == listId) ?? throw new VacationListNotFoundException(listId);
             return vacationList.Select(l => new VacationListDto
                 {
                     AddedOn = l.AddedOn,
@@ -50,12 +44,6 @@ namespace Unipack.Data.Services
                 .FirstOrDefaultAsync();
         }
 
-        /// <summary>
-        /// Get all lists from a user.
-        /// </summary>
-        /// <param name="itemId"></param>
-        /// <param name="listId"></param>
-        /// <returns>boolean of any made changes</returns>
         public ICollection<VacationListDto> GetAllVacationListsByUser(int userId)
         {
             User user = _users.FirstOrDefault(u => u.UserId == userId) ?? throw new UserNotFoundException(userId);
@@ -74,12 +62,6 @@ namespace Unipack.Data.Services
 
         }
 
-        /// <summary>
-        /// Adds an Item by Id to a List by Id. Returns false if 0 changes are made
-        /// </summary>
-        /// <param name="itemId"></param>
-        /// <param name="listId"></param>
-        /// <returns>boolean of any made changes</returns>
         public bool AddItemToListByItemId(int itemId, int listId)
         {
             Item item = _items.FirstOrDefault(i => i.ItemId == itemId) ?? throw new ItemNotFoundException(itemId);
@@ -89,22 +71,12 @@ namespace Unipack.Data.Services
             return _context.SaveChanges() != 0;
         }
 
-        /// <summary>
-        /// Add a VacationList to the database. Returns false if 0 changes are made
-        /// </summary>
-        /// <param name="list"></param>
-        /// <returns>boolean of any made changes</returns>
         public bool AddVacationList(VacationListDto list)
         {
             _vacationLists.Add(new VacationList() { Name = list.Name, AddedOn = DateTime.Now });
             return _context.SaveChanges() != 0;
         }
 
-        /// <summary>
-        /// Delete a VacationList by Id. Returns false if 0 changes are made
-        /// </summary>
-        /// <param name="listId"></param>
-        /// <returns>boolean of any made changes</returns>
         public bool DeleteVacationListById(int listId)
         {
             VacationList list = _vacationLists.FirstOrDefault(l => l.VacationListId == listId) ?? throw new VacationListNotFoundException(listId);
@@ -113,12 +85,6 @@ namespace Unipack.Data.Services
             return _context.SaveChanges() != 0;
         }
 
-        /// <summary>
-        /// Delete a Item by vacationItemId from List by Id. Returns false if 0 changes are made
-        /// </summary>
-        /// <param name="itemId"></param>
-        /// <param name="listId"></param>
-        /// <returns>boolean of any made changes</returns>
         public bool DeleteItemFromListByVacationItemId(int itemId, int listId)
         {
             VacationList vacationList = _vacationLists.FirstOrDefault(x => x.VacationListId == listId) ??
@@ -131,12 +97,6 @@ namespace Unipack.Data.Services
             return _context.SaveChanges() != 0;
         }
 
-        /// <summary>
-        /// Update a List by Id. Returns false if 0 changes are made
-        /// </summary>
-        /// <param name="itemId"></param>
-        /// <param name="listId"></param>
-        /// <returns>boolean of any made changes</returns>
         public bool UpdateList(int id, VacationListDto model)
         {
             var list = _vacationLists.FirstOrDefault(l => l.VacationListId == id) ?? throw new VacationListNotFoundException(id);

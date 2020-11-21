@@ -93,7 +93,7 @@ namespace Unipack.Controllers
             }
             catch (ItemNotFoundException e)
             {
-                return NotFound(new {message = "Not found: " + e.Message});
+                return NotFound(new {message = "Item not found: " + e.Message});
             }
             catch (Exception e)
             {
@@ -148,7 +148,7 @@ namespace Unipack.Controllers
             try
             {
                 var user = await GetCurrentUser();
-                var category = _categoryService.GetCategoryById((int) itemDto.CategoryId);
+                var category = itemDto.CategoryId != null ?_categoryService.GetCategoryById((int) itemDto.CategoryId) : null;
                 var item = new Item
                 {
                     Name = itemDto.Name,
@@ -185,13 +185,10 @@ namespace Unipack.Controllers
                 {
                     if (_itemService.DeleteItemById(itemId))
                         return Ok(true);
+                    throw new Exception("Something went wrong, item has not been deleted.");
                 }
-                else
-                {
-                    return BadRequest("This item does not belong to your account.");
-                }
+                return BadRequest("This item does not belong to your account.");
                     
-                throw new Exception("Something went wrong, item has not been deleted.");
             }
             catch (Exception e)
             {

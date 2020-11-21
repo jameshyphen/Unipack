@@ -7,6 +7,7 @@ namespace Unipack.Data.Interfaces
     {
         Category GetCategoryById(int categoryId);
         bool AddCategory(Category category);
+        bool UpdateCategory(int categoryId, Category category);
         
         ICollection<Category> GetAllCategoriesByUserId(int userId);
 

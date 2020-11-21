@@ -20,7 +20,6 @@ namespace Unipack.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        private readonly IItemService _itemService;
         private readonly ICategoryService _categoryService;
         private readonly IUserService _userService;
         private readonly UserManager<IdentityUser> _userManager;
@@ -31,151 +30,175 @@ namespace Unipack.Controllers
             IUserService userService,
             UserManager<IdentityUser> userManager,
             ILogger<ItemController> logger,
-            IItemService itemService,
             ICategoryService categoryService
         )
         {
             this._logger = logger;
             this._userService = userService;
             this._userManager = userManager;
-            this._itemService = itemService;
             this._categoryService = categoryService;
         }
 
         /// <summary>
-        /// Returns all Items created by the authenticated user.
+        /// Returns all Categories created by the authenticated user.
         /// </summary>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult<ICollection<ItemDto>>> GetAllItems()
-        {
-            User user = await GetCurrentUser();
-            List<ItemDto> result = _itemService.GetAllItemsByUserId(user.UserId)
-                .Select(x => new ItemDto
-                    {
-                        ItemId = x.ItemId,
-                        AddedOn = x.AddedOn,
-                        Name = x.AddedOn.ToString("d"),
-                        CategoryId = x.Category.CategoryId,
-                        CategoryName = x.Category.Name
-                    }
-                ).ToList();
-            return Ok(result);
-        }
-
-        /// <summary>
-        /// Finds an Item with the specified id.
-        /// </summary>
-        /// <param name="itemId">The id of the Item you're looking to get.</param>  
-        [HttpGet("{itemId}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public ActionResult<ItemDto> GetItem(int itemId)
+        public async Task<ActionResult<List<CategoryDto>>> GetAllCategories()
         {
             try
             {
-                Item item = _itemService.GetItemById(itemId);
-                ItemDto result = new ItemDto
-                {
-                    ItemId = item.ItemId,
-                    AddedOn = item.AddedOn,
-                    Name = item.AddedOn.ToString("d"),
-                    CategoryId = item.Category.CategoryId
-                };
-                return Ok(result);
 
-            }
-            catch (ItemNotFoundException e)
-            {
-                return NotFound(new {message = "Not found: " + e.Message});
+                var user = await GetCurrentUser();
+                var result = _categoryService.GetAllCategoriesByUserId(user.UserId)
+                    .Select(x => new CategoryDto
+                    {
+                         CategoryId = x.CategoryId,
+                         Name = x.Name,
+                         AddedOn = x.AddedOn,
+                         Author = user
+                    }
+                    ).ToList();
+                return Ok(result);
             }
             catch (Exception e)
             {
-                _logger.LogError($"[INTERNAL ERROR] Something broke in {nameof(ItemController)}: {e.Message}");
-                return BadRequest(new {message = "Internal server error: " + e.Message});
+                var methodName = this.GetType().FullName + "." + System.Reflection.MethodBase.GetCurrentMethod().Name;
+                _logger.LogError($"[INTERNAL ERROR] Something broke in {nameof(CategoryController)}/{methodName}: {e.Message}");
+                return BadRequest(new { message = "Internal server error: " + e.Message });
+            }
+
+        }
+
+        /// <summary>
+        /// Finds a Category with the specified id.
+        /// </summary>
+        /// <param name="categoryId">The id of the Category you're looking to get.</param>  
+        [HttpGet("{categoryId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<CategoryDto>> GetCategory(int categoryId)
+        {
+            try
+            {
+                var user = await GetCurrentUser();
+                var category = _categoryService.GetCategoryById(categoryId);
+                if (category.Author.UserId == user.UserId)
+                {
+                    var result = new CategoryDto
+                    {
+                        CategoryId = category.CategoryId,
+                        Name = category.Name,
+                        AddedOn = category.AddedOn,
+                        Author = category.Author
+                    };
+                    return Ok(result);
+                }
+                return BadRequest("This category does not belong to your account");
+            }
+            catch (CategoryNotFoundException e)
+            {
+                return NotFound(new { message = "Category not found: " + e.Message });
+            }
+            catch (Exception e)
+            {
+                var methodName = this.GetType().FullName + "." + System.Reflection.MethodBase.GetCurrentMethod().Name;
+                _logger.LogError($"[INTERNAL ERROR] Something broke in {nameof(CategoryController)}/{methodName}: {e.Message}");
+                return StatusCode(500);
+            }
+        }
+
+        /// <summary>
+        /// Creates a Category with the passed on Category DTO model.
+        /// </summary>
+        /// <param name="categoryDto">The Category DTO model of the Category to be created.</param>  
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<bool>> AddCategory([FromBody] CategoryDto categoryDto)
+        {
+            try
+            {
+                var user = await GetCurrentUser();
+                var category = new Category
+                {
+                    Name = categoryDto.Name,
+                    Author = user,
+                };
+                if (_categoryService.AddCategory(category))
+                    return Ok(true);
+                throw new Exception("Something went wrong, category has not been created.");
+            }
+            catch (Exception e)
+            {
+                var methodName = this.GetType().FullName + "." + System.Reflection.MethodBase.GetCurrentMethod().Name;
+                _logger.LogError($"[INTERNAL ERROR] Something broke in {nameof(CategoryController)}/{methodName}: {e.Message}");
+                return StatusCode(500);
+            }
+        }
+
+        /// <summary>
+        /// Creates an Category with the passed on Category DTO Model.
+        /// </summary>
+        /// <param name="categoryId">The Id of the Category to be updated.</param>  
+        /// <param name="categoryDto">The Category DTO Model of the Category to be updated.</param>  
+        [HttpPut("{categoryId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<bool>> UpdateCategory(int categoryId, [FromBody] CategoryDto categoryDto)
+        {
+            try
+            {
+                var user = await GetCurrentUser();
+                var category = _categoryService.GetCategoryById(categoryDto.CategoryId);
+                var update_cat = new Category
+                {
+                    Name = category.Name,
+                };
+                if (_categoryService.UpdateCategory(categoryId, update_cat))
+                    return Ok(true);
+                throw new Exception("Something went wrong, category has not been updated.");
+            }
+            catch (Exception e)
+            {
+                var methodName = this.GetType().FullName + "." + System.Reflection.MethodBase.GetCurrentMethod().Name;
+                _logger.LogError($"[INTERNAL ERROR] Something broke in {nameof(CategoryController)}/{methodName}: {e.Message}");
+                return StatusCode(500);
             }
         }
 
 
-        // TODO: You cannot have 2 gets in the same controller, causes conflict lol
-        // TODO: Create a categorycontroller...
-        //[HttpGet]
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        //public ActionResult<Task<IEnumerable<string>>> GetAllCategories()
-        //{
-        //    var user = User.Identity.Name;
-        //    //TODO implement method to get userid
-        //    return service.GetAllCategoriesByUser(0);
-        //}
-
-        // TODO: Same issue, move to category controller
-        //[HttpPost]
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        //public ActionResult<bool> AddCategory([FromBody] string value)
-        //{
-        //    return service.AddCategory(value);
-        //}
-
-        // TODO: All of these endpoints are not going to work, they are all on the same api/Item/{id} http get, and the above ones are all on api/Item,
-        // TODO: please make unique routes and correct request types
-        //[HttpGet("{id}")]
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        //public ActionResult<bool> AddItemToCategory(int id,[FromBody] string categoryName)
-        //{
-        //    return service.AddItemToCategory(id, categoryName);
-        //}
-
-        //[HttpDelete]
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        //public ActionResult<bool> DeleteCategory(string name)
-        //{
-        //    return service.DeleteCategoryByName(name);
-        //}
-
         /// <summary>
-        /// Creates an Item.
+        /// Deletes an Category with the specified id.
         /// </summary>
-        /// <param name="model">This is the ItemDto model with the required information.</param>  
-        [HttpPost]
+        /// <param name="categoryId">The Id of the Category to be updated.</param>  
+        [HttpDelete("{categoryId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public ActionResult<bool> AddItem([FromBody] ItemDto model)
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<bool>> DeleteCategory(int categoryId)
         {
-            //return _itemService.AddItem(model);
-            return true;
-        }
+            try
+            {
+                var user = await GetCurrentUser();
+                if (_categoryService.GetCategoryById(categoryId).Author.UserId == user.UserId)
+                {
+                    if (_categoryService.DeleteCategoryById(categoryId))
+                        return Ok(true);
+                    throw new Exception("Something went wrong, category has not been deleted.");
+                }
+                return BadRequest("This category does not belong to your account.");
 
-        /// <summary>
-        /// Updates an Item with the specified id.
-        /// </summary>
-        /// <param name="id">The id of the Item you're looking to update.</param>  
-        /// <param name="model">This is the ItemDto model with the required information.</param>  
-        [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public ActionResult<bool> UpdateItem(int id, [FromBody] ItemDto model)
-        {
-            //return _itemService.UpdateItem(id, model);
-            return true;
-        }
-
-        /// <summary>
-        /// Deletes an Item with the specified id.
-        /// </summary>
-        /// <param name="id">The id of the Item you're looking to delete.</param>  
-        [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public ActionResult<bool> DeleteItem(int id)
-        {
-            return _itemService.DeleteItemById(id);
+            }
+            catch (Exception e)
+            {
+                var methodName = this.GetType().FullName + "." + System.Reflection.MethodBase.GetCurrentMethod().Name;
+                _logger.LogError($"[INTERNAL ERROR] Something broke in {nameof(CategoryController)}/{methodName}: {e.Message}");
+                return StatusCode(500);
+            }
         }
 
         private async Task<User> GetCurrentUser()

@@ -54,7 +54,7 @@ namespace Unipack.Data.Services
         public ICollection<Category> GetAllCategoriesByUserId(int userId)
         {
             // This is really not performant but we can index the db on userid for category table so that should be fine.
-            ICollection<Category> userCategories = _categories.Where(x => x.AuthorUser.UserId == userId).ToList();
+            ICollection<Category> userCategories = _categories.Where(x => x.Author.UserId == userId).ToList();
             return userCategories;
         }
 
@@ -70,6 +70,17 @@ namespace Unipack.Data.Services
             var category = _categories.FirstOrDefault(x => x.CategoryId == categoryId) ??
                            throw new CategoryNotFoundException(categoryId);
             return category;
+        }
+
+        public bool UpdateCategory(int categoryId, Category category)
+        {
+            var toBeUpdatedCategory = _categories.FirstOrDefault(x => x.CategoryId == categoryId) ??
+                                      throw new CategoryNotFoundException(categoryId);
+
+            toBeUpdatedCategory.Name = category.Name;
+
+            _categories.Update(toBeUpdatedCategory);
+            return _context.SaveChanges() != 0;
         }
     }
 }
