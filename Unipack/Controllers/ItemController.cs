@@ -54,8 +54,10 @@ namespace Unipack.Controllers
                             Name = x.Name,
                             AddedOn = x.AddedOn,
                             CategoryId = x.Category?.CategoryId ,
-                            CategoryName = x.Category?.Name
-                        }
+                            CategoryName = x.Category?.Name,
+                            Priority = x.Priority
+
+                    }
                     ).ToList();
                 return Ok(result);
             }
@@ -73,20 +75,27 @@ namespace Unipack.Controllers
         /// <param name="itemId">The id of the Item you're looking to get.</param>  
         [HttpGet("{itemId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public ActionResult<ItemDto> GetItem(int itemId)
+        public async Task<ActionResult<ItemDto>> GetItem(int itemId)
         {
             try
             {
+                var user = await GetCurrentUser();
                 var item = _itemService.GetItemById(itemId);
+                if (user.UserId != item.Author.UserId)
+                    return BadRequest("This item does not belong to you.");
+
                 var result = new ItemDto
                 {
                     ItemId = item.ItemId,
                     AddedOn = item.AddedOn,
                     Name = item.AddedOn.ToString("d"),
-                    CategoryName = item.Category.Name
+                    CategoryName = item.Category.Name,
+                    CategoryId = item.Category.CategoryId,
+                    Priority = item.Priority
                 };
                 return Ok(result);
 

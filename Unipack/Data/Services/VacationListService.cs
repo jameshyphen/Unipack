@@ -17,7 +17,7 @@ namespace Unipack.Data.Services
         private readonly Context _context;
         private readonly ILogger _logger;
         private readonly DbSet<VacationList> _vacationLists;
-        private readonly DbSet<VacationItem> _vacationItems;
+        private readonly DbSet<VacationListItem> _vacationItems;
         private readonly DbSet<Item> _items;
         private readonly DbSet<User> _users;
 
@@ -66,7 +66,7 @@ namespace Unipack.Data.Services
         {
             Item item = _items.FirstOrDefault(i => i.ItemId == itemId) ?? throw new ItemNotFoundException(itemId);
             VacationList list = _vacationLists.FirstOrDefault(l => l.VacationListId == listId) ?? throw new VacationListNotFoundException(listId);
-            var vacationItem = new VacationItem { Item = item, VacationList = list, Quantity = 1, AddedOn = DateTime.Now };
+            var vacationItem = new VacationListItem { Item = item, VacationList = list, Quantity = 1, AddedOn = DateTime.Now };
             _vacationItems.Add(vacationItem);
             return _context.SaveChanges() != 0;
         }
@@ -90,7 +90,7 @@ namespace Unipack.Data.Services
             VacationList vacationList = _vacationLists.FirstOrDefault(x => x.VacationListId == listId) ??
                                         throw new VacationListNotFoundException(listId);
 
-            VacationItem vacationItem = vacationList.Items.FirstOrDefault(x => x.ItemId == itemId) ??
+            VacationListItem vacationItem = vacationList.Items.FirstOrDefault(x => x.ItemId == itemId) ??
                                         throw new ItemNotFoundException(itemId);
 
             vacationList.Items.Remove(vacationItem);

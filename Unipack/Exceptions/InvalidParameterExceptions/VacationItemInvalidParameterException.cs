@@ -9,7 +9,7 @@ namespace Unipack.Exceptions.InvalidParameterExceptions
     public class VacationItemInvalidParameterException : Exception
     {
         public VacationItemInvalidParameterException()
-            :base($"You must provide an item and a vacationlist to make a relation between the 2."){}
+            :base($"You must provide an item and a vacation list to make a relation between the two."){}
         public VacationItemInvalidParameterException(VacationList list)
             : base($"The following list {list} is not valid.") { }
         public VacationItemInvalidParameterException(Item item)

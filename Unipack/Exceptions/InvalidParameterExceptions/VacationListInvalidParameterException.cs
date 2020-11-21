@@ -9,7 +9,7 @@ namespace Unipack.Exceptions.InvalidParameterExceptions
     public class VacationListInvalidParameterException : Exception
     {
         public VacationListInvalidParameterException()
-            :base($"You must provide a name and a user to create a vacationlist.") {}
+            :base($"You must provide a name and a user to create a vacation list.") {}
         public VacationListInvalidParameterException(string name)
             : base($"The following name {name} is not valid.") { }
         public VacationListInvalidParameterException(User user)

@@ -14,12 +14,12 @@ namespace Unipack.Models
         public DateTime DateArrival { get; set; }
         public DateTime DateDeparture { get; set; }
         public VacationLocation() { }
-        public VacationLocation(string countryName, DateTime addedOn, DateTime dateArrival, DateTime dateDeparture)
-        {
-            CountryName = countryName;
-            AddedOn = addedOn;
-            DateArrival = dateArrival;
-            DateDeparture = dateDeparture;
-        }
+        //public VacationLocation(string countryName, DateTime dateDeparture, DateTime dateArrival)
+        //{
+        //    CountryName = countryName;
+        //    AddedOn = DateTime.Now;
+        //    DateArrival = dateArrival;
+        //    DateDeparture = dateDeparture;
+        //}
     }
 }

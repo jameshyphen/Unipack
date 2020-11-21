@@ -12,7 +12,7 @@ namespace Unipack.DTOs
     {
         public int CategoryId { get; set; }
         public string Name { get; set; }
-        public User Author { get; set; }
+        public UserDto Author { get; set; }
         public DateTime AddedOn { get; set; }
     }
 }

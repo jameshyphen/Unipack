@@ -13,7 +13,7 @@ namespace Unipack.Models
         public int VacationListId { get; set; }
         public string Name { get; set; }
         public User AuthorUser { get; set; }
-        public ICollection<VacationItem> Items { get; set; }
+        public ICollection<VacationListItem> Items { get; set; }
         public ICollection<VacationTask> Tasks { get; set; }
         public DateTime AddedOn { get; set; }
         
@@ -23,7 +23,7 @@ namespace Unipack.Models
 
         public VacationList()
         {
-            Items = new HashSet<VacationItem>();
+            Items = new HashSet<VacationListItem>();
             Tasks = new HashSet<VacationTask>();
             AddedOn = DateTime.Now;
         }
@@ -31,7 +31,7 @@ namespace Unipack.Models
         public VacationList(string name) : this()
         {
             Name = name;
-            Items = new HashSet<VacationItem>();
+            Items = new HashSet<VacationListItem>();
             Tasks = new HashSet<VacationTask>();
             AddedOn = DateTime.Now;
         }
@@ -47,7 +47,7 @@ namespace Unipack.Models
 
         public void AddItem(Item item)
         {
-            VacationItem vacItem = new VacationItem(this, item);
+            VacationListItem vacItem = new VacationListItem(this, item);
             Items.Add(vacItem);
         }
 

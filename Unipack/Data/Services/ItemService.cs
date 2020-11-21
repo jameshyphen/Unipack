@@ -59,7 +59,10 @@ namespace Unipack.Data.Services
 
         public Item GetItemById(int itemId)
         {
-            var item = _items.FirstOrDefault(x => x.ItemId == itemId) ?? throw new ItemNotFoundException(itemId);
+            var item = _items
+                .Include(x => x.Author)
+                .Include(x => x.Category)
+                .FirstOrDefault(x => x.ItemId == itemId) ?? throw new ItemNotFoundException(itemId);
             return item;
         }
 

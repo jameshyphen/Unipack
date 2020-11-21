@@ -57,7 +57,14 @@ namespace Unipack.Controllers
                          CategoryId = x.CategoryId,
                          Name = x.Name,
                          AddedOn = x.AddedOn,
-                         Author = user
+                         Author = new UserDto
+                         {
+                             Email = x.Author.Email,
+                             Username = x.Author.Username,
+                             FirstName = x.Author.Firstname,
+                             LastName = x.Author.Firstname,
+                             UserId = x.Author.UserId
+                         }
                     }
                     ).ToList();
                 return Ok(result);
@@ -93,7 +100,14 @@ namespace Unipack.Controllers
                         CategoryId = category.CategoryId,
                         Name = category.Name,
                         AddedOn = category.AddedOn,
-                        Author = category.Author
+                        Author = new UserDto
+                        {
+                            Email = category.Author.Email,
+                            Username = category.Author.Username,
+                            FirstName = category.Author.Firstname,
+                            LastName = category.Author.Firstname,
+                            UserId = category.Author.UserId
+                        }
                     };
                     return Ok(result);
                 }
@@ -141,7 +155,7 @@ namespace Unipack.Controllers
         }
 
         /// <summary>
-        /// Creates an Category with the passed on Category DTO Model.
+        /// Updates a Category with the passed on Category DTO Model.
         /// </summary>
         /// <param name="categoryId">The Id of the Category to be updated.</param>  
         /// <param name="categoryDto">The Category DTO Model of the Category to be updated.</param>  
@@ -153,10 +167,9 @@ namespace Unipack.Controllers
             try
             {
                 var user = await GetCurrentUser();
-                var category = _categoryService.GetCategoryById(categoryDto.CategoryId);
                 var update_cat = new Category
                 {
-                    Name = category.Name,
+                    Name = categoryDto.Name,
                 };
                 if (_categoryService.UpdateCategory(categoryId, update_cat))
                     return Ok(true);
@@ -172,7 +185,7 @@ namespace Unipack.Controllers
 
 
         /// <summary>
-        /// Deletes an Category with the specified id.
+        /// Deletes a Category with the specified id.
         /// </summary>
         /// <param name="categoryId">The Id of the Category to be updated.</param>  
         [HttpDelete("{categoryId}")]

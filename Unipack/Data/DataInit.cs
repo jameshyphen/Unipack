@@ -118,10 +118,11 @@ namespace Unipack.Data
             VacationTask task1 = new VacationTask("Charge up my phone", dzhem, DateTime.Parse("12/12/2020"));
 
             task1.Priority = Priority.High;
+            task1.Completed = true;
             ronaVacList.Tasks.Add(task1);
-            ronaVacList.Items.Add(new VacationItem(ronaVacList, ronaItem));
-            ronaVacList.Items.Add(new VacationItem(ronaVacList, ronaItem2));
-            ronaVacList.Items.Add(new VacationItem(ronaVacList, ronaItem3));
+            ronaVacList.Items.Add(new VacationListItem(ronaVacList, ronaItem));
+            ronaVacList.Items.Add(new VacationListItem(ronaVacList, ronaItem2));
+            ronaVacList.Items.Add(new VacationListItem(ronaVacList, ronaItem3));
             // Add some locations to the lists
 
             ronaVac.AddList(ronaVacList);

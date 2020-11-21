@@ -14,7 +14,7 @@ namespace Unipack.Data
         public DbSet<Item> Items { get; set; }
         public DbSet<Vacation> Vacations { get; set; }
         public DbSet<Category> Categories { get; set; }
-        public DbSet<VacationItem> VacationItems { get; set; }
+        public DbSet<VacationListItem> VacationItems { get; set; }
         public DbSet<VacationList> VacationLists { get; set; }
         public DbSet<VacationLocation> VacationLocations { get; set; }
         public DbSet<VacationTask> VacationTasks { get; set; }
@@ -33,7 +33,7 @@ namespace Unipack.Data
             builder.Entity<Item>();
             builder.Entity<Vacation>();
 
-            builder.Entity<VacationItem>();
+            builder.Entity<VacationListItem>();
 
             builder.Entity<VacationList>();
             builder.Entity<VacationLocation>();
