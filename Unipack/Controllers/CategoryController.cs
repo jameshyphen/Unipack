@@ -154,11 +154,11 @@ namespace Unipack.Controllers
             {
                 var user = await GetCurrentUser();
                 var category = _categoryService.GetCategoryById(categoryDto.CategoryId);
-                var category = new Category
+                var update_cat = new Category
                 {
                     Name = category.Name,
                 };
-                if (_categoryService.UpdateCategory(categoryId, category))
+                if (_categoryService.UpdateCategory(categoryId, update_cat))
                     return Ok(true);
                 throw new Exception("Something went wrong, category has not been updated.");
             }

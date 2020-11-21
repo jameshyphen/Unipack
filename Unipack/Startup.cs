@@ -155,7 +155,7 @@ namespace Unipack
                 endpoints.MapControllers();
             });
 
-            //dataInit.InitAsync().Wait();
+            dataInit.InitAsync().Wait();
         }
     }
 }
