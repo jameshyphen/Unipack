@@ -20,7 +20,14 @@ namespace Unipack
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration((hostContext, builder) => { builder.AddUserSecrets<Program>(); })
+                .ConfigureAppConfiguration((hostContext, builder) =>
+                {
+                    if(hostContext.HostingEnvironment.IsDevelopment())
+                        builder.AddUserSecrets<Program>();
+
+                    builder.AddJsonFile("appsettings.secret.json", optional: false, reloadOnChange: true)
+                    .AddEnvironmentVariables();
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();

@@ -38,6 +38,8 @@ namespace Unipack
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var initConfig = new StartupConfig();
+            Configuration.GetSection("Secrets").Bind(initConfig);
             
             services.AddMemoryCache();
             services.AddAuthorization(o => {
@@ -88,13 +90,13 @@ namespace Unipack
             services.AddScoped<IItemService, ItemService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<DataInit>();
-            var connString = $"Data Source={Configuration["Database:Host"]};Initial Catalog=master;Integrated Security=True;Database={Configuration["Database:Name"]};";
+            var connString = $"Data Source={initConfig.DatabaseHost};Initial Catalog=master;Integrated Security=True;Database={initConfig.DatabaseName};";
             services.AddDbContext<Context>(options =>
                 options.UseSqlServer(
                     //Configuration.GetConnectionString("Azure")
                     Environment.GetEnvironmentVariable("AzureConnectionString") ?? throw new ArgumentNullException(nameof(services))
                 ));
-            var key = Configuration["Users:SignInKey"];
+            var key = initConfig.UserSignInKey;
             var keyBytes = Encoding.UTF8.GetBytes(key ?? throw new ArgumentNullException(nameof(services)));
 
 

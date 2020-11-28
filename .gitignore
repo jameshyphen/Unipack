@@ -12,3 +12,5 @@ Unipack/bin/
 Unipack/obj/
 
 Unipack/bin/
+
+Unipack/appsettings.Secret.json
