@@ -143,9 +143,14 @@ namespace Unipack
             Configuration.GetSection(nameof(SwaggerOptions)).Bind(swaggerOptions);
 
             app.UseSwagger();
+            app.UseSwagger(c =>
+            {
+                c.RouteTemplate = swaggerOptions.JsonRoute;
+            });
             app.UseSwaggerUI(option =>
             {
                 option.SwaggerEndpoint(swaggerOptions.UiEndpoint, swaggerOptions.Description);
+                option.RoutePrefix = "unipack/swagger";
             });
 
             app.UseHttpsRedirection();
