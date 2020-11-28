@@ -83,7 +83,7 @@ namespace Unipack
                 options.AccessDeniedPath = "/api/account/denied";
                 options.SlidingExpiration = true;
             });
-
+            services.AddCors(options => options.AddPolicy("AllowAllOrigins", builder => builder.AllowAnyOrigin()));
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IItemService, ItemService>();
             services.AddScoped<ICategoryService, CategoryService>();
@@ -149,6 +149,7 @@ namespace Unipack
 
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseCors("AllowAllOrigins");
 
             app.UseEndpoints(endpoints =>
             {
