@@ -35,14 +35,14 @@
         </member>
         <member name="M:Unipack.Controllers.CategoryController.UpdateCategory(System.Int32,Unipack.DTOs.CategoryDto)">
             <summary>
-            Creates an Category with the passed on Category DTO Model.
+            Updates a Category with the passed on Category DTO Model.
             </summary>
             <param name="categoryId">The Id of the Category to be updated.</param>  
             <param name="categoryDto">The Category DTO Model of the Category to be updated.</param>  
         </member>
         <member name="M:Unipack.Controllers.CategoryController.DeleteCategory(System.Int32)">
             <summary>
-            Deletes an Category with the specified id.
+            Deletes a Category with the specified id.
             </summary>
             <param name="categoryId">The Id of the Category to be updated.</param>  
         </member>

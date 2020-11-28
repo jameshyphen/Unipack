@@ -40,15 +40,16 @@ namespace Unipack
         {
             var initConfig = new StartupConfig();
             Configuration.GetSection("Secrets").Bind(initConfig);
-            
+
             services.AddMemoryCache();
-            services.AddAuthorization(o => {
+            services.AddAuthorization(o =>
+            {
                 o.AddPolicy("Moderators", s => s.Requirements.Add(new RolesAuthorizationRequirement(new string[] { "Admin", "Moderator" })));
                 o.AddPolicy("Admins", s => s.RequireRole("Admin"));
             });
             services.AddControllers(o =>
                 {
-                    
+
                     o.Filters.Add(new AuthorizeFilter());
                     o.Conventions.Add(new RouteTokenTransformerConvention(new SlugifyParameterTransformer()));
                 })
@@ -66,7 +67,8 @@ namespace Unipack
                 x.IncludeXmlComments(xmlPath);
             });
 
-            services.AddIdentity<IdentityUser, IdentityRole>(o => {
+            services.AddIdentity<IdentityUser, IdentityRole>(o =>
+            {
                 o.Password.RequireDigit = false;
                 o.Password.RequireUppercase = false;
                 o.Password.RequiredLength = 6;
@@ -90,16 +92,21 @@ namespace Unipack
             services.AddScoped<IItemService, ItemService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<DataInit>();
-            var connString = $"Data Source={initConfig.DatabaseHost};Initial Catalog=master;Integrated Security=True;Database={initConfig.DatabaseName};";
-            services.AddDbContext<Context>(options =>
-                options.UseSqlServer(
-                    //Configuration.GetConnectionString("Azure")
-                    Environment.GetEnvironmentVariable("AzureConnectionString") ?? throw new ArgumentNullException(nameof(services))
-                ));
+
+            var dbHost = initConfig.DatabaseHost ??
+                throw new Exception("Database Host is not set in secrets");
+            var dbName = initConfig.DatabaseName ??
+                throw new Exception("Database Name is not set in secrets");
+            var dbPassword = initConfig.DatabasePassword ??
+                throw new Exception("Database Password is not set in secrets");
+            var dbUser = initConfig.DatabaseUser ??
+                throw new Exception("Database User is not set in secrets");
+
+            var connString = $"Data Source={dbHost};Initial Catalog=master;Integrated Security=True;Database={dbName};User Id={dbUser};Password={dbPassword};";
+            services.AddDbContext<Context>(options => options.UseSqlServer(connString));
+
             var key = initConfig.UserSignInKey;
             var keyBytes = Encoding.UTF8.GetBytes(key ?? throw new ArgumentNullException(nameof(services)));
-
-
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

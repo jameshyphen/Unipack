@@ -10,5 +10,7 @@ namespace Unipack.Options
         public string UserSignInKey { get; set; }
         public string DatabaseHost { get; set; }
         public string DatabaseName { get; set; }
+        public string DatabasePassword { get; set; }
+        public string DatabaseUser { get; set; }
     }
 }

@@ -94,7 +94,6 @@ C:\Applications\Native apps 2\Unipack\Unipack.Tests\obj\Debug\netcoreapp3.1\Unip
 C:\Applications\Native apps 2\Unipack\Unipack.Tests\obj\Debug\netcoreapp3.1\Unipack.Tests.pdb
 C:\Applications\Native apps 2\Unipack\Unipack.Tests\bin\Debug\netcoreapp3.1\appsettings.Development.json
 C:\Applications\Native apps 2\Unipack\Unipack.Tests\bin\Debug\netcoreapp3.1\appsettings.json
-C:\Applications\Native apps 2\Unipack\Unipack.Tests\bin\Debug\netcoreapp3.1\Properties\launchSettings.json
 C:\Applications\Native apps 2\Unipack\Unipack.Tests\bin\Debug\netcoreapp3.1\Unipack.exe
 C:\Applications\Native apps 2\Unipack\Unipack.Tests\bin\Debug\netcoreapp3.1\System.Net.Http.Formatting.dll
 C:\Applications\Native apps 2\Unipack\Unipack.Tests\bin\Debug\netcoreapp3.1\System.Web.Http.dll
@@ -160,7 +159,6 @@ C:\Applications\Native apps 2\Unipack\Unipack.Tests\bin\Debug\netcoreapp3.1\Syst
 C:\Applications\Native apps 2\Unipack\Unipack.Tests\bin\Debug\netcoreapp3.1\System.Diagnostics.DiagnosticSource.dll
 C:\Applications\Native apps 2\Unipack\Unipack.Tests\bin\Debug\netcoreapp3.1\System.IdentityModel.Tokens.Jwt.dll
 C:\Applications\Native apps 2\Unipack\Unipack.Tests\bin\Debug\netcoreapp3.1\System.Runtime.Caching.dll
-C:\Applications\Native apps 2\Unipack\Unipack.Tests\bin\Debug\netcoreapp3.1\System.Security.Cryptography.Pkcs.dll
 C:\Applications\Native apps 2\Unipack\Unipack.Tests\bin\Debug\netcoreapp3.1\System.Security.Cryptography.ProtectedData.dll
 C:\Applications\Native apps 2\Unipack\Unipack.Tests\bin\Debug\netcoreapp3.1\cs\Microsoft.CodeAnalysis.resources.dll
 C:\Applications\Native apps 2\Unipack\Unipack.Tests\bin\Debug\netcoreapp3.1\de\Microsoft.CodeAnalysis.resources.dll
@@ -221,8 +219,18 @@ C:\Applications\Native apps 2\Unipack\Unipack.Tests\bin\Debug\netcoreapp3.1\runt
 C:\Applications\Native apps 2\Unipack\Unipack.Tests\bin\Debug\netcoreapp3.1\runtimes\win-x86\native\sni.dll
 C:\Applications\Native apps 2\Unipack\Unipack.Tests\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.0\System.Runtime.Caching.dll
 C:\Applications\Native apps 2\Unipack\Unipack.Tests\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.0\System.Runtime.Caching.dll
-C:\Applications\Native apps 2\Unipack\Unipack.Tests\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.1\System.Security.Cryptography.Pkcs.dll
 C:\Applications\Native apps 2\Unipack\Unipack.Tests\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
 C:\Applications\Native apps 2\Unipack\Unipack.Tests\bin\Debug\netcoreapp3.1\Unipack.dll
 C:\Applications\Native apps 2\Unipack\Unipack.Tests\bin\Debug\netcoreapp3.1\Unipack.pdb
 C:\Applications\Native apps 2\Unipack\Unipack.Tests\bin\Debug\netcoreapp3.1\Unipack.xml
+C:\Applications\Native apps 2\Unipack\Unipack.Tests\bin\Debug\netcoreapp3.1\appsettings.secret.Development.json
+C:\Applications\Native apps 2\Unipack\Unipack.Tests\bin\Debug\netcoreapp3.1\appsettings.Secret.json
+C:\Applications\Native apps 2\Unipack\Unipack.Tests\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Configuration.FileExtensions.dll
+C:\Applications\Native apps 2\Unipack\Unipack.Tests\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Configuration.Json.dll
+C:\Applications\Native apps 2\Unipack\Unipack.Tests\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Configuration.UserSecrets.dll
+C:\Applications\Native apps 2\Unipack\Unipack.Tests\bin\Debug\netcoreapp3.1\Microsoft.Extensions.FileProviders.Abstractions.dll
+C:\Applications\Native apps 2\Unipack\Unipack.Tests\bin\Debug\netcoreapp3.1\Microsoft.Extensions.FileProviders.Physical.dll
+C:\Applications\Native apps 2\Unipack\Unipack.Tests\bin\Debug\netcoreapp3.1\Microsoft.Extensions.FileSystemGlobbing.dll
+C:\Applications\Native apps 2\Unipack\Unipack.Tests\bin\Debug\netcoreapp3.1\System.Text.Json.dll
+C:\Applications\Native apps 2\Unipack\Unipack.Tests\obj\Debug\netcoreapp3.1\Unipack.Tests.csproj.CoreCompileInputs.cache
+C:\Applications\Native apps 2\Unipack\Unipack.Tests\obj\Debug\netcoreapp3.1\Unipack.Tests.genruntimeconfig.cache
