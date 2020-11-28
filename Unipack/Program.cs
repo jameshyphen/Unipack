@@ -25,7 +25,7 @@ namespace Unipack
                     if(hostContext.HostingEnvironment.IsDevelopment())
                         builder.AddUserSecrets<Program>();
 
-                    builder.AddJsonFile("appsettings.secret.json", optional: false, reloadOnChange: true)
+                    builder.AddJsonFile("appsettings.Secret.json", optional: false, reloadOnChange: true)
                     .AddEnvironmentVariables();
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
