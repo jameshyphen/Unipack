@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Unipack.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("unipack/api/[controller]")]
     [ApiController]
     public class VacationController : ControllerBase
     {

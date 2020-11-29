@@ -17,7 +17,7 @@ using Xunit;
 
 namespace Unipack.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("unipack/api/[controller]")]
     [Authorize]
     [ApiController]
     public class VacationListController : ControllerBase

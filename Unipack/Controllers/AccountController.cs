@@ -18,7 +18,7 @@ using Unipack.Models;
 
 namespace Unipack.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("unipack/api/[controller]")]
     [ApiController]
     public class AccountController : ControllerBase
     {

@@ -141,6 +141,7 @@ namespace Unipack
 
             var swaggerOptions = new SwaggerOptions();
             Configuration.GetSection(nameof(SwaggerOptions)).Bind(swaggerOptions);
+            app.UsePathBase("/unipack");
 
             app.UseSwagger();
             app.UseSwagger(c =>
@@ -171,6 +172,7 @@ namespace Unipack
             {
                 endpoints.MapControllers();
             });
+
 
             dataInit.InitAsync().Wait();
         }
