@@ -16,7 +16,7 @@ using Unipack.Models;
 
 namespace Unipack.Controllers
 {
-    [Route("unipack/api/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class CategoryController : ControllerBase
     {

@@ -38,8 +38,10 @@ namespace Unipack
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var initConfig = new StartupConfig();
+            var initConfig = new Config();
             Configuration.GetSection("Secrets").Bind(initConfig);
+
+            services.Configure<Config>(Configuration.GetSection("Secrets"));
 
             services.AddMemoryCache();
             services.AddAuthorization(o =>
@@ -144,14 +146,10 @@ namespace Unipack
             app.UsePathBase("/unipack");
 
             app.UseSwagger();
-            app.UseSwagger(c =>
-            {
-                c.RouteTemplate = swaggerOptions.JsonRoute;
-            });
             app.UseSwaggerUI(option =>
             {
                 option.SwaggerEndpoint(swaggerOptions.UiEndpoint, swaggerOptions.Description);
-                option.RoutePrefix = "unipack/swagger";
+                option.RoutePrefix = "swagger";
             });
 
             app.UseHttpsRedirection();

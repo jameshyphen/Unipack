@@ -10,27 +10,31 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Unipack.Data.Interfaces;
 using Unipack.DTOs;
 using Unipack.Models;
+using Unipack.Options;
 
 namespace Unipack.Controllers
 {
-    [Route("unipack/api/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class AccountController : ControllerBase
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IUserService _userService;
         private readonly ILogger<AccountController> _logger;
+        private readonly string _signInKey;
 
-        public AccountController(UserManager<IdentityUser> userManager, IUserService _userService, ILogger<AccountController> _logger)
+        public AccountController(UserManager<IdentityUser> userManager, IUserService _userService, ILogger<AccountController> _logger, IOptions<Config> config)
         {
             this._userManager = userManager;
             this._userService = _userService;
             this._logger = _logger;
+            this._signInKey = config.Value.UserSignInKey;
         }
 
         /// <summary>
@@ -62,7 +66,7 @@ namespace Unipack.Controllers
                     Expires = DateTime.UtcNow.AddMinutes(5),
                     SigningCredentials = new SigningCredentials(
                         new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("SignInKey"))),
+                            Encoding.UTF8.GetBytes(_signInKey)),
                         SecurityAlgorithms.HmacSha256Signature)
                 };
                 var tokenHandler = new JwtSecurityTokenHandler();
@@ -109,7 +113,7 @@ namespace Unipack.Controllers
                     Expires = DateTime.UtcNow.AddMinutes(5),
                     SigningCredentials = new SigningCredentials(
                         new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("SignInKey"))),
+                            Encoding.UTF8.GetBytes(_signInKey)),
                         SecurityAlgorithms.HmacSha256Signature)
                 };
                 var tokenHandler = new JwtSecurityTokenHandler();

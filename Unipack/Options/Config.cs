@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Unipack.Options
 {
-    public class StartupConfig
+    public class Config
     {
         public string UserSignInKey { get; set; }
         public string DatabaseHost { get; set; }
