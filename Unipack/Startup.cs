@@ -102,7 +102,7 @@ namespace Unipack
             var dbUser = initConfig.DatabaseUser ??
                 throw new Exception("Database User is not set in secrets");
 
-            var connString = $"Data Source={dbHost};Initial Catalog=master;Integrated Security=True;Database={dbName};User Id={dbUser};Password={dbPassword};";
+            var connString = $"Data Source={dbHost};Initial Catalog=master;Integrated Security=True;Database={dbName};User Id={dbUser};Password={dbPassword};Trusted_Connection=False;";
             services.AddDbContext<Context>(options => options.UseSqlServer(connString));
 
             var key = initConfig.UserSignInKey;
