@@ -12,33 +12,43 @@ namespace Unipack.Controllers
     [ApiController]
     public class VacationController : ControllerBase
     {
-        // GET: api/<VacationController>
+        /// <summary>
+        /// Returns all Items created by the authenticated user.
+        /// </summary>
         [HttpGet]
         public IEnumerable<string> Get()
         {
             return new string[] { "value1", "value2" };
         }
 
-        // GET api/<VacationController>/5
+        /// <summary>
+        /// Returns all Items created by the authenticated user.
+        /// </summary>
         [HttpGet("{id}")]
         public string Get(int id)
         {
             return "value";
         }
 
-        // POST api/<VacationController>
+        /// <summary>
+        /// Returns all Items created by the authenticated user.
+        /// </summary>
         [HttpPost]
         public void Post([FromBody] string value)
         {
         }
 
-        // PUT api/<VacationController>/5
+        /// <summary>
+        /// Returns all Items created by the authenticated user.
+        /// </summary>
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
         }
 
-        // DELETE api/<VacationController>/5
+        /// <summary>
+        /// Returns all Items created by the authenticated user.
+        /// </summary>
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
