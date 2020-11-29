@@ -13,7 +13,7 @@ namespace Unipack.Controllers
     public class VacationController : ControllerBase
     {
         /// <summary>
-        /// TEST.
+        /// TEST 2.
         /// </summary>
         [HttpGet]
         public IEnumerable<string> Get()
@@ -22,7 +22,7 @@ namespace Unipack.Controllers
         }
 
         /// <summary>
-        /// TEST.
+        /// TEST 2.
         /// </summary>
         [HttpGet("{id}")]
         public string Get(int id)
@@ -31,7 +31,7 @@ namespace Unipack.Controllers
         }
 
         /// <summary>
-        /// TEST.
+        /// TEST 2.
         /// </summary>
         [HttpPost]
         public void Post([FromBody] string value)
@@ -39,7 +39,7 @@ namespace Unipack.Controllers
         }
 
         /// <summary>
-        /// TEST.
+        /// TEST 2.
         /// </summary>
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
