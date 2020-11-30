@@ -13,7 +13,7 @@ namespace Unipack.Controllers
     public class VacationController : ControllerBase
     {
         /// <summary>
-        /// TEST 2.
+        /// TEST 2. REDEPL
         /// </summary>
         [HttpGet]
         public IEnumerable<string> Get()
