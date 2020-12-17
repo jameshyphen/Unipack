@@ -38,7 +38,7 @@ namespace Unipack.Controllers
         }
 
         /// <summary>
-        /// Registers a user. Returns a token and the created user. Hello from mattice.
+        /// Registers a user. Returns a token and the created user.
         /// </summary>
         /// <param name="model">This is the RegisterDto model with the required information.</param>  
         [AllowAnonymous]
