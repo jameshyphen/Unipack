@@ -17,7 +17,6 @@ namespace Unipack.Models
         public DateTime AddedOn { get; set; }
         public Priority Priority { get; set; }
         public Category Category { get; set; }
-        // Random test comment
         #endregion
 
         #region Constructors

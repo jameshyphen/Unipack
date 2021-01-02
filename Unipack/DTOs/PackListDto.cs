@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Unipack.DTOs
 {
-    public class VacationListDto
+    public class PackListDto
     {
         [Range(0, int.MaxValue, ErrorMessage = "Ah yes, an Id below 0, not sure how you managed that but good job!")]
         [Required]
@@ -19,8 +19,8 @@ namespace Unipack.DTOs
         [Required]
         public DateTime AddedOn { get; set; }
         //Vacation props:
-        //public DateTime Departure { get; set; }
-        //public DateTime Return { get; set; }
+        public DateTime Departure { get; set; }
+        public DateTime Return { get; set; }
         //public ICollection<VacationLocationDto> Locations { get; set; }
     }
 }

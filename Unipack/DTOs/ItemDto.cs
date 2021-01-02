@@ -9,7 +9,7 @@ namespace Unipack.DTOs
 {
     public class ItemDto
     {
-        [Range(0, int.MaxValue, ErrorMessage = "Ah yes, an Id below 0, not sure how you managed that but good job!")]
+        [Range(0, int.MaxValue, ErrorMessage = "Negative ID")]
         [Required]
         public int ItemId { get; set; }
         [Required]

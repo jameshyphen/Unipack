@@ -6,25 +6,25 @@ using System.Threading.Tasks;
 
 namespace Unipack.Models
 {
-    public class VacationListItem
+    public class PackItem
     {
-        public int VacationListItemId { get; set; }
+        public int PackItemId { get; set; }
         public int ItemId { get; set; }
         [ForeignKey(nameof(ItemId))]
         public Item Item { get; set; }
 
-        public int VacationListId { get; set; }
+        public int PackListId { get; set; }
 
-        [ForeignKey(nameof(VacationListId))]
-        public VacationList VacationList { get; set; }
+        [ForeignKey(nameof(PackListId))]
+        public PackList PackList { get; set; }
         public int Quantity { get; set; }
         public DateTime AddedOn { get; set; }
 
-        public VacationListItem() { }
-        public VacationListItem(VacationList VacationList, Item Item) // etc
+        public PackItem() { }
+        public PackItem(PackList VacationList, Item Item) // etc
         {
-            this.VacationList = VacationList;
-            this.VacationListItemId = VacationList.VacationListId;
+            this.PackList = VacationList;
+            this.PackItemId = VacationList.PackListId;
             this.Item = Item;
             this.ItemId = Item.ItemId;
         }

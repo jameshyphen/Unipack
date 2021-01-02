@@ -14,10 +14,10 @@ namespace Unipack.Data
         public DbSet<Item> Items { get; set; }
         public DbSet<Vacation> Vacations { get; set; }
         public DbSet<Category> Categories { get; set; }
-        public DbSet<VacationListItem> VacationItems { get; set; }
-        public DbSet<VacationList> VacationLists { get; set; }
+        public DbSet<PackItem> VacationItems { get; set; }
+        public DbSet<PackList> VacationLists { get; set; }
         public DbSet<VacationLocation> VacationLocations { get; set; }
-        public DbSet<VacationTask> VacationTasks { get; set; }
+        public DbSet<PackTask> VacationTasks { get; set; }
 
         public Context(DbContextOptions options)
             : base(options)
@@ -33,11 +33,11 @@ namespace Unipack.Data
             builder.Entity<Item>();
             builder.Entity<Vacation>();
 
-            builder.Entity<VacationListItem>();
+            builder.Entity<PackItem>();
 
-            builder.Entity<VacationList>();
+            builder.Entity<PackList>();
             builder.Entity<VacationLocation>();
-            builder.Entity<VacationTask>();
+            builder.Entity<PackTask>();
 
         }
     }

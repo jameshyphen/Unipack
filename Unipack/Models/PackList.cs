@@ -6,37 +6,37 @@ using Microsoft.AspNetCore.Routing;
 
 namespace Unipack.Models
 {
-    public class VacationList
+    public class PackList
     {
         #region Properties
 
-        public int VacationListId { get; set; }
+        public int PackListId { get; set; }
         public string Name { get; set; }
         public User AuthorUser { get; set; }
-        public ICollection<VacationListItem> Items { get; set; }
-        public ICollection<VacationTask> Tasks { get; set; }
+        public ICollection<PackItem> Items { get; set; }
+        public ICollection<PackTask> Tasks { get; set; }
         public DateTime AddedOn { get; set; }
         
         #endregion
 
         #region Constructors
 
-        public VacationList()
+        public PackList()
         {
-            Items = new HashSet<VacationListItem>();
-            Tasks = new HashSet<VacationTask>();
+            Items = new HashSet<PackItem>();
+            Tasks = new HashSet<PackTask>();
             AddedOn = DateTime.Now;
         }
 
-        public VacationList(string name) : this()
+        public PackList(string name) : this()
         {
             Name = name;
-            Items = new HashSet<VacationListItem>();
-            Tasks = new HashSet<VacationTask>();
+            Items = new HashSet<PackItem>();
+            Tasks = new HashSet<PackTask>();
             AddedOn = DateTime.Now;
         }
 
-        public VacationList(string name, User user) : this(name)
+        public PackList(string name, User user) : this(name)
         {
             AuthorUser = user;
         }
@@ -47,7 +47,7 @@ namespace Unipack.Models
 
         public void AddItem(Item item)
         {
-            VacationListItem vacItem = new VacationListItem(this, item);
+            PackItem vacItem = new PackItem(this, item);
             Items.Add(vacItem);
         }
 

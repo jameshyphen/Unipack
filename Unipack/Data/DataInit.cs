@@ -92,12 +92,12 @@ namespace Unipack.Data
                     );
 
             // Add some lists to the vacation
-            VacationList ronaVacList = 
-                new VacationList(
+            PackList ronaVacList = 
+                new PackList(
                         "Important stuff, DONT FORGET!", dzhem
                     );
-            VacationList ronaVacList2 =
-                new VacationList(
+            PackList ronaVacList2 =
+                new PackList(
                     "Optional stuff!", dzhem
                 );
 
@@ -115,14 +115,14 @@ namespace Unipack.Data
 
             // Add some tasks to the lists
 
-            VacationTask task1 = new VacationTask("Charge up my phone", dzhem, DateTime.Parse("12/12/2020"));
+            PackTask task1 = new PackTask("Charge up my phone", dzhem, DateTime.Parse("12/12/2020"));
 
             task1.Priority = Priority.High;
             task1.Completed = true;
             ronaVacList.Tasks.Add(task1);
-            ronaVacList.Items.Add(new VacationListItem(ronaVacList, ronaItem));
-            ronaVacList.Items.Add(new VacationListItem(ronaVacList, ronaItem2));
-            ronaVacList.Items.Add(new VacationListItem(ronaVacList, ronaItem3));
+            ronaVacList.Items.Add(new PackItem(ronaVacList, ronaItem));
+            ronaVacList.Items.Add(new PackItem(ronaVacList, ronaItem2));
+            ronaVacList.Items.Add(new PackItem(ronaVacList, ronaItem3));
             // Add some locations to the lists
 
             ronaVac.AddList(ronaVacList);

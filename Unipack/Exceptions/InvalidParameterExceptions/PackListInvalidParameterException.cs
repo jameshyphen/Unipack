@@ -6,13 +6,13 @@ using Unipack.Models;
 
 namespace Unipack.Exceptions.InvalidParameterExceptions
 {
-    public class VacationListInvalidParameterException : Exception
+    public class PackListInvalidParameterException : Exception
     {
-        public VacationListInvalidParameterException()
+        public PackListInvalidParameterException()
             :base($"You must provide a name and a user to create a vacation list.") {}
-        public VacationListInvalidParameterException(string name)
+        public PackListInvalidParameterException(string name)
             : base($"The following name {name} is not valid.") { }
-        public VacationListInvalidParameterException(User user)
+        public PackListInvalidParameterException(User user)
             : base($"The following user {user} is not valid.") { }
     }
 }
