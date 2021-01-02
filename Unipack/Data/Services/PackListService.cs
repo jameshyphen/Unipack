@@ -64,11 +64,11 @@ namespace Unipack.Data.Services
 
         }
 
-        public bool AddItemToListByItemId(int listId, int itemId)
+        public bool AddItemToPackList(PackItemDto model)
         {
-            Item item = _items.FirstOrDefault(i => i.ItemId == itemId) ?? throw new ItemNotFoundException(itemId);
-            PackList list = _packLists.FirstOrDefault(l => l.PackListId == listId) ?? throw new PackListNotFoundException(listId);
-            var vacationItem = new PackItem { Item = item, PackList = list, Quantity = 1, AddedOn = DateTime.Now };
+            Item item = _items.FirstOrDefault(i => i.ItemId == model.ItemId) ?? throw new ItemNotFoundException(model.ItemId);
+            PackList list = _packLists.FirstOrDefault(l => l.PackListId == model.PackListId) ?? throw new PackListNotFoundException(model.PackListId);
+            var vacationItem = new PackItem { Item = item, PackList = list, Quantity = model.Quantity};
             _packItems.Add(vacationItem);
             return _context.SaveChanges() != 0;
         }
@@ -92,10 +92,12 @@ namespace Unipack.Data.Services
             return _context.SaveChanges() != 0;
         }
 
-        public bool DeleteItemFromListByVacationItemId(int itemId, int listId)
+        public bool DeleteItemFromListByItemId(int listId, int itemId)
         {
-            PackList vacationList = _packLists.FirstOrDefault(x => x.PackListId == listId) ??
-                                        throw new PackListNotFoundException(listId);
+            PackList vacationList = _packLists
+                .Include(x => x.Items)
+                .FirstOrDefault(x => x.PackListId == listId) 
+                ?? throw new PackListNotFoundException(listId);
 
             PackItem vacationItem = vacationList.Items.FirstOrDefault(x => x.ItemId == itemId) ??
                                         throw new ItemNotFoundException(itemId);

@@ -18,8 +18,8 @@ namespace Unipack.Data.Interfaces
         bool DeletePackListById(int id);
         bool UpdatePackList(int id, PackListDto model);
 
-        bool AddItemToListByItemId(int listId, int itemId);
+        bool AddItemToPackList(PackItemDto model);
 
-        bool DeleteItemFromListByVacationItemId(int vacationItemId, int listId);
+        bool DeleteItemFromListByItemId(int listId, int itemId);
     }
 }

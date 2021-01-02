@@ -118,18 +118,17 @@ namespace Unipack.Controllers
         /// <summary>
         /// Add an Item to PackList.
         /// </summary>
-        /// <param name="packListId">The id of the PackList you're looking to update.</param>
-        /// <param name="itemId">This is the PackList model with the required information.</param>
+        /// <param name="model">PackListDto model containing the IDs and quantity.</param>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [HttpPost("{packListId}/item/{itemId}")]
-        public ActionResult AddItemToPackList(int packListId, int itemId)
+        [HttpPost("{packListId}/item")]
+        public ActionResult AddItemToPackList(PackItemDto model)
         {
             bool result;
             try
             {
-                result = _packListService.AddItemToListByItemId(packListId, itemId);
+                result = _packListService.AddItemToPackList(model);
             }
             catch (PackListNotFoundException ve)
             {
@@ -137,7 +136,28 @@ namespace Unipack.Controllers
             }
             return new OkObjectResult(result);
         }
-
+        /// <summary>
+        /// Add an Item to PackList.
+        /// </summary>
+        /// <param name="packListId">The id of the PackList you're looking to update.</param>
+        /// <param name="itemId">This is the PackList model with the required information.</param>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [HttpDelete("{packListId}/item/{itemId}")]
+        public ActionResult DeleteItemFromPackList(int packListId, int itemId)
+        {
+            bool result;
+            try
+            {
+                result = _packListService.DeleteItemFromListByItemId(packListId, itemId);
+            }
+            catch (PackListNotFoundException ve)
+            {
+                return BadRequest(new { message = "Error while finding pack list: " + ve.Message });
+            }
+            return new OkObjectResult(result);
+        }
         /// <summary>
         /// Deletes a PackList with the specified id.
         /// </summary>

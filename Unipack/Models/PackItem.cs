@@ -20,8 +20,10 @@ namespace Unipack.Models
         public int Quantity { get; set; }
         public DateTime AddedOn { get; set; }
 
-        public PackItem() { }
-        public PackItem(PackList VacationList, Item Item) // etc
+        public PackItem() {
+            AddedOn = DateTime.Now;
+        }
+        public PackItem(PackList VacationList, Item Item) :this() // etc
         {
             this.PackList = VacationList;
             this.PackItemId = VacationList.PackListId;
