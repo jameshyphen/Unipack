@@ -14,7 +14,7 @@ namespace Unipack.Data
         public DbSet<Item> Items { get; set; }
         public DbSet<Vacation> Vacations { get; set; }
         public DbSet<Category> Categories { get; set; }
-        public DbSet<PackItem> VacationItems { get; set; }
+        public DbSet<PackItem> PackItems { get; set; }
         public DbSet<PackList> PackLists { get; set; }
         public DbSet<VacationLocation> VacationLocations { get; set; }
         public DbSet<PackTask> VacationTasks { get; set; }

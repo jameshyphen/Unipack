@@ -26,7 +26,7 @@ namespace Unipack.Data.Services
             _context = context;
             _logger = logger;
             _vacationLists = context.PackLists;
-            _vacationItems = context.VacationItems;
+            _vacationItems = context.PackItems;
             _items = context.Items;
             _users = context.UnipackUsers;
         }

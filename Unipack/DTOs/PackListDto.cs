@@ -16,7 +16,6 @@ namespace Unipack.DTOs
         
         //public ICollection<VacationItemDto> Items { get; set; }
         //public ICollection<VacationTaskDto> Tasks { get; set; }
-        [Required]
         public DateTime AddedOn { get; set; }
         //Vacation props:
         public DateTime Departure { get; set; }

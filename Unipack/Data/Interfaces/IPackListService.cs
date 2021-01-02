@@ -9,7 +9,7 @@ namespace Unipack.Data.Interfaces
 {
     public interface IPackListService
     {
-        bool AddPackList(PackListDto list);
+        bool AddPackList(int vacationId, PackList list);
 
         Task<PackListDto> GetPackListById(int id);
 

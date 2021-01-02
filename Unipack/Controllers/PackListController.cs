@@ -24,14 +24,16 @@ namespace Unipack.Controllers
     {
 
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly ILogger _logger;
         private readonly IPackListService _packListService;
         private readonly IUserService _userService;
 
-        public PackListController(UserManager<IdentityUser> userManager, IPackListService packListService, IUserService userService)
+        public PackListController(UserManager<IdentityUser> userManager, IPackListService packListService, IUserService userService, ILogger<PackListController> logger)
         {
-            this._userManager = userManager;
-            this._packListService = packListService;
-            this._userService = userService;
+            _userManager = userManager;
+            _packListService = packListService;
+            _userService = userService;
+            _logger = logger;
         }
 
         /// <summary>
@@ -75,17 +77,20 @@ namespace Unipack.Controllers
         /// <summary>
         /// Creates a PackList.
         /// </summary>
+        /// <param name="vacationId">The vacation you wish to create a pack list for.</param>  
         /// <param name="model">This is the PackListDto model with the required information.</param>  
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [HttpPost]
-        public ActionResult AddPackList([FromBody] PackListDto model)
+        [HttpPost("{vacationId}")]
+        public async Task<ActionResult> AddPackList(int vacationId, [FromBody] PackListDto model)
         {
-                if (_packListService.AddPackList(model))
-                    return Ok();
-                else
-                    throw new Exception("Something went wrong, pack list has not been added.");
+            var packList = new PackList(model.Name, await GetCurrentUser());
+
+            if (_packListService.AddPackList(vacationId, packList))
+                return Ok();
+            else
+                throw new Exception("Something went wrong, pack list has not been added.");
         }
         /// <summary>
         /// Update a PackList with the specified id.
@@ -154,6 +159,27 @@ namespace Unipack.Controllers
                 return BadRequest(new { message = "Error while finding pack list: " + ve.Message });
             }
             return new OkObjectResult(result);
+        }
+
+        private async Task<User> GetCurrentUser()
+        {
+            try
+            {
+                //get identity userid from claims
+                var userId = User.Claims.First(c => c.Type == "UserID").Value;
+
+                //get identity class
+                var identityUser = await _userManager.FindByIdAsync(userId);
+
+                //get user class by identity username
+                var user = await _userService.GetByUserEmailAsync(identityUser.Email);
+                return user;
+            }
+            catch (Exception e)
+            {
+                _logger.LogInformation($"Error GetCurrentUser(): {e.Message}");
+                return null;
+            }
         }
     }
 }

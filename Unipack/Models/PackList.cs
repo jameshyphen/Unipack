@@ -12,7 +12,7 @@ namespace Unipack.Models
 
         public int PackListId { get; set; }
         public string Name { get; set; }
-        public User AuthorUser { get; set; }
+        public User Author { get; set; }
         public ICollection<PackItem> Items { get; set; }
         public ICollection<PackTask> Tasks { get; set; }
         public DateTime AddedOn { get; set; }
@@ -31,14 +31,11 @@ namespace Unipack.Models
         public PackList(string name) : this()
         {
             Name = name;
-            Items = new HashSet<PackItem>();
-            Tasks = new HashSet<PackTask>();
-            AddedOn = DateTime.Now;
         }
 
         public PackList(string name, User user) : this(name)
         {
-            AuthorUser = user;
+            Author = user;
         }
 
         #endregion

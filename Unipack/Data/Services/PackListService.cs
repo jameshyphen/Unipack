@@ -16,24 +16,26 @@ namespace Unipack.Data.Services
     {
         private readonly Context _context;
         private readonly ILogger _logger;
-        private readonly DbSet<PackList> _vacationLists;
-        private readonly DbSet<PackItem> _vacationItems;
+        private readonly DbSet<PackList> _packLists;
+        private readonly DbSet<PackItem> _packItems;
         private readonly DbSet<Item> _items;
         private readonly DbSet<User> _users;
+        private readonly DbSet<Vacation> _vacations;
 
         public PackListService(Context context, ILogger<UserService> logger)
         {
             _context = context;
             _logger = logger;
-            _vacationLists = context.PackLists;
-            _vacationItems = context.VacationItems;
+            _packLists = context.PackLists;
+            _vacations = context.Vacations;
+            _packItems = context.PackItems;
             _items = context.Items;
             _users = context.UnipackUsers;
         }
 
         public Task<PackListDto> GetPackListById(int listId)
         {
-            var vacationList = _vacationLists.Where(l => l.PackListId == listId) ?? throw new PackListNotFoundException(listId);
+            var vacationList = _packLists.Where(l => l.PackListId == listId) ?? throw new PackListNotFoundException(listId);
             return vacationList.Select(l => new PackListDto
                 {
                     AddedOn = l.AddedOn,
@@ -65,29 +67,34 @@ namespace Unipack.Data.Services
         public bool AddItemToListByItemId(int listId, int itemId)
         {
             Item item = _items.FirstOrDefault(i => i.ItemId == itemId) ?? throw new ItemNotFoundException(itemId);
-            PackList list = _vacationLists.FirstOrDefault(l => l.PackListId == listId) ?? throw new PackListNotFoundException(listId);
+            PackList list = _packLists.FirstOrDefault(l => l.PackListId == listId) ?? throw new PackListNotFoundException(listId);
             var vacationItem = new PackItem { Item = item, PackList = list, Quantity = 1, AddedOn = DateTime.Now };
-            _vacationItems.Add(vacationItem);
+            _packItems.Add(vacationItem);
             return _context.SaveChanges() != 0;
         }
 
-        public bool AddPackList(PackListDto list)
+        public bool AddPackList(int vacationId, PackList list)
         {
-            _vacationLists.Add(new PackList() { Name = list.Name, AddedOn = DateTime.Now });
+            var vacation = _vacations.FirstOrDefault(x => x.VacationId == vacationId) ?? throw new VacationNotFoundException(vacationId);
+
+            vacation.AddList(list);
+
+            _packLists.Add(list);
+
             return _context.SaveChanges() != 0;
         }
 
         public bool DeletePackListById(int listId)
         {
-            PackList list = _vacationLists.FirstOrDefault(l => l.PackListId == listId) ?? throw new PackListNotFoundException(listId);
+            PackList list = _packLists.FirstOrDefault(l => l.PackListId == listId) ?? throw new PackListNotFoundException(listId);
 
-            _vacationLists.Remove(list);
+            _packLists.Remove(list);
             return _context.SaveChanges() != 0;
         }
 
         public bool DeleteItemFromListByVacationItemId(int itemId, int listId)
         {
-            PackList vacationList = _vacationLists.FirstOrDefault(x => x.PackListId == listId) ??
+            PackList vacationList = _packLists.FirstOrDefault(x => x.PackListId == listId) ??
                                         throw new PackListNotFoundException(listId);
 
             PackItem vacationItem = vacationList.Items.FirstOrDefault(x => x.ItemId == itemId) ??
@@ -99,8 +106,8 @@ namespace Unipack.Data.Services
 
         public bool UpdatePackList(int id, PackListDto model)
         {
-            var list = _vacationLists.FirstOrDefault(l => l.PackListId == id) ?? throw new PackListNotFoundException(id);
-            _vacationLists.Update(list);
+            var list = _packLists.FirstOrDefault(l => l.PackListId == id) ?? throw new PackListNotFoundException(id);
+            _packLists.Update(list);
             return _context.SaveChanges() != 0;
         }
 
