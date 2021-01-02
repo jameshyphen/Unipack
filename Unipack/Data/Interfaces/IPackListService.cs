@@ -11,9 +11,9 @@ namespace Unipack.Data.Interfaces
     {
         bool AddPackList(int vacationId, PackList list);
 
-        Task<PackListDto> GetPackListById(int id);
+        PackList GetPackListById(int id);
 
-        ICollection<PackListDto> GetAllPackListsByUser(int userId);
+        ICollection<PackList> GetAllPackListsByUser(int userId);
 
         bool DeletePackListById(int id);
         bool UpdatePackList(int id, PackListDto model);

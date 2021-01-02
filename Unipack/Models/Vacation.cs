@@ -11,7 +11,7 @@ namespace Unipack.Models
         public int VacationId { get; set; }
         public string Name { get; set; }
         public ICollection<VacationLocation> Locations { get; set; }
-        public ICollection<PackList> VacationLists { get; set; }
+        public ICollection<PackList> PackLists { get; set; }
         public DateTime DateDeparture { get; set; }
         public DateTime DateReturn { get; set; }
         public DateTime AddedOn { get; set; }
@@ -21,7 +21,7 @@ namespace Unipack.Models
         public Vacation()
         {
             Locations = new HashSet<VacationLocation>();
-            VacationLists = new HashSet<PackList>();
+            PackLists = new HashSet<PackList>();
             AddedOn = DateTime.Now;
         }
 
@@ -41,7 +41,7 @@ namespace Unipack.Models
 
         public void AddList(PackList list)
         {
-            VacationLists.Add(list);
+            PackLists.Add(list);
         }
 
         #endregion

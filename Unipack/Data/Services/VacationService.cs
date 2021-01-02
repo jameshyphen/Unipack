@@ -16,54 +16,59 @@ namespace Unipack.Data.Services
     {
         private readonly Context _context;
         private readonly ILogger _logger;
-        private readonly DbSet<PackList> _vacationLists;
-        private readonly DbSet<PackItem> _vacationItems;
-        private readonly DbSet<Item> _items;
+        private readonly DbSet<Vacation> _vacations;
         private readonly DbSet<User> _users;
 
         public VacationService(Context context, ILogger<UserService> logger)
         {
             _context = context;
             _logger = logger;
-            _vacationLists = context.PackLists;
-            _vacationItems = context.PackItems;
-            _items = context.Items;
+            _vacations = context.Vacations;
             _users = context.UnipackUsers;
         }
 
-        public bool AddPackListToVacation(int vacationId, PackListDto packListDto)
+        public bool AddVacation(VacationDto vacationDto)
         {
-            throw new NotImplementedException();
-        }
+            var vacation = new Vacation(vacationDto.Name, vacationDto.DateDeparture, vacationDto.DateReturn);
 
-        public bool AddVacation(VacationDto vacation)
-        {
-            throw new NotImplementedException();
-        }
+            _vacations.Add(vacation);
 
-        public bool DeletePackListFromVacationById(int vacationId, int packListId)
-        {
-            throw new NotImplementedException();
+            return _context.SaveChanges() != 0;
         }
 
         public bool DeleteVacationById(int id)
         {
-            throw new NotImplementedException();
+            var vacation = _vacations.FirstOrDefault(x => x.VacationId == id) ?? throw new VacationNotFoundException(id);
+
+            _vacations.Remove(vacation);
+
+            return _context.SaveChanges() != 0;
         }
 
-        public ICollection<PackListDto> GetAllVacationsByUser(int userId)
+        public ICollection<Vacation> GetAllVacationsByUser(int userId)
         {
-            throw new NotImplementedException();
+            User user = _users.Include(x => x.Vacations).FirstOrDefault(u => u.UserId == userId) ?? throw new UserNotFoundException(userId);
+
+            return user.Vacations.OrderByDescending(l => l.AddedOn).ToList();
         }
 
-        public Task<PackListDto> GetVacationById(int id)
+        public Vacation GetVacationById(int id)
         {
-            throw new NotImplementedException();
+            var vacation = _vacations.FirstOrDefault(x => x.VacationId == id) ?? throw new VacationNotFoundException(id);
+
+            return vacation;
         }
 
         public bool UpdateVacation(int id, VacationDto model)
         {
-            throw new NotImplementedException();
+            var vacation = _vacations.FirstOrDefault(l => l.VacationId == id) ?? throw new VacationNotFoundException(id);
+
+            vacation.DateReturn = model.DateReturn;
+            vacation.DateDeparture = model.DateDeparture;
+            vacation.Name = model.Name;
+
+            _vacations.Update(vacation);
+            return _context.SaveChanges() != 0;
         }
     }
 }

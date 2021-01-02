@@ -45,7 +45,7 @@ namespace Unipack.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public ActionResult GetPackListFromUser(User user)
         {
-            var result = _packListService.GetAllPackListsByUser(user.UserId);
+            var result = _packListService.GetAllPackLists(user.UserId);
             if (result != null)
                 return new OkObjectResult(result);
             return NotFound();

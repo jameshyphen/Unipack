@@ -11,15 +11,11 @@ namespace Unipack.Data.Interfaces
     {
         bool AddVacation(VacationDto vacation);
 
-        Task<PackListDto> GetVacationById(int id);
+        Vacation GetVacationById(int id);
 
-        ICollection<PackListDto> GetAllVacationsByUser(int userId);
+        ICollection<Vacation> GetAllVacationsByUser(int userId);
 
         bool DeleteVacationById(int id);
         bool UpdateVacation(int id, VacationDto model);
-
-        bool AddPackListToVacation(int vacationId, PackListDto packListDto);
-
-        bool DeletePackListFromVacationById(int vacationId, int packListId);
     }
 }

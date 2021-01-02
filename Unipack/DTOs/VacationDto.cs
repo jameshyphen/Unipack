@@ -11,6 +11,8 @@ namespace Unipack.DTOs
         [Range(0, int.MaxValue, ErrorMessage = "Negative ID value")]
         [Required]
         public int VacationId { get; set; }
+        [Required]
+        public string Name { get; set; }
         public ICollection<VacationLocationDto> Locations { get; set; }
         //public ICollection<VacationItemDto> VacationItems { get; set; }
 

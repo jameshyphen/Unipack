@@ -33,35 +33,18 @@ namespace Unipack.Data.Services
             _users = context.UnipackUsers;
         }
 
-        public Task<PackListDto> GetPackListById(int listId)
+        public PackList GetPackListById(int listId)
         {
-            var vacationList = _packLists.Where(l => l.PackListId == listId) ?? throw new PackListNotFoundException(listId);
-            return vacationList.Select(l => new PackListDto
-                {
-                    AddedOn = l.AddedOn,
-                    Name = l.Name,
-                    VacationListId = l.PackListId,
-                    // TODO: Move this, change up VacationList to Vacation
-                })
-                .FirstOrDefaultAsync();
+            var packList = _packLists.FirstOrDefault(l => l.PackListId == listId) ?? throw new PackListNotFoundException(listId);
+            return packList;
         }
 
-        public ICollection<PackListDto> GetAllPackListsByUser(int userId)
+        public ICollection<PackList> GetAllPackListsByUser(int userId)
         {
-            User user = _users.FirstOrDefault(u => u.UserId == userId) ?? throw new UserNotFoundException(userId);
-            ICollection<PackList> vacationLists = user.Vacations.SelectMany(v=> v.VacationLists).ToList();
-            var dto = vacationLists.Select(list => new PackListDto
-            {
-                VacationListId = list.PackListId,
-                AddedOn = list.AddedOn,
-                Name = list.Name
-                //Can be uncommented when VacationItemDto & VacationTaskDto have been implemented
-                //Tasks = list.Tasks,
-                //Items= list.Items
-            }).OrderByDescending(l => l.AddedOn).ToList();
-            return dto;
-            
+            User user = _users.Include(x => x.Vacations).ThenInclude(x => x.PackLists).FirstOrDefault(u => u.UserId == userId) ?? throw new UserNotFoundException(userId);
+            ICollection<PackList> packLists = user.Vacations.SelectMany(v=> v.PackLists).ToList();
 
+            return packLists.OrderByDescending(l => l.AddedOn).ToList();
         }
 
         public bool AddItemToPackList(PackItemDto model)
