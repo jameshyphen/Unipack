@@ -43,11 +43,40 @@ namespace Unipack.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public ActionResult GetPackListFromUser(User user)
+        public async Task<ActionResult<List<PackListDto>>> GetPackListFromUser()
         {
-            var result = _packListService.GetAllPackLists(user.UserId);
+            var user = await GetCurrentUser();
+
+            var result = _packListService.GetAllPackListsByUser(user.UserId);
             if (result != null)
-                return new OkObjectResult(result);
+                return new OkObjectResult(result.Select(x => new PackListDto
+                {
+                    Name = x.Name,
+                    PackListId = x.PackListId,
+                    AddedOn = x.AddedOn,
+                    Items = x.Items.Select(item => new PackItemDto
+                    {
+                        ItemId = item.ItemId,
+                        PackListId = item.PackListId,
+                        Quantity = item.Quantity,
+                        Item = new ItemDto
+                        {
+                            AddedOn = item.Item.AddedOn,
+                            CategoryId = item.Item.Category.CategoryId,
+                            CategoryName = item.Item.Category.Name,
+                            Name = item.Item.Name,
+                            ItemId = item.Item.ItemId
+                        }
+                    }).ToList(),
+                    Tasks = x.Tasks.Select(task => new PackTaskDto
+                    {
+                        Name = task.Name,
+                        AddedOn = task.AddedOn,
+                        Completed = task.Completed,
+                        DeadLine = task.DeadLine,
+                        Priority = task.Priority
+                    }).ToList(),
+                }));
             return NotFound();
         }
 
@@ -65,7 +94,7 @@ namespace Unipack.Controllers
             try
             {
                 
-                result = await _packListService.GetPackListById(id);
+                result = _packListService.GetPackListById(id);
             }
             catch (PackListNotFoundException ve)
             {

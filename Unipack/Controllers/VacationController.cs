@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Unipack.Data.Interfaces;
+using Unipack.DTOs;
+using Unipack.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -33,11 +36,32 @@ namespace Unipack.Controllers
         /// Returns all Vacations created by the authenticated user
         /// </summary>
         [HttpGet]
-        public IEnumerable<string> GetAllVacations()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+
+        public async Task<ActionResult<List<VacationDto>>> GetAllVacations()
         {
-            var result = _vacationService.GetAllPackLists(user.UserId);
+            var user = await GetCurrentUser();
+
+            var result = _vacationService.GetAllVacationsByUser(user.UserId);
             if (result != null)
-                return new OkObjectResult(result);
+                return new OkObjectResult(result.Select(x => new VacationDto {
+                    Name = x.Name,
+                    VacationId = x.VacationId,
+                    AddedOn = x.AddedOn,
+                    DateDeparture = x.DateDeparture, 
+                    DateReturn = x.DateReturn, 
+                    Locations = x.Locations.Select(loc => new VacationLocationDto
+                    {
+                        CityName = loc.CityName,
+                        DateDeparture = loc.DateDeparture, 
+                        VacationLocationId = loc.VacationLocationId, 
+                        AddedOn = loc.AddedOn, 
+                        CountryName = loc.CountryName,
+                        DateArrival = loc.DateArrival,
+                    }).ToList()
+                }).ToList());
             return NotFound();
         }
 

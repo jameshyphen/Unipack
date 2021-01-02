@@ -8,7 +8,9 @@ namespace Unipack.DTOs
     public class PackItemDto
     {
         public int PackListId { get; set; }
+        public PackListDto PackList { get; set; }
         public int ItemId { get; set; }
+        public ItemDto Item { get; set; }
         public int Quantity { get; set; }
     }
 }
