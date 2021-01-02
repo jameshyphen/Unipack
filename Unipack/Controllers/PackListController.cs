@@ -118,14 +118,13 @@ namespace Unipack.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [HttpPut("{id}")]
+        [HttpPost("{packListId}/item/{itemId}")]
         public ActionResult AddItemToPackList(int packListId, int itemId)
         {
             bool result;
             try
             {
-
-                result = _packListService.UpdatePackList(id, model);
+                result = _packListService.AddItemToListByItemId(packListId, itemId);
             }
             catch (PackListNotFoundException ve)
             {
