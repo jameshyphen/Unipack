@@ -94,7 +94,7 @@ namespace Unipack
             services.AddScoped<IItemService, ItemService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IPackListService, PackListService>();
-            //services.AddScoped<DataInit>();
+            services.AddScoped<DataInit>();
 
             services.AddDbContext<Context>(options => options.UseSqlServer(initConfig.DatabaseDSN));
 
@@ -121,7 +121,7 @@ namespace Unipack
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env/*, DataInit dataInit*/)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DataInit dataInit)
         {
             if (env.IsDevelopment())
             {
@@ -162,7 +162,7 @@ namespace Unipack
                 endpoints.MapControllers();
             });
 
-            //dataInit.InitAsync().Wait();
+            dataInit.InitAsync().Wait();
         }
     }
 }

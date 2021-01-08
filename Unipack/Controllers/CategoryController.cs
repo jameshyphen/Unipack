@@ -77,44 +77,7 @@ namespace Unipack.Controllers
             }
 
         }
-        /// <summary>
-        /// Returns all Categories created by the authenticated user.
-        /// </summary>
-        /// <param name="categoryId">The id of the Category you're looking to get.</param>  
-        [HttpGet("{categoryId}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult<List<CategoryDto>>> GetAllItemsByCategory(int categoryId)
-        {
-            try
-            {
-                var user = await GetCurrentUser();
-                var result = _categoryService.GetAllCategoriesByUserId(user.UserId)
-                    .Select(x => new CategoryDto
-                    {
-                        CategoryId = x.CategoryId,
-                        Name = x.Name,
-                        AddedOn = x.AddedOn,
-                        Author = new UserDto
-                        {
-                            Email = x.Author.Email,
-                            Username = x.Author.Username,
-                            FirstName = x.Author.Firstname,
-                            LastName = x.Author.Firstname,
-                            UserId = x.Author.UserId
-                        }
-                    }
-                    ).ToList();
-                return Ok(result);
-            }
-            catch (Exception e)
-            {
-                var methodName = this.GetType().FullName + "." + System.Reflection.MethodBase.GetCurrentMethod().Name;
-                _logger.LogError($"[INTERNAL ERROR] Something broke in {nameof(CategoryController)}/{methodName}: {e.Message}");
-                return BadRequest(new { message = "Internal server error: " + e.Message });
-            }
 
-        }
         /// <summary>
         /// Finds a Category with the specified id.
         /// </summary>
@@ -145,6 +108,61 @@ namespace Unipack.Controllers
                             LastName = category.Author.Firstname,
                             UserId = category.Author.UserId
                         }
+                    };
+                    return Ok(result);
+                }
+                return BadRequest("This category does not belong to your account");
+            }
+            catch (CategoryNotFoundException e)
+            {
+                return NotFound(new { message = "Category not found: " + e.Message });
+            }
+            catch (Exception e)
+            {
+                var methodName = this.GetType().FullName + "." + System.Reflection.MethodBase.GetCurrentMethod().Name;
+                _logger.LogError($"[INTERNAL ERROR] Something broke in {nameof(CategoryController)}/{methodName}: {e.Message}");
+                return StatusCode(500);
+            }
+        }
+
+
+        /// <summary>
+        /// Fetches items with a specific category id
+        /// </summary>
+        /// <param name="categoryId">Category id of the items you want to fetch.</param>  
+        [HttpGet("{categoryId}/items")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<CategoryDto>> GetCategoryWithAllItems(int categoryId)
+        {
+            try
+            {
+                var user = await GetCurrentUser();
+                var category = _categoryService.GetCategoryById(categoryId);
+                if (category.Author.UserId == user.UserId)
+                {
+                    var result = new CategoryDto
+                    {
+                        CategoryId = category.CategoryId,
+                        Name = category.Name,
+                        AddedOn = category.AddedOn,
+                        Author = new UserDto
+                        {
+                            Email = category.Author.Email,
+                            Username = category.Author.Username,
+                            FirstName = category.Author.Firstname,
+                            LastName = category.Author.Firstname,
+                            UserId = category.Author.UserId
+                        },
+                        Items = category.Items.Select(x => new ItemDto
+                        {
+                            AddedOn = x.AddedOn,
+                            Name = x.Name,
+                            ItemId = x.ItemId,
+                            Priority = x.Priority
+                        }).ToList()
                     };
                     return Ok(result);
                 }
