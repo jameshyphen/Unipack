@@ -22,16 +22,20 @@ namespace Unipack
             Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((hostContext, builder) =>
                 {
-                    if(hostContext.HostingEnvironment.IsDevelopment())
-                        builder.AddUserSecrets<Program>();
-
-                    builder.AddJsonFile("appsettings.Secret.json", optional: false, reloadOnChange: true)
-                    .AddEnvironmentVariables();
+                    if (hostContext.HostingEnvironment.IsDevelopment())
+                    {
+                        builder.AddJsonFile("appsettings.Secret.Development.json", optional: false, reloadOnChange: true)
+                            .AddEnvironmentVariables();
+                    }
+                    else
+                    {
+                        builder.AddJsonFile("appsettings.Secret.json", optional: false, reloadOnChange: true)
+                            .AddEnvironmentVariables();
+                    }
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
                 });
     }
-#pragma warning restore CS1591
 }

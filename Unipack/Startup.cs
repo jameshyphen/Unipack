@@ -93,19 +93,10 @@ namespace Unipack
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IItemService, ItemService>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IPackListService, PackListService>();
             services.AddScoped<DataInit>();
 
-            var dbHost = initConfig.DatabaseHost ??
-                throw new Exception("Database Host is not set in secrets");
-            var dbName = initConfig.DatabaseName ??
-                throw new Exception("Database Name is not set in secrets");
-            var dbPassword = initConfig.DatabasePassword ??
-                throw new Exception("Database Password is not set in secrets");
-            var dbUser = initConfig.DatabaseUser ??
-                throw new Exception("Database User is not set in secrets");
-
-            var connString = $"Data Source={dbHost};Initial Catalog=master;Integrated Security=True;Database={dbName};User Id={dbUser};Password={dbPassword};Trusted_Connection=False;";
-            services.AddDbContext<Context>(options => options.UseSqlServer(connString));
+            services.AddDbContext<Context>(options => options.UseSqlServer(initConfig.DatabaseDSN));
 
             var key = initConfig.UserSignInKey;
             var keyBytes = Encoding.UTF8.GetBytes(key ?? throw new ArgumentNullException(nameof(services)));
@@ -170,7 +161,6 @@ namespace Unipack
             {
                 endpoints.MapControllers();
             });
-
 
             dataInit.InitAsync().Wait();
         }

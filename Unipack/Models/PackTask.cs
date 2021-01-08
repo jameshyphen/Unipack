@@ -9,11 +9,11 @@ using Unipack.Enums;
 
 namespace Unipack.Models
 {
-    public class VacationTask
+    public class PackTask
     {
         #region Properties
 
-        public int VacationTaskId { get; set; }
+        public int PackTaskId { get; set; }
 
         public string Name { get; set; }
         public User Author { get; set; }
@@ -30,23 +30,23 @@ namespace Unipack.Models
 
         #region Constructors
 
-        public VacationTask(string name)
+        public PackTask(string name)
         {
             Name = name;
             AddedOn = DateTime.Now;
         }
 
-        public VacationTask(string name, DateTime deadLine): this(name)
+        public PackTask(string name, DateTime deadLine): this(name)
         {
             DeadLine = deadLine;
         }
 
-        public VacationTask(string name, User user) : this(name)
+        public PackTask(string name, User user) : this(name)
         {
             Author = user;
         }
 
-        public VacationTask(string name, User user, DateTime deadLine) : this(name, user)
+        public PackTask(string name, User user, DateTime deadLine) : this(name, user)
         {
             DeadLine = deadLine;
         }

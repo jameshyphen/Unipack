@@ -6,21 +6,18 @@ using System.Threading.Tasks;
 
 namespace Unipack.DTOs
 {
-    public class VacationListDto
+    public class PackListDto
     {
         [Range(0, int.MaxValue, ErrorMessage = "Ah yes, an Id below 0, not sure how you managed that but good job!")]
         [Required]
-        public int VacationListId { get; set; }
+        public int PackListId { get; set; }
         [Required]
         public string Name { get; set; }
-        
-        //public ICollection<VacationItemDto> Items { get; set; }
-        //public ICollection<VacationTaskDto> Tasks { get; set; }
-        [Required]
+
+        public ICollection<PackItemDto> Items { get; set; }
+        public ICollection<PackTaskDto> Tasks { get; set; }
         public DateTime AddedOn { get; set; }
         //Vacation props:
-        //public DateTime Departure { get; set; }
-        //public DateTime Return { get; set; }
         //public ICollection<VacationLocationDto> Locations { get; set; }
     }
 }

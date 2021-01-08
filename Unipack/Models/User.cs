@@ -25,7 +25,7 @@ namespace Unipack.Models
                 var emailValid = new MailAddress(value);
 
                 if (emailValid.Address != value)
-                    throw new FormatException("Invalid email.");
+                    throw new FormatException("Email invalid.");
                 _email = value;
             }
         }
