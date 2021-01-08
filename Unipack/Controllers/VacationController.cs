@@ -46,18 +46,19 @@ namespace Unipack.Controllers
 
             var result = _vacationService.GetAllVacationsByUser(user.UserId);
             if (result != null)
-                return new OkObjectResult(result.Select(x => new VacationDto {
+                return new OkObjectResult(result.Select(x => new VacationDto
+                {
                     Name = x.Name,
                     VacationId = x.VacationId,
                     AddedOn = x.AddedOn,
-                    DateDeparture = x.DateDeparture, 
-                    DateReturn = x.DateReturn, 
+                    DateDeparture = x.DateDeparture,
+                    DateReturn = x.DateReturn,
                     Locations = x.Locations.Select(loc => new VacationLocationDto
                     {
                         CityName = loc.CityName,
-                        DateDeparture = loc.DateDeparture, 
-                        VacationLocationId = loc.VacationLocationId, 
-                        AddedOn = loc.AddedOn, 
+                        DateDeparture = loc.DateDeparture,
+                        VacationLocationId = loc.VacationLocationId,
+                        AddedOn = loc.AddedOn,
                         CountryName = loc.CountryName,
                         DateArrival = loc.DateArrival,
                     }).ToList()
@@ -117,4 +118,5 @@ namespace Unipack.Controllers
                 return null;
             }
         }
+    }
 }
