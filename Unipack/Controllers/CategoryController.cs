@@ -77,7 +77,44 @@ namespace Unipack.Controllers
             }
 
         }
+        /// <summary>
+        /// Returns all Categories created by the authenticated user.
+        /// </summary>
+        /// <param name="categoryId">The id of the Category you're looking to get.</param>  
+        [HttpGet("{categoryId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<List<CategoryDto>>> GetAllItemsByCategory(int categoryId)
+        {
+            try
+            {
+                var user = await GetCurrentUser();
+                var result = _categoryService.GetAllCategoriesByUserId(user.UserId)
+                    .Select(x => new CategoryDto
+                    {
+                        CategoryId = x.CategoryId,
+                        Name = x.Name,
+                        AddedOn = x.AddedOn,
+                        Author = new UserDto
+                        {
+                            Email = x.Author.Email,
+                            Username = x.Author.Username,
+                            FirstName = x.Author.Firstname,
+                            LastName = x.Author.Firstname,
+                            UserId = x.Author.UserId
+                        }
+                    }
+                    ).ToList();
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                var methodName = this.GetType().FullName + "." + System.Reflection.MethodBase.GetCurrentMethod().Name;
+                _logger.LogError($"[INTERNAL ERROR] Something broke in {nameof(CategoryController)}/{methodName}: {e.Message}");
+                return BadRequest(new { message = "Internal server error: " + e.Message });
+            }
 
+        }
         /// <summary>
         /// Finds a Category with the specified id.
         /// </summary>
