@@ -9,7 +9,7 @@ namespace Unipack.Data.Interfaces
 {
     public interface IVacationService
     {
-        bool AddVacation(VacationDto vacation);
+        bool AddVacation(VacationDto vacationDto, User user);
 
         Vacation GetVacationById(int id);
 

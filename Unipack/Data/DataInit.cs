@@ -87,6 +87,7 @@ namespace Unipack.Data
             Vacation ronaVac = 
                 new Vacation(
                     "Tour de la Corona",
+                    dzhem,
                     new DateTime(2021, 3, 20),
                     new DateTime(2021, 4, 20)
                     );

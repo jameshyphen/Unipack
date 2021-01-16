@@ -27,9 +27,9 @@ namespace Unipack.Data.Services
             _users = context.UnipackUsers;
         }
 
-        public bool AddVacation(VacationDto vacationDto)
+        public bool AddVacation(VacationDto vacationDto, User user)
         {
-            var vacation = new Vacation(vacationDto.Name, vacationDto.DateDeparture, vacationDto.DateReturn);
+            var vacation = new Vacation(vacationDto.Name, user, vacationDto.DateDeparture, vacationDto.DateReturn);
 
             _vacations.Add(vacation);
 
