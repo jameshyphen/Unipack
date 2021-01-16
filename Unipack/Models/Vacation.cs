@@ -10,6 +10,7 @@ namespace Unipack.Models
         #region Properties
         public int VacationId { get; set; }
         public string Name { get; set; }
+        public User Author { get; set; }
         public ICollection<VacationLocation> Locations { get; set; }
         public ICollection<PackList> PackLists { get; set; }
         public DateTime DateDeparture { get; set; }
@@ -25,12 +26,13 @@ namespace Unipack.Models
             AddedOn = DateTime.Now;
         }
 
-        public Vacation(string name): this()
+        public Vacation(string name, User author): this()
         {
             Name = name;
+            Author = author;
         }
 
-        public Vacation(string name, DateTime dateDeparture, DateTime dateReturn): this(name)
+        public Vacation(string name, User author, DateTime dateDeparture, DateTime dateReturn): this(name, author)
         {
             DateDeparture = dateDeparture;
             DateReturn = dateReturn;

@@ -83,24 +83,28 @@ namespace Unipack.Controllers
         /// <summary>
         /// Finds a PackList with the specified id.
         /// </summary>
-        /// <param name="id">The id of the PackList you're looking to get.</param>  
+        /// <param name="packListId">The id of the PackList you're looking to get.</param>  
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [HttpGet("{id}", Name = "Get")]
-        public async Task<ActionResult> GetPackList(int id)
+        [HttpGet("{packListId}", Name = "Get")]
+        public async Task<ActionResult> GetPackList(int packListId)
         {
-            var result = new object();
+            var user = await GetCurrentUser();
+
             try
             {
-                
-                result = _packListService.GetPackListById(id);
+                var result = _packListService.GetPackListById(packListId);
+                if (result.Author.UserId == user.UserId)
+                {
+                    return new OkObjectResult(result);
+                } else
+                    throw new PackListNotFoundException(packListId);
             }
             catch (PackListNotFoundException ve)
             {
                 return BadRequest(new { message = "Error while finding pack list: " + ve.Message });
             }
-            return new OkObjectResult(result);
         }
 
         /// <summary>
@@ -135,7 +139,6 @@ namespace Unipack.Controllers
             bool result;
             try
             {
-
                 result = _packListService.UpdatePackList(id, model);
             }
             catch (PackListNotFoundException ve)
@@ -165,11 +168,12 @@ namespace Unipack.Controllers
             }
             return new OkObjectResult(result);
         }
+
         /// <summary>
-        /// Add an Item to PackList.
+        /// Deletes an Item from a PackList.
         /// </summary>
-        /// <param name="packListId">The id of the PackList you're looking to update.</param>
-        /// <param name="itemId">This is the PackList model with the required information.</param>
+        /// <param name="packListId">The id of the Packlist.</param>
+        /// <param name="itemId">The id of the item you wish to delete.</param>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
