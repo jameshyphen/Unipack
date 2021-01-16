@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Unipack.Data.Interfaces;
 using Unipack.DTOs;
+using Unipack.Exceptions.NotFoundExceptions;
 using Unipack.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -67,36 +68,56 @@ namespace Unipack.Controllers
         }
 
         /// <summary>
-        /// TEST 2.
+        /// Update a Vacation with the specified id.
         /// </summary>
-        [HttpGet("{id}")]
-        public string Get(int id)
+        /// <param name="vacationId">The id of the PackList you're looking to update.</param>
+        /// <param name="model">This is the PackList model with the required information.</param>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [HttpPut("{vacationId}")]
+        public async  Task<ActionResult> UpdateVacation(int vacationId, [FromBody] VacationDto model)
         {
-            return "value";
+            var user = await GetCurrentUser();
+
+            try
+            {
+                var vac = _vacationService.GetVacationById(vacationId);
+                if (vac.Author.UserId == user.UserId)
+                {
+                    return new OkObjectResult(_vacationService.UpdateVacation(vacationId, model));
+                }
+                else
+                    throw new VacationNotFoundException(vacationId);
+            }
+            catch (VacationNotFoundException e)
+            {
+                return BadRequest(new { message = "Error while finding pack list: " + e.Message });
+            }
         }
 
         /// <summary>
-        /// TEST 2.
+        /// Delete a Vacation with the specified id.
         /// </summary>
-        [HttpPost]
-        public void Post([FromBody] string value)
+        /// <param name="vacationId">The id of the PackList you're looking to delete.</param>
+        [HttpDelete("{vacationId}")]
+        public async Task<ActionResult> DeleteVacation(int vacationId)
         {
-        }
+            var user = await GetCurrentUser();
 
-        /// <summary>
-        /// TEST 2.
-        /// </summary>
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        /// <summary>
-        /// Returns all Items created by the authenticated user.
-        /// </summary>
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            try
+            {
+                var vac = _vacationService.GetVacationById(vacationId);
+                if (vac.Author.UserId == user.UserId)
+                {
+                    return new OkObjectResult(_vacationService.DeleteVacationById(vacationId));
+                }
+                else
+                    throw new VacationNotFoundException(vacationId);
+            }catch(VacationNotFoundException e)
+            {
+                return BadRequest(new { message = "Error while finding pack list: " + e.Message });
+            }
         }
         private async Task<User> GetCurrentUser()
         {
