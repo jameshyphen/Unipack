@@ -140,7 +140,7 @@ namespace Unipack.Controllers
             try
             {
                 var user = await GetCurrentUser();
-                var category = _categoryService.GetCategoryById(categoryId);
+                var category = _categoryService.GetCategoryByIdWithItems(categoryId);
                 if (category.Author.UserId == user.UserId)
                 {
                     var result = new CategoryDto
