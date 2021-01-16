@@ -198,7 +198,7 @@ namespace Unipack.Controllers
                     Author = user,
                 };
                 if (_categoryService.AddCategory(category))
-                    return Ok(true);
+                    return new OkObjectResult(category);
                 throw new Exception("Something went wrong, category has not been created.");
             }
             catch (Exception e)

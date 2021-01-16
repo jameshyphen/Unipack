@@ -133,7 +133,7 @@ namespace Unipack.Controllers
                     Priority = itemDto.Priority
                 };
                 if (_itemService.AddItem(item))
-                    return Ok(true);
+                    return new OkObjectResult(item);
                 throw new Exception("Something went wrong, item has not been created.");
             }
             catch (Exception e)
