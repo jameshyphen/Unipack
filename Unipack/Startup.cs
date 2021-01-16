@@ -92,6 +92,7 @@ namespace Unipack
             services.AddCors(options => options.AddPolicy("AllowAllOrigins", builder => builder.AllowAnyOrigin()));
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IItemService, ItemService>();
+            services.AddScoped<IVacationService, VacationService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IPackListService, PackListService>();
             services.AddScoped<DataInit>();

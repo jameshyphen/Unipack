@@ -13,6 +13,7 @@ namespace Unipack.DTOs
         public int VacationId { get; set; }
         [Required]
         public string Name { get; set; }
+        public UserDto Author { get; set; }
         public ICollection<VacationLocationDto> Locations { get; set; }
         //public ICollection<VacationItemDto> VacationItems { get; set; }
 
