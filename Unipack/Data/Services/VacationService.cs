@@ -47,7 +47,7 @@ namespace Unipack.Data.Services
 
         public ICollection<Vacation> GetAllVacationsByUser(int userId)
         {
-            User user = _users.Include(x => x.Vacations).ThenInclude(x => x.Locations).FirstOrDefault(u => u.UserId == userId) ?? throw new UserNotFoundException(userId);
+            User user = _users.Include(x => x.Vacations).ThenInclude(x => x.Locations).Include(x => x.Vacations).ThenInclude(x => x.PackLists).FirstOrDefault(u => u.UserId == userId) ?? throw new UserNotFoundException(userId);
 
             return user.Vacations.OrderByDescending(l => l.AddedOn).ToList();
         }
