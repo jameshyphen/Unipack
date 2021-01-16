@@ -34,6 +34,24 @@ namespace Unipack.Controllers
         }
 
         /// <summary>
+        /// Creates a Vacation.
+        /// </summary>
+        /// <param name="model">This is the Vacation model with the required information.</param>  
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [HttpPost]
+        public async Task<ActionResult> AddVacation([FromBody] VacationDto model)
+        {
+            var user = await GetCurrentUser();
+            var packList = new PackList(model.Name, await GetCurrentUser());
+
+            if (_vacationService.AddVacation(model, user))
+                return Ok();
+            else
+                throw new Exception("Something went wrong, vacation has not been added.");
+        }
+        /// <summary>
         /// Returns all Vacations created by the authenticated user
         /// </summary>
         [HttpGet]
@@ -92,7 +110,7 @@ namespace Unipack.Controllers
             }
             catch (VacationNotFoundException e)
             {
-                return BadRequest(new { message = "Error while finding pack list: " + e.Message });
+                return BadRequest(new { message = "Error while finding vacation: " + e.Message });
             }
         }
 
@@ -116,7 +134,7 @@ namespace Unipack.Controllers
                     throw new VacationNotFoundException(vacationId);
             }catch(VacationNotFoundException e)
             {
-                return BadRequest(new { message = "Error while finding pack list: " + e.Message });
+                return BadRequest(new { message = "Error while finding vacation: " + e.Message });
             }
         }
         private async Task<User> GetCurrentUser()
