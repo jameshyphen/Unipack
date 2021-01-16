@@ -72,6 +72,13 @@ namespace Unipack.Data.Services
             return category;
         }
 
+        public Category GetCategoryByIdWithItems(int categoryId)
+        {
+            var category = _categories.Include(x => x.Items).FirstOrDefault(x => x.CategoryId == categoryId) ??
+               throw new CategoryNotFoundException(categoryId);
+            return category;
+        }
+
         public bool UpdateCategory(int categoryId, Category category)
         {
             var toBeUpdatedCategory = _categories.FirstOrDefault(x => x.CategoryId == categoryId) ??

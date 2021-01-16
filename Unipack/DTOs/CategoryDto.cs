@@ -14,5 +14,6 @@ namespace Unipack.DTOs
         public string Name { get; set; }
         public UserDto Author { get; set; }
         public DateTime AddedOn { get; set; }
+        public List<ItemDto> Items { get; set; }
     }
 }

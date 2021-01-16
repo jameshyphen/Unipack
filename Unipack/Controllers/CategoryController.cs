@@ -125,6 +125,61 @@ namespace Unipack.Controllers
             }
         }
 
+
+        /// <summary>
+        /// Fetches items with a specific category id
+        /// </summary>
+        /// <param name="categoryId">Category id of the items you want to fetch.</param>  
+        [HttpGet("{categoryId}/items")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<CategoryDto>> GetCategoryWithAllItems(int categoryId)
+        {
+            try
+            {
+                var user = await GetCurrentUser();
+                var category = _categoryService.GetCategoryByIdWithItems(categoryId);
+                if (category.Author.UserId == user.UserId)
+                {
+                    var result = new CategoryDto
+                    {
+                        CategoryId = category.CategoryId,
+                        Name = category.Name,
+                        AddedOn = category.AddedOn,
+                        Author = new UserDto
+                        {
+                            Email = category.Author.Email,
+                            Username = category.Author.Username,
+                            FirstName = category.Author.Firstname,
+                            LastName = category.Author.Firstname,
+                            UserId = category.Author.UserId
+                        },
+                        Items = category.Items.Select(x => new ItemDto
+                        {
+                            AddedOn = x.AddedOn,
+                            Name = x.Name,
+                            ItemId = x.ItemId,
+                            Priority = x.Priority
+                        }).ToList()
+                    };
+                    return Ok(result);
+                }
+                return BadRequest("This category does not belong to your account");
+            }
+            catch (CategoryNotFoundException e)
+            {
+                return NotFound(new { message = "Category not found: " + e.Message });
+            }
+            catch (Exception e)
+            {
+                var methodName = this.GetType().FullName + "." + System.Reflection.MethodBase.GetCurrentMethod().Name;
+                _logger.LogError($"[INTERNAL ERROR] Something broke in {nameof(CategoryController)}/{methodName}: {e.Message}");
+                return StatusCode(500);
+            }
+        }
+
         /// <summary>
         /// Creates a Category with the passed on Category DTO model.
         /// </summary>
