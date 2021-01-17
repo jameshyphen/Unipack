@@ -226,7 +226,7 @@ namespace Unipack.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [HttpGet("{vacationId}/location{vacationLocationId}")]
+        [HttpGet("{vacationId}/location/{vacationLocationId}")]
         public async Task<ActionResult<List<VacationLocationDto>>> GetLocationById(int vacationId, int vacationLocationId)
         {
             var user = await GetCurrentUser();
@@ -266,7 +266,7 @@ namespace Unipack.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [HttpPut("{vacationId}/location{vacationLocationId}")]
+        [HttpPut("{vacationId}/location/{vacationLocationId}")]
         public async Task<ActionResult<List<VacationLocationDto>>> UpdateLocationById(int vacationId, int vacationLocationId, [FromBody] VacationLocationDto model)
         {
             var user = await GetCurrentUser();

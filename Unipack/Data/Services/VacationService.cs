@@ -41,6 +41,8 @@ namespace Unipack.Data.Services
 
             vacation.Locations.Add(newVac);
 
+            _context.SaveChanges();
+
             return newVac;
         }
 
