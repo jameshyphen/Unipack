@@ -161,7 +161,9 @@ namespace Unipack.Controllers
                             AddedOn = x.AddedOn,
                             Name = x.Name,
                             ItemId = x.ItemId,
-                            Priority = x.Priority
+                            Priority = x.Priority,
+                            CategoryId = x.Category.CategoryId,
+                            CategoryName =x.Category.Name
                         }).ToList()
                     };
                     return Ok(result);
