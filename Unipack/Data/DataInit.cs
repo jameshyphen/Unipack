@@ -41,7 +41,7 @@ namespace Unipack.Data
         private async Task InitializeUsers()
         {
             const string password = "password";
-            await CreateUser("dzhemaptula", "dzhem.aptula@gmail.com", password);
+            await CreateUser("uwptest", "uwp.test@gmail.com", password);
             await CreateUser("tijlzwartjes", "tijl@gmail.com", password);
             await CreateUser("lunadv", "luna.devuyst@student.hogent.be", password);
             await CreateUser("josephstalin", "joseph@stal.in", password);
@@ -65,13 +65,13 @@ namespace Unipack.Data
 
         private void InitUsers()
         {
-            var dzhem = new User("Dzhem", "Aptula", "dzhem.aptula@gmail.com");
+            var uwptest = new User("uwp", "test", "uwp.test@gmail.com");
             var luna = new User("Luna", "dv", "luna.devuyst@student.hogent.be");
             var tijl = new User("Tijl", "Zwartjes", "tijl@hotmail.com");
             var users = _context.UnipackUsers;
-            dzhem.Username = "dzhemaptula";
+            uwptest.Username = "dzhemaptula";
             luna.Username = "nicklersberghe";
-            users.Add(dzhem);
+            users.Add(uwptest);
             users.Add(luna);
             users.Add(tijl);
             users.Add(new User("John", "Cena", "john@ce.na"));
@@ -80,14 +80,12 @@ namespace Unipack.Data
             users.Add(new User("Napoleon", "Bonaparte", "short@men.riseup"));
             users.Add(new User("Post", "Malone", "water@melo.ne"));
             users.Add(new User("Lil", "Pump", "plum6969@esket.it"));
-            var web4 = new User("student", "hogent", "student@hogent.be", "web4");
-            users.Add(web4);
 
             // Create a vacation
             Vacation ronaVac = 
                 new Vacation(
                     "Tour de la Corona",
-                    dzhem,
+                    uwptest,
                     new DateTime(2021, 3, 20),
                     new DateTime(2021, 4, 20)
                     );
@@ -95,28 +93,36 @@ namespace Unipack.Data
             // Add some lists to the vacation
             PackList ronaVacList = 
                 new PackList(
-                        "Important stuff, DONT FORGET!", dzhem
+                        "Important stuff, DONT FORGET!", uwptest
                     );
             PackList ronaVacList2 =
                 new PackList(
-                    "Optional stuff!", dzhem
+                    "Optional stuff!", uwptest
                 );
+            VacationLocation vacLoc = new VacationLocation
+            {
+                CityName = "Barcelona",
+                CountryName = "Spain",
+                DateArrival = new DateTime(2021, 2, 20),
+                DateDeparture = new DateTime(2021, 2, 22)
+            };
 
+            ronaVac.Locations.Add(vacLoc);
             // Add some item categories
-            Category ronaCategory = new Category("Technology", dzhem);
+            Category ronaCategory = new Category("Technology", uwptest);
 
-            Category ronaCategory2 = new Category("Books", dzhem);
+            Category ronaCategory2 = new Category("Books", uwptest);
 
 
             // Add some items to the lists
-            Item ronaItem = new Item("Laptop", dzhem){Category = ronaCategory};
-            Item ronaItem2 = new Item("Phone", dzhem) {Category = ronaCategory};
+            Item ronaItem = new Item("Laptop", uwptest){Category = ronaCategory};
+            Item ronaItem2 = new Item("Phone", uwptest) {Category = ronaCategory};
 
-            Item ronaItem3 = new Item("Clean Coder book", dzhem) { Category = ronaCategory2 };
+            Item ronaItem3 = new Item("Clean Coder book", uwptest) { Category = ronaCategory2 };
 
             // Add some tasks to the lists
 
-            PackTask task1 = new PackTask("Charge up my phone", dzhem, DateTime.Parse("12/12/2020"));
+            PackTask task1 = new PackTask("Charge up my phone", uwptest, DateTime.Parse("12/12/2020"));
 
             task1.Priority = Priority.High;
             task1.Completed = true;
@@ -128,7 +134,7 @@ namespace Unipack.Data
 
             ronaVac.AddList(ronaVacList);
             ronaVac.AddList(ronaVacList2);
-            dzhem.AddVacation(ronaVac);
+            uwptest.AddVacation(ronaVac);
             _context.SaveChanges();
         }
     }

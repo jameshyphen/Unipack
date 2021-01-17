@@ -17,6 +17,7 @@ namespace Unipack.Models
 
         [ForeignKey(nameof(PackListId))]
         public PackList PackList { get; set; }
+        public int PackedQuantity { get; set; }
         public int Quantity { get; set; }
         public DateTime AddedOn { get; set; }
 

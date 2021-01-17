@@ -66,7 +66,7 @@ namespace Unipack.Data.Services
         {
             User user = _users
                 .Include(x => x.Vacations).ThenInclude(x => x.Locations)
-                .Include(x => x.Vacations).ThenInclude(x => x.PackLists).ThenInclude(x => x.Items)
+                .Include(x => x.Vacations).ThenInclude(x => x.PackLists).ThenInclude(x => x.Items).ThenInclude(x => x.Item).ThenInclude(x => x.Category)
                 .Include(x => x.Vacations).ThenInclude(x => x.PackLists).ThenInclude(x => x.Tasks)
                 .FirstOrDefault(u => u.UserId == userId) ?? throw new UserNotFoundException(userId);
 

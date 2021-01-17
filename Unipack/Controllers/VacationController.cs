@@ -145,7 +145,7 @@ namespace Unipack.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [HttpPut("{vacationId}/location")]
+        [HttpPost("{vacationId}/location")]
         public async Task<ActionResult> AddLocation(int vacationId, [FromBody] VacationLocationDto model)
         {
             var user = await GetCurrentUser();
