@@ -27,6 +27,23 @@ namespace Unipack.Data.Services
             _users = context.UnipackUsers;
         }
 
+        public VacationLocation AddLocation(int vacationId, VacationLocationDto location)
+        {
+            var vacation = _vacations.FirstOrDefault(x => x.VacationId == vacationId) ?? throw new VacationNotFoundException(vacationId);
+
+            var newVac = new VacationLocation
+            {
+                CityName = location.CityName,
+                CountryName = location.CountryName,
+                DateArrival = location.DateArrival,
+                DateDeparture = location.DateDeparture
+            };
+
+            vacation.Locations.Add(newVac);
+
+            return newVac;
+        }
+
         public bool AddVacation(VacationDto vacationDto, User user)
         {
             var vacation = new Vacation(vacationDto.Name, user, vacationDto.DateDeparture, vacationDto.DateReturn);
@@ -47,14 +64,18 @@ namespace Unipack.Data.Services
 
         public ICollection<Vacation> GetAllVacationsByUser(int userId)
         {
-            User user = _users.Include(x => x.Vacations).ThenInclude(x => x.Locations).Include(x => x.Vacations).ThenInclude(x => x.PackLists).FirstOrDefault(u => u.UserId == userId) ?? throw new UserNotFoundException(userId);
+            User user = _users
+                .Include(x => x.Vacations).ThenInclude(x => x.Locations)
+                .Include(x => x.Vacations).ThenInclude(x => x.PackLists).ThenInclude(x => x.Items)
+                .Include(x => x.Vacations).ThenInclude(x => x.PackLists).ThenInclude(x => x.Tasks)
+                .FirstOrDefault(u => u.UserId == userId) ?? throw new UserNotFoundException(userId);
 
             return user.Vacations.OrderByDescending(l => l.AddedOn).ToList();
         }
 
         public Vacation GetVacationById(int id)
         {
-            var vacation = _vacations.FirstOrDefault(x => x.VacationId == id) ?? throw new VacationNotFoundException(id);
+            var vacation = _vacations.Include(x => x.Locations).FirstOrDefault(x => x.VacationId == id) ?? throw new VacationNotFoundException(id);
 
             return vacation;
         }
@@ -68,6 +89,22 @@ namespace Unipack.Data.Services
             vacation.Name = model.Name;
 
             _vacations.Update(vacation);
+            return _context.SaveChanges() != 0;
+        }
+
+        public bool UpdateVacationLocation(int vacationId, int vacationLocationId, VacationLocationDto model)
+        {
+            var vacation = _vacations.Include(x => x.Locations).FirstOrDefault(l => l.VacationId == vacationId) ?? throw new VacationNotFoundException(vacationId);
+
+            var vacLocation = vacation.Locations.FirstOrDefault(x => x.VacationLocationId == vacationLocationId) ?? throw new VacationLocationNotFoundException(vacationLocationId);
+
+            vacLocation.CityName = model.CityName;
+            vacLocation.CountryName = model.CountryName;
+            vacLocation.DateArrival = model.DateArrival;
+            vacLocation.DateDeparture = model.DateDeparture;
+
+            _vacations.Update(vacation);
+
             return _context.SaveChanges() != 0;
         }
     }

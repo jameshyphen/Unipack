@@ -22,5 +22,6 @@ namespace Unipack.DTOs
         public DateTime DateDeparture { get; set; }
         [Required]
         public DateTime DateReturn { get; set; }
+        public List<PackListDto> PackLists { get; set; }
     }
 }

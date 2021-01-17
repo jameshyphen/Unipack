@@ -13,7 +13,9 @@ namespace Unipack.Models
         public DateTime AddedOn { get; set; }
         public DateTime DateArrival { get; set; }
         public DateTime DateDeparture { get; set; }
-        public VacationLocation() { }
+        public VacationLocation() {
+            AddedOn = DateTime.Now;
+        }
         //public VacationLocation(string countryName, DateTime dateDeparture, DateTime dateArrival)
         //{
         //    CountryName = countryName;

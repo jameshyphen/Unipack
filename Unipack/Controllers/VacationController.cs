@@ -79,6 +79,30 @@ namespace Unipack.Controllers
                         AddedOn = loc.AddedOn,
                         CountryName = loc.CountryName,
                         DateArrival = loc.DateArrival,
+                    }).ToList(),
+                    PackLists = x.PackLists.Select(pl => new PackListDto
+                    {
+                        Name = pl.Name,
+                        Tasks = pl.Tasks.Select(tsk => new PackTaskDto { 
+                            Name = tsk.Name,
+                            AddedOn = tsk.AddedOn,
+                            Completed = tsk.Completed,
+                            DeadLine = tsk.DeadLine,
+                            Priority = tsk.Priority
+                        }).ToList(),
+                        AddedOn = pl.AddedOn,
+                        Items = pl.Items.Select(i => new PackItemDto {
+                            ItemId = i.Item.ItemId,
+                            Item = new ItemDto {
+                                CategoryId = i.Item.Category.CategoryId,
+                                CategoryName = i.Item.Category.Name,
+                                Name = i.Item.Name,
+                                Priority = i.Item.Priority,
+                                AddedOn = i.Item.AddedOn,
+                                ItemId = i.Item.ItemId
+                            },
+                            Quantity = i.Quantity
+                        }).ToList(),
                     }).ToList()
                 }).ToList());
             return NotFound();
@@ -112,6 +136,148 @@ namespace Unipack.Controllers
                 return BadRequest(new { message = "Error while finding vacation: " + e.Message });
             }
         }
+
+        /// <summary>
+        /// Add a location to a vacation.
+        /// </summary>
+        /// <param name="vacationId">The id of the Vacation you're looking to add a location to.</param>
+        /// <param name="model">This is the VacationLocation model with the required information.</param>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [HttpPut("{vacationId}/location")]
+        public async Task<ActionResult> AddLocation(int vacationId, [FromBody] VacationLocationDto model)
+        {
+            var user = await GetCurrentUser();
+
+            try
+            {
+                var vac = _vacationService.GetVacationById(vacationId);
+                if (vac.Author.UserId == user.UserId)
+                {
+                    // Check if the new location interferes with other ones
+                    var interferes = vac.Locations.Any(x => x.DateArrival <= model.DateArrival && x.DateDeparture >= model.DateDeparture);
+
+                    if (!interferes)
+                        return new OkObjectResult(_vacationService.AddLocation(vacationId, model));
+                    else
+                        throw new Exception("Dates interfere with another location");
+                }
+                else
+                    throw new VacationNotFoundException(vacationId);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = "Error while finding vacation: " + e.Message });
+            }
+        }
+
+        /// <summary>
+        /// Returns all VacationLocations for a certain Vacation.
+        /// </summary>
+        /// <param name="vacationId">The id of the Vacation you're looking to add a location to.</param>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [HttpGet("{vacationId}/location")]
+        public async Task<ActionResult<List<VacationLocationDto>>> GetLocations(int vacationId)
+        {
+            var user = await GetCurrentUser();
+
+            try
+            {
+                var vac = _vacationService.GetVacationById(vacationId);
+                if (vac.Author.UserId == user.UserId)
+                {
+                    return new OkObjectResult(vac.Locations.Select(x => new VacationLocationDto
+                    {
+                        AddedOn = x.AddedOn,
+                        CityName = x.CityName,
+                        CountryName = x.CountryName,
+                        DateArrival = x.DateArrival,
+                        DateDeparture = x.DateDeparture,
+                        VacationLocationId = x.VacationLocationId
+                    }).ToList());
+                }
+                else
+                    throw new VacationNotFoundException(vacationId);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = "Error while finding vacation: " + e.Message });
+            }
+        }
+
+        /// <summary>
+        /// Returns a sepcified VacationLocations for a certain Vacation.
+        /// </summary>
+        /// <param name="vacationId">The id of the Vacation you're looking to add a location to.</param>
+        /// <param name="vacationLocationId">The id of the Vacation you're looking to add a location to.</param>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [HttpGet("{vacationId}/location{vacationLocationId}")]
+        public async Task<ActionResult<List<VacationLocationDto>>> GetLocationById(int vacationId, int vacationLocationId)
+        {
+            var user = await GetCurrentUser();
+
+            try
+            {
+                var vac = _vacationService.GetVacationById(vacationId);
+                if (vac.Author.UserId == user.UserId)
+                {
+                    var vacLoc = vac.Locations.Select(x => new VacationLocationDto
+                    {
+                        AddedOn = x.AddedOn,
+                        CityName = x.CityName,
+                        CountryName = x.CountryName,
+                        DateArrival = x.DateArrival,
+                        DateDeparture = x.DateDeparture,
+                        VacationLocationId = x.VacationLocationId
+                    }).FirstOrDefault(x => x.VacationLocationId == vacationLocationId) 
+                        ?? throw new VacationLocationNotFoundException(vacationLocationId);
+
+                    return new OkObjectResult(vacLoc);
+                }
+                else
+                    throw new VacationNotFoundException(vacationId);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = "Error while finding vacation: " + e.Message });
+            }
+        }
+
+        /// <summary>
+        /// Updates a sepcified VacationLocations for a certain Vacation.
+        /// </summary>
+        /// <param name="vacationId">The id of the Vacation you're looking to add a location to.</param>
+        /// <param name="vacationLocationId">The id of the Vacation you're looking to add a location to.</param>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [HttpPut("{vacationId}/location{vacationLocationId}")]
+        public async Task<ActionResult<List<VacationLocationDto>>> UpdateLocationById(int vacationId, int vacationLocationId, [FromBody] VacationLocationDto model)
+        {
+            var user = await GetCurrentUser();
+
+            try
+            {
+                var vac = _vacationService.GetVacationById(vacationId);
+                if (vac.Author.UserId == user.UserId)
+                {
+                    return new OkObjectResult(_vacationService.UpdateVacationLocation(vacationId, vacationLocationId, model));
+                }
+                else
+                    throw new VacationNotFoundException(vacationId);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = "Error while finding vacation: " + e.Message });
+            }
+        }
+
+
 
         /// <summary>
         /// Delete a Vacation with the specified id.

@@ -8,7 +8,7 @@ namespace Unipack.DTOs
 {
     public class VacationLocationDto
     {
-        [Range(0, int.MaxValue, ErrorMessage = "Error 404 Id below 0")]
+        [Range(0, int.MaxValue, ErrorMessage = "Negative ID exception")]
         [Required]
         public int VacationLocationId { get; set; }
 

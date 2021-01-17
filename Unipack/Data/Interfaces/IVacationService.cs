@@ -10,6 +10,7 @@ namespace Unipack.Data.Interfaces
     public interface IVacationService
     {
         bool AddVacation(VacationDto vacationDto, User user);
+        VacationLocation AddLocation(int vacationId, VacationLocationDto location);
 
         Vacation GetVacationById(int id);
 
@@ -17,5 +18,6 @@ namespace Unipack.Data.Interfaces
 
         bool DeleteVacationById(int id);
         bool UpdateVacation(int id, VacationDto model);
+        bool UpdateVacationLocation(int vacationId, int vacationLocationId, VacationLocationDto model);
     }
 }
