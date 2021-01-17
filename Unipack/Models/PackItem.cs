@@ -23,6 +23,7 @@ namespace Unipack.Models
 
         public PackItem() {
             AddedOn = DateTime.Now;
+            PackedQuantity = 0;
         }
         public PackItem(PackList VacationList, Item Item) :this() // etc
         {

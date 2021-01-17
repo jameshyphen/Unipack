@@ -69,6 +69,14 @@ namespace Unipack.Controllers
                     Name = x.Name,
                     VacationId = x.VacationId,
                     AddedOn = x.AddedOn,
+                    Author = new UserDto
+                    {
+                        FirstName = x.Author.Firstname,
+                        LastName = x.Author.Lastname,
+                        Email = x.Author.Email,
+                        UserId = x.Author.UserId,
+                        Username = x.Author.Username
+                    },
                     DateDeparture = x.DateDeparture,
                     DateReturn = x.DateReturn,
                     Locations = x.Locations.Select(loc => new VacationLocationDto
@@ -83,7 +91,8 @@ namespace Unipack.Controllers
                     PackLists = x.PackLists.Select(pl => new PackListDto
                     {
                         Name = pl.Name,
-                        Tasks = pl.Tasks.Select(tsk => new PackTaskDto { 
+                        PackListId = pl.PackListId,
+                        Tasks = pl.Tasks.Select(tsk => new PackTaskDto {
                             Name = tsk.Name,
                             AddedOn = tsk.AddedOn,
                             Completed = tsk.Completed,
@@ -101,7 +110,8 @@ namespace Unipack.Controllers
                                 AddedOn = i.Item.AddedOn,
                                 ItemId = i.Item.ItemId
                             },
-                            Quantity = i.Quantity
+                            Quantity = i.Quantity,
+                            PackedQuantity = i.PackedQuantity
                         }).ToList(),
                     }).ToList()
                 }).ToList());

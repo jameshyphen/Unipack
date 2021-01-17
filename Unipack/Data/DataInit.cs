@@ -69,7 +69,9 @@ namespace Unipack.Data
             var luna = new User("Luna", "dv", "luna.devuyst@student.hogent.be");
             var tijl = new User("Tijl", "Zwartjes", "tijl@hotmail.com");
             var users = _context.UnipackUsers;
-            uwptest.Username = "dzhemaptula";
+            uwptest.Username = "uwptest";
+            luna.Username = "lunadv";
+            tijl.Username = "tijlzwartjes";
             luna.Username = "nicklersberghe";
             users.Add(uwptest);
             users.Add(luna);
@@ -127,9 +129,9 @@ namespace Unipack.Data
             task1.Priority = Priority.High;
             task1.Completed = true;
             ronaVacList.Tasks.Add(task1);
-            ronaVacList.Items.Add(new PackItem(ronaVacList, ronaItem));
-            ronaVacList.Items.Add(new PackItem(ronaVacList, ronaItem2));
-            ronaVacList.Items.Add(new PackItem(ronaVacList, ronaItem3));
+            ronaVacList.Items.Add(new PackItem(ronaVacList, ronaItem) { Quantity = 1 });
+            ronaVacList.Items.Add(new PackItem(ronaVacList, ronaItem2) { Quantity = 2 });
+            ronaVacList.Items.Add(new PackItem(ronaVacList, ronaItem3) { Quantity = 1 });
             // Add some locations to the lists
 
             ronaVac.AddList(ronaVacList);
